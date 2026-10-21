@@ -1,0 +1,33 @@
+{
+  "name": "RAS Yoddha - RPSC Prelims Master & Game Arena",
+  "short_name": "RAS Yoddha",
+  "description": "RPSC RAS Prelims Preparation App with authentic PYQ analysis, unlimited practice, spaced repetition and gaming arena.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#090d16",
+  "theme_color": "#ea580c",
+  "lang": "hi",
+  "categories": ["education", "games", "productivity"],
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ea580c"/>
+      <stop offset="50%" stop-color="#d97706"/>
+      <stop offset="100%" stop-color="#991b1b"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="50%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- App Icon Background (Rounded Squircle) -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)"/>
+  
+  <!-- Outer Ring Shield -->
+  <circle cx="256" cy="256" r="200" fill="none" stroke="url(#goldGrad)" stroke-width="12" opacity="0.85" filter="url(#shadow)"/>
+  <circle cx="256" cy="256" r="182" fill="none" stroke="#ffffff" stroke-width="2" stroke-dasharray="8 8" opacity="0.4"/>
+
+  <!-- Rajputana / Fort Silhouette Crest -->
+  <path d="M190 350 L190 290 L210 290 L210 270 L230 270 L230 250 L256 220 L282 250 L282 270 L302 270 L302 290 L322 290 L322 350 Z" 
+        fill="#ffffff" opacity="0.15"/>
+
+  <!-- Main Symbol: Bold Devanagari 'रा' (RAS) -->
+  <text x="256" y="325" 
+        font-family="'Rozha One', 'Yatra One', serif, sans-serif" 
+        font-size="200" 
+        font-weight="900" 
+        fill="#ffffff" 
+        text-anchor="middle"
+        filter="url(#shadow)">रा</text>
+
+  <!-- Top Star / Emblem -->
+  <path d="M256 95 L266 120 L294 122 L272 138 L279 164 L256 149 L233 164 L240 138 L218 122 L246 120 Z" 
+        fill="url(#goldGrad)" filter="url(#shadow)"/>
+
+  <!-- Bottom Text Banner -->
+  <text x="256" y="420" 
+        font-family="'Inter', sans-serif" 
+        font-size="34" 
+        font-weight="800" 
+        letter-spacing="5"
+        fill="#fef3c7" 
+        text-anchor="middle" 
+        opacity="0.95">RPSC RAS</text>
+</svg>
