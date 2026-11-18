@@ -99,10 +99,10 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
     }
 
     // Filter out:
-    // 1) questions seen in this active session
+    // 1) questions or concepts seen in this active session
     // 2) questions that do not meet the 20-40 question gap rule
     const validCandidates = pool.filter(q => {
-      if (seenInSession.has(q.id)) return false;
+      if (seenInSession.has(q.id) || (q.conceptKey && seenInSession.has(q.conceptKey))) return false;
       return isQuestionEligibleForPractice(q.id, q.importanceScore, q.conceptKey);
     });
 
@@ -111,22 +111,22 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
       const randomIdx = Math.floor(Math.random() * validCandidates.length);
       const chosen = validCandidates[randomIdx];
       setCurrentQuestion(chosen);
-      setSeenInSession(prev => new Set([...prev, chosen.id]));
+      setSeenInSession(prev => new Set([...prev, chosen.id, chosen.conceptKey]));
     } else {
       // Generate fresh dynamic question enforcing the 20-40 question spacing rule
       let generated: Question | null = null;
       let attempts = 0;
-      while (!generated && attempts < 25) {
+      while (!generated && attempts < 30) {
         attempts++;
-        const candidate = generateDynamicQuestion(subj, Date.now() + Math.floor(Math.random() * 500000) + attempts * 37);
-        if (!seenInSession.has(candidate.id) && isQuestionEligibleForPractice(candidate.id, candidate.importanceScore, candidate.conceptKey)) {
+        const candidate = generateDynamicQuestion(subj, Date.now() + Math.floor(Math.random() * 500000) + attempts * 53, seenInSession);
+        if (!seenInSession.has(candidate.id) && !seenInSession.has(candidate.conceptKey) && isQuestionEligibleForPractice(candidate.id, candidate.importanceScore, candidate.conceptKey)) {
           generated = candidate;
         }
       }
 
-      const finalQ = generated || generateDynamicQuestion(subj, Date.now() + Math.floor(Math.random() * 999999));
+      const finalQ = generated || generateDynamicQuestion(subj, Date.now() + Math.floor(Math.random() * 999999), seenInSession);
       setCurrentQuestion(finalQ);
-      setSeenInSession(prev => new Set([...prev, finalQ.id]));
+      setSeenInSession(prev => new Set([...prev, finalQ.id, finalQ.conceptKey]));
     }
   };
 

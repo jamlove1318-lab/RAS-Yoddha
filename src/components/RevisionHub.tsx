@@ -15,13 +15,15 @@ import {
   Eye,
   AlertTriangle,
   Zap,
-  Play
+  Play,
+  Infinity as InfinityIcon
 } from 'lucide-react';
 import { Question, SubjectId } from '../types';
 import { 
   getAllHighImportanceQuestions, 
   getDueRevisionQuestions, 
-  getMistakeQuestions 
+  getMistakeQuestions,
+  getNextHighYieldRevisionQuestion
 } from '../services/revisionService';
 import { 
   getSRSItems, 
@@ -41,12 +43,14 @@ export const RevisionHub: React.FC<RevisionHubProps> = ({ lang, onAddXP }) => {
 
   // Drill State
   const [drillActive, setDrillActive] = useState<boolean>(false);
+  const [drillLimit, setDrillLimit] = useState<number>(0); // 0 = Unlimited
   const [drillQuestions, setDrillQuestions] = useState<Question[]>([]);
   const [drillIndex, setDrillIndex] = useState<number>(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showExplanation, setShowExplanation] = useState<boolean>(false);
   const [drillScore, setDrillScore] = useState<number>(0);
   const [drillComplete, setDrillComplete] = useState<boolean>(false);
+  const [seenKeysInDrill, setSeenKeysInDrill] = useState<Set<string>>(new Set());
 
   // Flashcards revealed state
   const [revealedCards, setRevealedCards] = useState<Record<string, boolean>>({});
@@ -64,14 +68,26 @@ export const RevisionHub: React.FC<RevisionHubProps> = ({ lang, onAddXP }) => {
     }
   });
 
-  const handleStartDrill = (questionsPool: Question[], limit: number = 0) => {
+  const handleStartDrill = (limit: number = 0) => {
     sounds.playClick();
-    const shuffled = [...questionsPool].sort(() => 0.5 - Math.random());
-    const selected = limit > 0 ? shuffled.slice(0, limit) : shuffled;
+    setDrillLimit(limit);
 
-    if (selected.length === 0) return;
+    // Initial question for the drill
+    const q1 = getNextHighYieldRevisionQuestion(subjectFilter, new Set(), Date.now());
+    const seen = new Set<string>([q1.id, q1.conceptKey]);
 
-    setDrillQuestions(selected);
+    const initialList: Question[] = [q1];
+    if (limit > 0) {
+      for (let i = 1; i < limit; i++) {
+        const nextQ = getNextHighYieldRevisionQuestion(subjectFilter, seen, Date.now() + i * 47);
+        seen.add(nextQ.id);
+        seen.add(nextQ.conceptKey);
+        initialList.push(nextQ);
+      }
+    }
+
+    setSeenKeysInDrill(seen);
+    setDrillQuestions(initialList);
     setDrillIndex(0);
     setSelectedAnswer(null);
     setShowExplanation(false);
@@ -111,8 +127,21 @@ export const RevisionHub: React.FC<RevisionHubProps> = ({ lang, onAddXP }) => {
     if (drillIndex < drillQuestions.length - 1) {
       setDrillIndex(prev => prev + 1);
     } else {
-      sounds.playLevelUp();
-      setDrillComplete(true);
+      // If unlimited mode (drillLimit === 0), stream the NEXT high-yield question without stopping!
+      if (drillLimit === 0) {
+        const nextQ = getNextHighYieldRevisionQuestion(
+          subjectFilter, 
+          seenKeysInDrill, 
+          Date.now() + (drillIndex + 1) * 31
+        );
+        setSeenKeysInDrill(prev => new Set([...prev, nextQ.id, nextQ.conceptKey]));
+        setDrillQuestions(prev => [...prev, nextQ]);
+        setDrillIndex(prev => prev + 1);
+      } else {
+        // Fixed limit reached
+        sounds.playLevelUp();
+        setDrillComplete(true);
+      }
     }
   };
 
@@ -145,22 +174,22 @@ export const RevisionHub: React.FC<RevisionHubProps> = ({ lang, onAddXP }) => {
               <span>{lang === 'hi' ? 'उच्च-महत्व प्रश्न रिवीजन हब' : 'High-Importance Revision Hub'}</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black tracking-tight">
-              {lang === 'hi' ? 'जब चाहें महत्वपूर्ण प्रश्नों का रिवीजन करें' : 'Revise High-Yield Questions Anytime'}
+              {lang === 'hi' ? 'जब चाहें महत्वपूर्ण प्रश्नों का असीमित रिवीजन' : 'Unlimited High-Yield Revision'}
             </h1>
             <p className="text-xs sm:text-sm text-amber-100 max-w-2xl leading-relaxed">
               {lang === 'hi'
-                ? 'यह विशेष हब केवल RPSC के सर्वाधिक महत्वपूर्ण (High-Yield) प्रश्नों, समसामयिकी और आपकी पिछली गलतियों के लिए समर्पित है। अपनी सुविधानुसार कभी भी अभ्यास करें।'
-                : 'Dedicated revision center for verified high-yield RPSC Prelims questions, live current affairs, and previous mistakes.'}
+                ? 'केवल RPSC के सर्वाधिक महत्वपूर्ण (High-Yield) प्रश्नों, समसामयिकी और आपकी पिछली गलतियों के लिए समर्पित। शून्य दोहराव एल्गोरिदम के साथ असीमित प्रश्न हल करें।'
+                : 'Dedicated revision center for verified high-yield RPSC Prelims questions. Solve unlimited questions without annoying repetition.'}
             </p>
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
             <button
-              onClick={() => handleStartDrill(dueQuestions.length > 0 ? dueQuestions : allHighYield, 15)}
+              onClick={() => handleStartDrill(0)}
               className="px-5 py-2.5 rounded-2xl bg-white text-orange-700 hover:bg-amber-50 font-black text-xs sm:text-sm shadow-lg active:scale-95 transition-all flex items-center gap-2"
             >
-              <Zap className="w-4 h-4 text-amber-600" />
-              <span>{lang === 'hi' ? 'त्वरित 15Q रिवीजन' : 'Quick 15Q Drill'}</span>
+              <InfinityIcon className="w-4 h-4 text-amber-600" />
+              <span>{lang === 'hi' ? 'असीमित रिवीजन शुरू करें' : 'Start Unlimited Drill'}</span>
             </button>
           </div>
         </div>
@@ -169,10 +198,10 @@ export const RevisionHub: React.FC<RevisionHubProps> = ({ lang, onAddXP }) => {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-2">
           <div className="p-3 rounded-2xl bg-black/20 backdrop-blur-md border border-white/10">
             <span className="text-[10px] uppercase font-bold text-yellow-300 block">
-              {lang === 'hi' ? 'कुल महत्वपूर्ण प्रश्न' : 'Total High-Yield'}
+              {lang === 'hi' ? 'असीमित बैंक' : 'Unlimited High-Yield'}
             </span>
-            <span className="text-xl sm:text-2xl font-black text-white">
-              {allHighYield.length}
+            <span className="text-xl sm:text-2xl font-black text-white flex items-center gap-1">
+              <InfinityIcon className="w-5 h-5 inline" /> {lang === 'hi' ? 'सक्रिय' : 'Active'}
             </span>
           </div>
 
@@ -209,8 +238,8 @@ export const RevisionHub: React.FC<RevisionHubProps> = ({ lang, onAddXP }) => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white dark:bg-slate-900 p-2.5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
         <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
           {[
-            { id: 'drill', labelHi: '🎯 त्वरित रिवीजन टेस्ट', labelEn: '🎯 Interactive Drill' },
-            { id: 'cards', labelHi: '💡 फ्लैशकार्ड व समाधान', labelEn: '💡 High-Yield Flashcards' },
+            { id: 'drill', labelHi: '🎯 असीमित रिवीजन टेस्ट', labelEn: '🎯 Unlimited Drill' },
+            { id: 'cards', labelHi: '💡 फ्लैशकार्ड व समाधान', labelEn: '💡 Flashcards' },
             { id: 'mistakes', labelHi: `⚠️ गलती सुधार (${mistakeQuestions.length})`, labelEn: `⚠️ Mistakes (${mistakeQuestions.length})` }
           ].map(tab => (
             <button
@@ -267,38 +296,38 @@ export const RevisionHub: React.FC<RevisionHubProps> = ({ lang, onAddXP }) => {
               </div>
               <div className="space-y-1">
                 <h3 className="text-xl font-black text-slate-900 dark:text-slate-100">
-                  {lang === 'hi' ? 'उच्च-महत्व प्रश्नों का अभ्यास सत्र' : 'Start High-Yield Revision Session'}
+                  {lang === 'hi' ? 'उच्च-महत्व प्रश्नों का असीमित अभ्यास सत्र' : 'Start Unlimited High-Yield Revision'}
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto">
                   {lang === 'hi'
-                    ? 'अपनी गति से हल करें। प्रत्येक प्रश्न के तुरंत बाद विस्तृत द्विभाषी व्याख्या प्राप्त करें।'
-                    : 'Practice at your own pace with instant bilingual explanations and retention tracking.'}
+                    ? 'अपनी गति से हल करें। जब तक चाहें तब तक नए-नए उच्च-महत्व प्रश्नों का अभ्यास करें। 20-40 प्रश्नों से पहले कोई प्रश्न नहीं दोहराया जाएगा।'
+                    : 'Practice at your own pace. Solve unlimited high-importance questions with verified non-repetition.'}
                 </p>
               </div>
 
               <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
                 <button
-                  onClick={() => handleStartDrill(allHighYield, 10)}
-                  className="px-5 py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs sm:text-sm shadow-md active:scale-95 transition-all flex items-center gap-1.5"
+                  onClick={() => handleStartDrill(0)}
+                  className="px-6 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-black text-xs sm:text-sm shadow-md shadow-orange-500/20 active:scale-95 transition-all flex items-center gap-2"
                 >
-                  <Play className="w-4 h-4 fill-white" />
+                  <InfinityIcon className="w-4 h-4" />
+                  <span>{lang === 'hi' ? 'असीमित रिवीजन मोड (अनुशंसित)' : 'Unlimited Mode (Recommended)'}</span>
+                </button>
+
+                <button
+                  onClick={() => handleStartDrill(10)}
+                  className="px-5 py-2.5 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs sm:text-sm hover:bg-slate-200 active:scale-95 transition-all flex items-center gap-1.5"
+                >
+                  <Play className="w-3.5 h-3.5 text-amber-600" />
                   <span>{lang === 'hi' ? '10 प्रश्न रिवीजन' : '10 Questions'}</span>
                 </button>
 
                 <button
-                  onClick={() => handleStartDrill(allHighYield, 25)}
-                  className="px-5 py-2.5 rounded-2xl bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs sm:text-sm shadow-md active:scale-95 transition-all flex items-center gap-1.5"
+                  onClick={() => handleStartDrill(25)}
+                  className="px-5 py-2.5 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs sm:text-sm hover:bg-slate-200 active:scale-95 transition-all flex items-center gap-1.5"
                 >
-                  <Play className="w-4 h-4 fill-white" />
+                  <Play className="w-3.5 h-3.5 text-amber-600" />
                   <span>{lang === 'hi' ? '25 प्रश्न रिवीजन' : '25 Questions'}</span>
-                </button>
-
-                <button
-                  onClick={() => handleStartDrill(allHighYield, 0)}
-                  className="px-5 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs sm:text-sm hover:bg-slate-100 dark:hover:bg-slate-800 active:scale-95 transition-all flex items-center gap-1.5"
-                >
-                  <Layers className="w-4 h-4" />
-                  <span>{lang === 'hi' ? `सभी ${allHighYield.length} प्रश्न` : `All ${allHighYield.length} Questions`}</span>
                 </button>
               </div>
             </div>
@@ -307,8 +336,15 @@ export const RevisionHub: React.FC<RevisionHubProps> = ({ lang, onAddXP }) => {
             <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 sm:p-7 border border-slate-200 dark:border-slate-800 shadow-sm space-y-5">
               <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 border-b border-slate-100 dark:border-slate-800 pb-3">
                 <div className="flex items-center gap-2">
-                  <span className="font-extrabold text-amber-600 dark:text-amber-400">
-                    {lang === 'hi' ? `प्रश्न ${drillIndex + 1} / ${drillQuestions.length}` : `Question ${drillIndex + 1} of ${drillQuestions.length}`}
+                  <span className="font-extrabold text-amber-600 dark:text-amber-400 flex items-center gap-1">
+                    {drillLimit === 0 ? (
+                      <>
+                        <InfinityIcon className="w-3.5 h-3.5" />
+                        {lang === 'hi' ? `प्रश्न संख्या #${drillIndex + 1}` : `Question #${drillIndex + 1}`}
+                      </>
+                    ) : (
+                      <>{lang === 'hi' ? `प्रश्न ${drillIndex + 1} / ${drillLimit}` : `Question ${drillIndex + 1} of ${drillLimit}`}</>
+                    )}
                   </span>
                   <span className="px-2 py-0.5 rounded text-[10px] font-black bg-amber-500/10 text-amber-600 dark:text-amber-400">
                     {drillQuestions[drillIndex].subtopic}
@@ -388,10 +424,13 @@ export const RevisionHub: React.FC<RevisionHubProps> = ({ lang, onAddXP }) => {
               {/* Controls */}
               <div className="flex items-center justify-between pt-2">
                 <button
-                  onClick={() => setDrillActive(false)}
+                  onClick={() => {
+                    sounds.playClick();
+                    setDrillActive(false);
+                  }}
                   className="px-3.5 py-2 text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-800"
                 >
-                  {lang === 'hi' ? 'रिवीजन समाप्त करें' : 'Exit Session'}
+                  {lang === 'hi' ? 'रिवीजन समाप्त करें' : 'Finish & Exit'}
                 </button>
 
                 <button
@@ -403,7 +442,7 @@ export const RevisionHub: React.FC<RevisionHubProps> = ({ lang, onAddXP }) => {
                       : 'bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed'
                   }`}
                 >
-                  <span>{drillIndex < drillQuestions.length - 1 ? (lang === 'hi' ? 'अगला प्रश्न' : 'Next Question') : (lang === 'hi' ? 'परिणाम देखें' : 'View Result')}</span>
+                  <span>{lang === 'hi' ? 'अगला प्रश्न' : 'Next Question'}</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
@@ -427,11 +466,11 @@ export const RevisionHub: React.FC<RevisionHubProps> = ({ lang, onAddXP }) => {
 
               <div className="flex items-center justify-center gap-3">
                 <button
-                  onClick={() => handleStartDrill(allHighYield, drillQuestions.length)}
+                  onClick={() => handleStartDrill(0)}
                   className="px-5 py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs sm:text-sm shadow-md active:scale-95 transition-all flex items-center gap-1.5"
                 >
                   <RotateCcw className="w-4 h-4" />
-                  <span>{lang === 'hi' ? 'पुनः रिवीजन करें' : 'Revise Again'}</span>
+                  <span>{lang === 'hi' ? 'नया रिवीजन शुरू करें' : 'Start Fresh Revision'}</span>
                 </button>
 
                 <button
@@ -450,7 +489,7 @@ export const RevisionHub: React.FC<RevisionHubProps> = ({ lang, onAddXP }) => {
       {activeMode === 'cards' && (
         <div className="space-y-4">
           <div className="grid grid-cols-1 gap-4">
-            {allHighYield.map((q, idx) => {
+            {allHighYield.map((q) => {
               const isRevealed = !!revealedCards[q.id];
               const srs = srsItems[q.id];
               const box = srs ? srs.box : 1;
@@ -553,7 +592,7 @@ export const RevisionHub: React.FC<RevisionHubProps> = ({ lang, onAddXP }) => {
                   {lang === 'hi' ? `सुधार हेतु कुल ${mistakeQuestions.length} गलतियां` : `${mistakeQuestions.length} mistakes to rectify`}
                 </span>
                 <button
-                  onClick={() => handleStartDrill(mistakeQuestions)}
+                  onClick={() => handleStartDrill(0)}
                   className="px-4 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-black text-xs shadow-sm flex items-center gap-1.5"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
@@ -575,7 +614,6 @@ export const RevisionHub: React.FC<RevisionHubProps> = ({ lang, onAddXP }) => {
                       onClick={() => {
                         sounds.playClick();
                         clearMistake(q.id);
-                        // Force refresh by triggering small state change
                         setRevealedCards(prev => ({ ...prev }));
                       }}
                       className="text-[11px] font-bold text-slate-400 hover:text-slate-600"

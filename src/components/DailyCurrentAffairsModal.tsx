@@ -70,7 +70,7 @@ export const DailyCurrentAffairsModal: React.FC<DailyCurrentAffairsModalProps> =
     setQuestions(prev => [...prev.slice(0, currentIndex + 1), nextQ]);
     setCurrentIndex(prev => prev + 1);
     setShowExplanation(false);
-    setSeenIds(prev => new Set([...prev, nextQ.id]));
+    setSeenIds(prev => new Set([...prev, nextQ.id, nextQ.conceptKey]));
   };
 
   const handleSelectOption = (optIndex: number) => {
@@ -92,7 +92,7 @@ export const DailyCurrentAffairsModal: React.FC<DailyCurrentAffairsModalProps> =
     }
 
     recordAnswerInSRS(currentQ, isCorrect);
-    setSeenIds(prev => new Set([...prev, currentQ.id]));
+    setSeenIds(prev => new Set([...prev, currentQ.id, currentQ.conceptKey]));
   };
 
   const handleNextQuestion = () => {
@@ -110,7 +110,7 @@ export const DailyCurrentAffairsModal: React.FC<DailyCurrentAffairsModalProps> =
       );
       setQuestions(prev => [...prev, nextQ]);
       setCurrentIndex(prev => prev + 1);
-      setSeenIds(prev => new Set([...prev, nextQ.id]));
+      setSeenIds(prev => new Set([...prev, nextQ.id, nextQ.conceptKey]));
     }
   };
 
