@@ -1,5 +1,6 @@
 import { Question, SubjectId, ImportanceLevel } from '../types';
 import { isQuestionEligibleForPractice } from './srsEngine';
+import { getLiveCurrentAffairsQuestion } from './currentAffairsService';
 
 interface GenerationTemplate {
   subjectId: SubjectId;
@@ -140,11 +141,11 @@ export const TEMPLATES: GenerationTemplate[] = [
           statesEn: 'Rajasthan Union + Udaipur (Inaugurated by Pt. Jawaharlal Nehru)'
         },
         {
-          stageEn: 'Stage 4: Greater Rajasthan (वृहद् राजस्थान)',
+          stageEn: 'Stage 4: Greater Rajasthan (बृहत् राजस्थान)',
           dateEn: '30 March 1949 (Rajasthan Day)',
           dateHi: '30 मार्च 1949 (राजस्थान दिवस)',
-          pmEn: 'Pt. Hiralal Shastri',
-          pmHi: 'पं. हीरालाल शास्त्री',
+          pmEn: 'Pandit Hiralal Shastri',
+          pmHi: 'पंडित हीरालाल शास्त्री',
           rajpramukhEn: 'Maharaja Sawai Man Singh II (Jaipur)',
           rajpramukhHi: 'सवाई मानसिंह द्वितीय (जयपुर)',
           statesEn: 'United Rajasthan + Jaipur, Jodhpur, Bikaner, Jaisalmer'
@@ -152,18 +153,16 @@ export const TEMPLATES: GenerationTemplate[] = [
       ];
 
       const item = stages[seed % stages.length];
-      const otherItem = stages[(seed + 1) % stages.length];
-      const otherItem2 = stages[(seed + 2) % stages.length];
-      const otherItem3 = stages[(seed + 3) % stages.length];
+      const others = stages.filter(s => s.stageEn !== item.stageEn);
 
       return {
         question: {
-          en: `During the integration of Rajasthan, who was appointed as the Prime Minister (Chief Minister) of "${item.stageEn}" formed on ${item.dateEn}?`,
-          hi: `राजस्थान के एकीकरण के समय ${item.dateHi} को गठित "${item.stageEn}" का प्रधानमंत्री किसे बनाया गया था?`
+          en: `During the integration of Rajasthan, in which stage was ${item.pmEn} appointed as Prime Minister and ${item.rajpramukhEn} as Rajpramukh on ${item.dateEn}?`,
+          hi: `राजस्थान के एकीकरण के किस चरण में ${item.dateHi} को ${item.pmHi} प्रधानमंत्री तथा ${item.rajpramukhHi} राजप्रमुख बने?`
         },
         options: {
-          en: [item.pmEn, otherItem.pmEn, otherItem2.pmEn, otherItem3.pmEn],
-          hi: [item.pmHi, otherItem.pmHi, otherItem2.pmHi, otherItem3.pmHi]
+          en: [item.stageEn, others[0].stageEn, others[1].stageEn, others[2].stageEn],
+          hi: [item.stageEn, others[0].stageEn, others[1].stageEn, others[2].stageEn]
         },
         correctOption: 0,
         explanation: {
@@ -248,173 +247,239 @@ export const TEMPLATES: GenerationTemplate[] = [
     generate: (seed) => {
       const rivers = [
         {
-          nameEn: 'Chambal River (चर्मण्यवती / कामधेनु)',
-          nameHi: 'चंबल नदी (चर्मण्यवती)',
-          originEn: 'Janapav Hills (Vindhyan range), MP',
-          originHi: 'जानापाव पहाड़ी (विंध्याचल पर्वत, म.प्र.)',
-          damsEn: 'Gandhi Sagar (MP), Rana Pratap Sagar (Chittor), Jawahar Sagar (Kota), Kota Barrage',
-          damsHi: 'गांधी सागर (म.प्र.), राणा प्रताप सागर (चित्तौड़गढ़), जवाहर सागर व कोटा बैराज',
-          drainageEn: 'Bay of Bengal drainage (tributary of Yamuna at Etawah)',
-          drainageHi: 'बंगाल की खाड़ी अपवाह तंत्र (इटावा के निकट यमुना में विलय)'
+          nameEn: 'Luni River (लूणी नदी)',
+          originEn: 'Nag Pahar (Ajmer) in Aravalli range',
+          originHi: 'नाग पहाड़ (अजमेर)',
+          natureEn: 'Sweet water up to Balotra (Barmer), then becomes saline',
+          natureHi: 'बालोतरा तक मीठा पानी, इसके बाद खारी हो जाती है',
+          mouthEn: 'Rann of Kutch (Gujarat)',
+          mouthHi: 'कच्छ का रण (गुजरात)'
         },
         {
-          nameEn: 'Banas River (वन की आशा / वर्णाशा)',
-          nameHi: 'बनास नदी (वन की आशा)',
-          originEn: 'Khamnor Hills, Rajsamand',
-          originHi: 'खमनौर की पहाड़ियां (राजसमंद)',
-          damsEn: 'Bisalpur Dam (Tonk) and Isarda Dam (Sawai Madhopur)',
-          damsHi: 'बीसलपुर बांध (टोंक) तथा ईसरदा बांध (सवाई माधोपुर)',
-          drainageEn: 'Longest river completely flowing within Rajasthan (480 km)',
-          drainageHi: 'पूर्णतः राजस्थान में बहने वाली सबसे लंबी नदी (480 किमी)'
+          nameEn: 'Banas River (बनास नदी - वन की आशा)',
+          originEn: 'Khamnor Hills (Rajsamand)',
+          originHi: 'खमनोर की पहाड़ियां (राजसमंद)',
+          natureEn: 'Longest river flowing entirely within Rajasthan (~480 km)',
+          natureHi: 'पूर्णतः राजस्थान में बहने वाली सबसे लंबी नदी (वन की आशा)',
+          mouthEn: 'Confluence with Chambal at Rameshwaram Ghat (Sawai Madhopur)',
+          mouthHi: 'रामेश्वरम घाट (सवाई माधोपुर) में चंबल में विलय'
         },
         {
-          nameEn: 'Mahi River (कांठल की गंगा / आदिवासियों की गंगा)',
-          nameHi: 'माही नदी (कांठल की गंगा)',
-          originEn: 'Amjhera near Dhar, Mehadd Lake (MP)',
-          originHi: 'मेहद झील (धार, मध्य प्रदेश)',
-          damsEn: 'Mahi Bajaj Sagar Dam (Banswara) and Kadana Dam (Gujarat)',
-          damsHi: 'माही बजाज सागर (बांसवाड़ा) तथा कडाणा बांध (गुजरात)',
-          drainageEn: 'Cuts Tropic of Cancer twice; drains into Gulf of Khambhat (Arabian Sea)',
-          drainageHi: 'कर्क रेखा को दो बार पार करने वाली नदी (खंभात की खाड़ी)'
+          nameEn: 'Mahi River (माही नदी)',
+          originEn: 'Amjhero/Mehad Lake in Dhar, Vindhyachal (MP)',
+          originHi: 'मेहद झील, अमझोरा (धार, म.प्र.)',
+          natureEn: 'Crosses Tropic of Cancer twice; forms Triveni Sangam at Beneshwar (Banswara-Dungarpur)',
+          natureHi: 'कर्क रेखा को दो बार पार करने वाली नदी; बेणेश्वर में त्रिवेणी संगम',
+          mouthEn: 'Gulf of Khambhat (Arabian Sea)',
+          mouthHi: 'खंभात की खाड़ी'
         },
         {
-          nameEn: 'Som River (सोम नदी)',
-          nameHi: 'सोम नदी',
-          originEn: 'Bichhameda Hills, Udaipur',
-          originHi: 'बीछामेड़ा पहाड़ियां (उदयपुर)',
-          damsEn: 'Som-Kagdar (Udaipur) and Som-Kamla-Amba (Dungarpur)',
-          damsHi: 'सोम-कागदर (उदयपुर) एवं सोम-कमला-अम्बा (डूंगरपुर)',
-          drainageEn: 'Forms Triveni Sangam with Mahi and Jakham at Beneshwar Dham',
-          drainageHi: 'बेणेश्वर धाम पर माही व जाखम के साथ त्रिवेणी संगम बनाती है'
+          nameEn: 'Chambal River (चंबल / चर्मण्यवती)',
+          originEn: 'Janapav Hills in Vindhya range near Mhow (MP)',
+          originHi: 'जानापाव की पहाड़ियां (महू, म.प्र.)',
+          natureEn: 'Perennial river renowned for badland topography (Ravines/Behad)',
+          natureHi: 'राजस्थान की बारहमासी नदी जो बीहड़ (उत्खात भूमि) हेतु कुख्यात है',
+          mouthEn: 'Yamuna river near Etawah (UP)',
+          mouthHi: 'यमुना नदी (इटावा, उ.प्र.)'
         }
       ];
 
-      const r = rivers[seed % rivers.length];
-      const otherRivers = rivers.filter(item => item.nameEn !== r.nameEn);
+      const item = rivers[seed % rivers.length];
+      const others = rivers.filter(r => r.nameEn !== item.nameEn);
 
       return {
         question: {
-          en: `Which river in Rajasthan originates from ${r.originEn} and on which the major dam project "${r.damsEn}" is constructed?`,
-          hi: `राजस्थान की कौन सी नदी ${r.originHi} से निकलती है तथा जिस पर "${r.damsHi}" परियोजना निर्मित है?`
+          en: `Which river originating from ${item.originEn} is known for "${item.natureEn}" and drains into ${item.mouthEn}?`,
+          hi: `${item.originHi} से उद्गमित होने वाली कौन सी नदी "${item.natureHi}" के रूप में जानी जाती है तथा ${item.mouthHi} में विलीन होती है?`
         },
         options: {
-          en: [r.nameEn, otherRivers[0].nameEn, otherRivers[1].nameEn, otherRivers[2].nameEn],
-          hi: [r.nameHi, otherRivers[0].nameHi, otherRivers[1].nameHi, otherRivers[2].nameHi]
+          en: [item.nameEn, others[0].nameEn, others[1].nameEn, others[2].nameEn],
+          hi: [item.nameEn, others[0].nameEn, others[1].nameEn, others[2].nameEn]
         },
         correctOption: 0,
         explanation: {
-          en: `${r.nameEn}: Origin: ${r.originEn}. Dams: ${r.damsEn}. Note: ${r.drainageEn}.`,
-          hi: `${r.nameHi}: उद्गम ${r.originHi} से होता है। बांध: ${r.damsHi}। विशेष: ${r.drainageHi}।`
+          en: `${item.nameEn}: Origin: ${item.originEn}. Characteristics: ${item.natureEn}. Drainage destination: ${item.mouthEn}.`,
+          hi: `${item.nameEn}: उद्गम ${item.originHi}। विशेषताएं: ${item.natureHi}। विसर्जन: ${item.mouthHi}।`
         },
-        tags: ['Drainage', 'Rivers', 'Banas', 'Chambal', 'Mahi', 'High Yield']
+        tags: ['Rivers', 'Drainage', 'Rajasthan Geography']
+      };
+    }
+  },
+  {
+    subjectId: 'raj_geography',
+    subtopic: 'Minerals & Natural Resources (खनिज संसाधन)',
+    importance: 'HIGH_YIELD',
+    importanceScore: 97,
+    conceptKey: 'Mineral_Mines_Pair',
+    generate: (seed) => {
+      const minerals = [
+        {
+          mineralEn: 'Lead & Zinc (सीसा-जस्ता)',
+          minesEn: 'Rampura-Agucha (Bhilwara), Zawar (Udaipur), Rajpura-Dariba (Rajsamand)',
+          minesHi: 'रामपुरा-आगूचा (भीलवाड़ा), जावर (उदयपुर), राजपुरा-दरीबा (राजसमंद)',
+          factEn: 'Rajasthan holds virtually 100% of India\'s lead-zinc resources; Hindustan Zinc Limited smelters located at Chanderiya and Debari.',
+          factHi: 'भारत के लगभग 100% सीसा-जस्ता संसाधन राजस्थान में हैं; चंदेरिया व देबारी में प्रद्रावक स्थित हैं।'
+        },
+        {
+          mineralEn: 'Rock Phosphate (रॉक फॉस्फेट)',
+          minesEn: 'Jhamarkotra (Udaipur), Birmania (Jaisalmer)',
+          minesHi: 'झामरकोटड़ा (उदयपुर), बिरमानिया (जैसलमेर)',
+          factEn: 'Essential for chemical fertilizers; Jhamarkotra is India\'s largest open-cast deposit operated by RSMML.',
+          factHi: 'रासायनिक उर्वरक उद्योग हेतु अनिवार्य; झामरकोटड़ा देश की सबसे बड़ी ओपन कास्ट खान है।'
+        },
+        {
+          mineralEn: 'Gypsum (जिप्सम / हरसोंठ)',
+          minesEn: 'Jamsar (Bikaner), Badwasi (Nagaur), Mohangarh (Jaisalmer)',
+          minesHi: 'जामसर (बीकानेर), बड़वासी (नागौर), मोहनगढ़ (जैसलमेर)',
+          factEn: 'Used for soil reclamation of alkaline soils and manufacturing of cement/plaster of paris.',
+          factHi: 'क्षारीय भूमि सुधार व सीमेंट/पीओपी निर्माण में प्रयुक्त; जामसर सबसे बड़ा भंडार है।'
+        },
+        {
+          mineralEn: 'Copper (तांबा)',
+          minesEn: 'Khetri-Singhana (Jhunjhunu), Kho-Dariba (Alwar), Chandmari',
+          minesHi: 'खेतड़ी-सिंघाना (झुंझुनूं), खो-दरीबा (अलवर), चांदमारी',
+          factEn: 'Hindustan Copper Limited (HCL) complex at Khetri operates along the Aravalli copper belt.',
+          factHi: 'हिंदुस्तान कॉपर लिमिटेड (HCL) का संयंत्र खेतड़ी में अरावली कॉपर बेल्ट पर स्थित है।'
+        }
+      ];
+
+      const item = minerals[seed % minerals.length];
+      const wrongs = minerals.filter(m => m.mineralEn !== item.mineralEn);
+
+      return {
+        question: {
+          en: `In Rajasthan, which mineral deposit is predominantly mined from ${item.minesEn}?`,
+          hi: `राजस्थान में ${item.minesHi} क्षेत्र से मुख्य रूप से किस खनिज का उत्खनन किया जाता है?`
+        },
+        options: {
+          en: [item.mineralEn, wrongs[0].mineralEn, wrongs[1].mineralEn, wrongs[2].mineralEn],
+          hi: [item.mineralEn, wrongs[0].mineralEn, wrongs[1].mineralEn, wrongs[2].mineralEn]
+        },
+        correctOption: 0,
+        explanation: {
+          en: `${item.mineralEn}: Major mining locations: ${item.minesEn}. ${item.factEn}`,
+          hi: `${item.mineralEn}: प्रमुख खनन क्षेत्र - ${item.minesHi}। ${item.factHi}`
+        },
+        tags: ['Minerals', 'Mining', 'Rajasthan Geography', 'High Yield']
       };
     }
   },
 
   // ==========================================
-  // 3. RAJASTHAN POLITY & ADMINISTRATION
+  // 3. RAJASTHAN POLITY & ADMINISTRATIVE SYSTEM
   // ==========================================
   {
     subjectId: 'raj_polity_admin',
-    subtopic: 'Governor & Chief Minister powers & tenures',
+    subtopic: 'State Executive & Constitutional Bodies',
     importance: 'HIGH_YIELD',
-    importanceScore: 94,
-    conceptKey: 'Rajasthan_Governor_Articles',
+    importanceScore: 98,
+    conceptKey: 'State_Polity_Articles',
     generate: (seed) => {
       const articles = [
         {
-          article: 'Article 153',
-          featureEn: 'There shall be a Governor for each State (and 7th Amendment allows same person for two or more states)',
-          featureHi: 'प्रत्येक राज्य के लिए एक राज्यपाल होगा (7वें संशोधन द्वारा एक ही व्यक्ति दो या अधिक राज्यों का राज्यपाल हो सकता है)'
+          officeEn: 'Governor of Rajasthan (राज्यपाल)',
+          articleEn: 'Articles 153 to 161 (Appointment by President under Art. 155; Ordinance power under Art. 213)',
+          articleHi: 'अनुच्छेद 153 से 161 (अनु. 155 राष्ट्रपति द्वारा नियुक्ति, अनु. 213 अध्यादेश शक्ति)',
+          dutyEn: 'Constitutional executive head of state acting on aid and advice of the Council of Ministers under Article 163',
+          dutyHi: 'राज्य का संवैधानिक प्रमुख जो अनु. 163 के तहत मंत्रिपरिषद की सलाह पर कार्य करता है'
         },
         {
-          article: 'Article 156',
-          featureEn: 'Governor holds office during the pleasure of the President (normal term of 5 years)',
-          featureHi: 'राज्यपाल राष्ट्रपति के प्रसादपर्यंत पद धारण करता है (सामान्यतः 5 वर्ष का कार्यकाल)'
+          officeEn: 'Chief Minister & Council of Ministers',
+          articleEn: 'Article 164 (CM appointed by Governor; collective responsibility to Legislative Assembly under Art. 164(2))',
+          articleHi: 'अनुच्छेद 164 (राज्यपाल द्वारा मुख्यमंत्री की नियुक्ति; विधानसभा के प्रति सामूहिक उत्तरदायित्व)',
+          dutyEn: 'Article 167 defines the duties of the Chief Minister in furnishing information to the Governor',
+          dutyHi: 'अनुच्छेद 167 के अंतर्गत राज्यपाल को प्रशासनिक सूचनाएं देना मुख्यमंत्री का कर्तव्य है'
         },
         {
-          article: 'Article 161',
-          featureEn: 'Pardoning powers of the Governor for offenses against state laws (cannot pardon death sentence)',
-          featureHi: 'राज्य विधि के विरुद्ध अपराधों पर राज्यपाल की क्षमादान की शक्ति (मृत्युदंड को क्षमा नहीं कर सकता)'
+          officeEn: 'Rajasthan Public Service Commission (RPSC)',
+          articleEn: 'Articles 315 to 323 (Established on 20 August 1949; Chairman + 7 Members)',
+          articleHi: 'अनुच्छेद 315 से 323 (स्थापना 20 अगस्त 1949; अध्यक्ष + 7 सदस्य)',
+          dutyEn: 'Tenure is 6 years or 62 years of age; removal exclusively by President under Article 317 on Supreme Court inquiry',
+          dutyHi: 'पदावधि 6 वर्ष या 62 वर्ष की आयु; केवल राष्ट्रपति द्वारा उच्चतम न्यायालय की जांच उपरांत अनु. 317 के तहत पदच्युति'
         },
         {
-          article: 'Article 213',
-          featureEn: 'Power of the Governor to promulgate Ordinances during recess of the State Legislature',
-          featureHi: 'विधानमंडल के विश्रांतिकाल में राज्यपाल द्वारा अध्यादेश प्रख्यापित करने की शक्ति'
+          officeEn: 'Rajasthan State Election Commission (SEC)',
+          articleEn: 'Articles 243K and 243ZA (Single-member Constitutional Commission established in July 1994)',
+          articleHi: 'अनुच्छेद 243K एवं 243ZA (एकल सदस्यीय संवैधानिक आयोग, जुलाई 1994 में गठित)',
+          dutyEn: 'Superintends, directs and conducts elections to Panchayati Raj Institutions and Urban Local Bodies in Rajasthan',
+          dutyHi: 'पंचायती राज संस्थाओं एवं नगरीय निकायों के चुनावों का अधीक्षण, निर्देशन व संचालन'
         }
       ];
 
-      const chosen = articles[seed % articles.length];
-      const others = articles.filter(a => a.article !== chosen.article);
+      const item = articles[seed % articles.length];
+      const others = articles.filter(a => a.officeEn !== item.officeEn);
 
       return {
         question: {
-          en: `Under which Article of the Constitution of India ${chosen.featureEn}?`,
-          hi: `भारतीय संविधान के किस अनुच्छेद के तहत ${chosen.featureHi}?`
+          en: `Which constitutional office/body in Rajasthan is governed by "${item.articleEn}" and characterized by "${item.dutyEn}"?`,
+          hi: `राजस्थान की कौन सी संवैधानिक संस्था/पद "${item.articleHi}" से संबंधित है तथा "${item.dutyHi}" इसकी प्रमुख विशेषता है?`
         },
         options: {
-          en: [chosen.article, others[0].article, others[1].article, others[2].article],
-          hi: [chosen.article, others[0].article, others[1].article, others[2].article]
+          en: [item.officeEn, others[0].officeEn, others[1].officeEn, 'Rajasthan Lokayukta Secretariat'],
+          hi: [item.officeEn, others[0].officeEn, others[1].officeEn, 'राजस्थान लोकायुक्त सचिवालय']
         },
         correctOption: 0,
         explanation: {
-          en: `${chosen.article}: ${chosen.featureEn}.`,
-          hi: `${chosen.article}: ${chosen.featureHi}।`
+          en: `${item.officeEn}: Constitutional Framework: ${item.articleEn}. Key roles: ${item.dutyEn}.`,
+          hi: `${item.officeEn}: संवैधानिक उपबंध: ${item.articleHi}। मुख्य प्रावधान: ${item.dutyHi}।`
         },
-        tags: ['Polity', 'Governor', 'Constitution', 'High Yield']
+        tags: ['Polity', 'Constitutional Bodies', 'RPSC Favorite']
       };
     }
   },
 
   // ==========================================
-  // 4. RAJASTHAN ECONOMY & ECONOMIC SURVEY
+  // 4. RAJASTHAN ECONOMY
   // ==========================================
   {
     subjectId: 'raj_economy',
-    subtopic: 'Macro Indicators of Rajasthan (GSDP, Per Capita Income)',
+    subtopic: 'Rajasthan Economic Survey & Infrastructure',
     importance: 'HIGH_YIELD',
     importanceScore: 97,
-    conceptKey: 'Economic_Survey_Indicators',
+    conceptKey: 'Raj_Econ_Indicators',
     generate: (seed) => {
       const indicators = [
         {
-          topicEn: 'Per Capita Income of Rajasthan at current prices',
-          topicHi: 'प्रचलित मूल्यों पर राजस्थान की प्रति व्यक्ति आय',
-          factEn: 'As per the recent Rajasthan Economic Survey, Per Capita Income at current prices stands at approximately ₹1,56,149, reflecting strong service & industrial growth.',
-          factHi: 'राजस्थान आर्थिक समीक्षा के अनुसार प्रचलित मूल्यों पर प्रति व्यक्ति आय लगभग ₹1,56,149 आंकी गई है।',
-          correctEn: 'Around ₹1.56 Lakh (₹1,56,149)',
-          correctHi: 'लगभग ₹1.56 लाख (₹1,56,149)',
-          wrongsEn: ['Around ₹98,000', 'Around ₹2.40 Lakh', 'Around ₹3.10 Lakh'],
-          wrongsHi: ['लगभग ₹98,000', 'लगभग ₹2.40 लाख', 'लगभग ₹3.10 लाख']
+          nameEn: 'Sectoral Composition of GSDP (at constant 2011-12 prices)',
+          factEn: 'Services (~43-44%), Agriculture & Allied (~27-28%), Industry (~27-28%)',
+          factHi: 'सेवा क्षेत्र (~43-44%), कृषि एवं संबद्ध क्षेत्र (~27-28%), उद्योग क्षेत्र (~27-28%)',
+          detailEn: 'Services sector constitutes the largest contribution to the Gross State Domestic Product of Rajasthan.',
+          detailHi: 'राजस्थान के सकल राज्य घरेलू उत्पाद (GSDP) में सेवा क्षेत्र का योगदान सर्वाधिक है।'
         },
         {
-          topicEn: 'Sectoral contribution to GSVA at constant (2011-12) prices',
-          topicHi: 'स्थिर (2011-12) मूल्यों पर GSVA में क्षेत्रीय योगदान का सही घटता क्रम',
-          factEn: 'Services sector contributes the highest (~43.74%), followed by Agriculture (~28.50%) and Industry (~27.76%).',
-          factHi: 'सेवा क्षेत्र सर्वाधिक (~43.74%), उसके बाद कृषि क्षेत्र (~28.50%) तथा उद्योग क्षेत्र (~27.76%) का स्थान है।',
-          correctEn: 'Services > Agriculture > Industry',
-          correctHi: 'सेवा क्षेत्र > कृषि क्षेत्र > उद्योग क्षेत्र',
-          wrongsEn: ['Industry > Services > Agriculture', 'Agriculture > Industry > Services', 'Agriculture > Services > Industry'],
-          wrongsHi: ['उद्योग > सेवा > कृषि', 'कृषि > उद्योग > सेवा', 'कृषि > सेवा > उद्योग']
+          nameEn: 'Rajasthan Solar Energy Policy 2023',
+          factEn: 'Target to establish 90 GW (90,000 MW) of solar power capacity by 2030',
+          factHi: 'वर्ष 2030 तक 90 गीगावाट (90,000 मेगावाट) सौर ऊर्जा क्षमता स्थापना का लक्ष्य',
+          detailEn: 'Rajasthan currently ranks 1st in India in installed solar capacity with over 20,000 MW operational.',
+          detailHi: 'राजस्थान वर्तमान में 20,000 मेगावाट से अधिक स्थापित क्षमता के साथ देश में प्रथम स्थान पर है।'
+        },
+        {
+          nameEn: 'Delhi-Mumbai Industrial Corridor (DMIC) in Rajasthan',
+          factEn: '~38% of DMIC total alignment length (578 km) passes through Rajasthan',
+          factHi: 'DMIC के डेडिकेटेड फ्रेट कॉरिडोर का लगभग 38% हिस्सा (578 किमी) राजस्थान से गुजरता है',
+          detailEn: 'Major investment nodes include Khushkhera-Bhiwadi-Neemrana (Alwar) and Jodhpur-Pali-Marwar industrial node.',
+          detailHi: 'प्रमुख निवेश क्षेत्र: खुशखेड़ा-भिवाड़ी-नीमराना (अलवर) तथा जोधपुर-पाली-मारवाड़ नोड।'
         }
       ];
 
       const item = indicators[seed % indicators.length];
+      const others = indicators.filter(i => i.nameEn !== item.nameEn);
+
       return {
         question: {
-          en: `According to the latest Rajasthan Economic Survey, which of the following is correct regarding ${item.topicEn}?`,
-          hi: `नवीनतम राजस्थान आर्थिक समीक्षा के अनुसार ${item.topicHi} के संदर्भ में कौन सा कथन सही है?`
+          en: `According to the official Economic Survey of Rajasthan, which indicator/policy corresponds to: "${item.factEn}"?`,
+          hi: `राजस्थान की आधिकारिक आर्थिक समीक्षा के अनुसार कौन सा सूचक/नीति "${item.factHi}" से संबंधित है?`
         },
         options: {
-          en: [item.correctEn, ...item.wrongsEn],
-          hi: [item.correctHi, ...item.wrongsHi]
+          en: [item.nameEn, others[0].nameEn, others[1].nameEn, 'Rajasthan Wind & Hybrid Energy Policy 2019'],
+          hi: [item.nameEn, others[0].nameEn, others[1].nameEn, 'राजस्थान पवन एवं हाइब्रिड ऊर्जा नीति 2019']
         },
         correctOption: 0,
         explanation: {
-          en: `${item.topicEn}: ${item.factEn}`,
-          hi: `${item.topicHi}: ${item.factHi}`
+          en: `${item.nameEn}: ${item.detailEn} Key data: ${item.factEn}.`,
+          hi: `${item.nameEn}: ${item.detailHi} मुख्य आंकड़े: ${item.factHi}।`
         },
-        tags: ['Economic Survey', 'GSDP', 'Macro Indicators']
+        tags: ['Economic Survey', 'Rajasthan Economy', 'High Yield']
       };
     }
   },
@@ -424,64 +489,60 @@ export const TEMPLATES: GenerationTemplate[] = [
   // ==========================================
   {
     subjectId: 'indian_history',
-    subtopic: 'Modern India: 1857 Revolt, Socio-religious reforms',
+    subtopic: 'Indian National Movement & Freedom Struggle',
     importance: 'HIGH_YIELD',
-    importanceScore: 94,
-    conceptKey: 'Socio_Religious_Reformers',
+    importanceScore: 98,
+    conceptKey: 'INC_Sessions_PurnaSwaraj',
     generate: (seed) => {
-      const reformers = [
+      const incSessions = [
         {
-          nameEn: 'Brahmo Samaj (1828, Calcutta)',
-          nameHi: 'ब्रह्म समाज (1828, कलकत्ता)',
-          founderEn: 'Raja Ram Mohan Roy',
-          founderHi: 'राजा राम मोहन राय',
-          factEn: 'Opposed Sati Pratha (led to 1829 Sati Abolition Act under William Bentinck), idol worship and advocated monotheism.',
-          factHi: 'सती प्रथा के उन्मूलन (1829 का सती निषेध कानून) तथा एकेश्वरवाद के प्रचार में अग्रणी भूमिका निभाई।'
+          sessionEn: '1929 Lahore Session (लाहौर अधिवेशन)',
+          presidentEn: 'Pt. Jawaharlal Nehru',
+          presidentHi: 'पं. जवाहरलाल नेहरू',
+          resolutionEn: 'Adoption of "Purna Swaraj" (Complete Independence) resolution; Tri-color hoisted on Ravi river on 31 Dec 1929; 26 Jan 1930 declared Independence Day',
+          resolutionHi: '"पूर्ण स्वराज" का ऐतिहासिक प्रस्ताव पारित; रावी तट पर तिरंगा फहराया गया; 26 जनवरी 1930 को प्रथम स्वतंत्रता दिवस घोषित'
         },
         {
-          nameEn: 'Arya Samaj (1875, Bombay)',
-          nameHi: 'आर्य समाज (1875, बंबई)',
-          founderEn: 'Swami Dayanand Saraswati',
-          founderHi: 'स्वामी दयानंद सरस्वती',
-          factEn: 'Gave the call "Go Back to the Vedas" (वेदों की ओर लौटो); authored Satyarth Prakash in Udaipur, Rajasthan.',
-          factHi: '"वेदों की ओर लौटो" का नारा दिया तथा अपने प्रसिद्ध ग्रंथ "सत्यार्थ प्रकाश" की रचना उदयपुर (राजस्थान) में की।'
+          sessionEn: '1907 Surat Session (सूरत अधिवेशन)',
+          presidentEn: 'Rash Behari Ghosh',
+          presidentHi: 'रास बिहारी घोष',
+          resolutionEn: 'Surat Split between Moderates (Gokhale, Mehta) and Extremists (Tilak, Lal-Bal-Pal)',
+          resolutionHi: 'कांग्रेस का प्रथम ऐतिहासिक विभाजन (नरम दल और गरम दल में फूट)'
         },
         {
-          nameEn: 'Prarthana Samaj (1867, Bombay)',
-          nameHi: 'प्रार्थना समाज (1867, बंबई)',
-          founderEn: 'Dr. Atmaram Pandurang (with Justice M. G. Ranade)',
-          founderHi: 'डॉ. आत्माराम पांडुरंग (एम. जी. रानाडे के सहयोग से)',
-          factEn: 'Emphasized inter-caste dining, widow remarriage, upliftment of women and depressed classes.',
-          factHi: 'जाति प्रथा उन्मूलन, विधवा पुनर्विवाह एवं स्त्री शिक्षा पर विशेष बल दिया।'
+          sessionEn: '1916 Lucknow Session (लखनऊ अधिवेशन)',
+          presidentEn: 'Ambica Charan Mazumdar',
+          presidentHi: 'अंबिका चरण मजूमदार',
+          resolutionEn: 'Reunion of Moderates and Extremists; historic Lucknow Pact signed between Congress and Muslim League',
+          resolutionHi: 'नरम दल व गरम दल का पुनर्मिलन तथा कांग्रेस व मुस्लिम लीग के बीच प्रसिद्ध लखनऊ समझौता'
         },
         {
-          nameEn: 'Satyashodhak Samaj (1873, Maharashtra)',
-          nameHi: 'सत्यशोधक समाज (1873, महाराष्ट्र)',
-          founderEn: 'Jyotirao Phule',
-          founderHi: 'ज्योतिराव फुले',
-          factEn: 'Penned "Gulamgiri" and fought against caste oppression, Brahminical supremacy and for girl education.',
-          factHi: '"गुलामगिरी" पुस्तक की रचना की तथा दलितों व महिलाओं की शिक्षा एवं अधिकारों हेतु संघर्ष किया।'
+          sessionEn: '1924 Belgaum Session (बेलगाम अधिवेशन)',
+          presidentEn: 'Mahatma Gandhi',
+          presidentHi: 'महात्मा गांधी',
+          resolutionEn: 'The only Indian National Congress session presided over by Mahatma Gandhi',
+          resolutionHi: 'महात्मा गांधी की अध्यक्षता में आयोजित होने वाला भारतीय राष्ट्रीय कांग्रेस का एकमात्र अधिवेशन'
         }
       ];
 
-      const chosen = reformers[seed % reformers.length];
-      const others = reformers.filter(r => r.nameEn !== chosen.nameEn);
+      const item = incSessions[seed % incSessions.length];
+      const others = incSessions.filter(s => s.sessionEn !== item.sessionEn);
 
       return {
         question: {
-          en: `Who was the founder of "${chosen.nameEn}" which ${chosen.factEn}?`,
-          hi: `"${chosen.nameHi}" के संस्थापक कौन थे, जिन्होंने ${chosen.factHi}?`
+          en: `In which historic session of the Indian National Congress, presided over by ${item.presidentEn}, was the resolution for "${item.resolutionEn}" passed?`,
+          hi: `${item.presidentHi} की अध्यक्षता में आयोजित भारतीय राष्ट्रीय कांग्रेस के किस अधिवेशन में "${item.resolutionHi}" पारित किया गया था?`
         },
         options: {
-          en: [chosen.founderEn, others[0].founderEn, others[1].founderEn, others[2].founderEn],
-          hi: [chosen.founderHi, others[0].founderHi, others[1].founderHi, others[2].founderHi]
+          en: [item.sessionEn, others[0].sessionEn, others[1].sessionEn, others[2].sessionEn],
+          hi: [item.sessionEn, others[0].sessionEn, others[1].sessionEn, others[2].sessionEn]
         },
         correctOption: 0,
         explanation: {
-          en: `${chosen.nameEn} was founded by ${chosen.founderEn}. Key impact: ${chosen.factEn}`,
-          hi: `${chosen.nameHi} की स्थापना ${chosen.founderHi} द्वारा की गई थी।`
+          en: `${item.sessionEn}: President was ${item.presidentEn}. Key outcome: ${item.resolutionEn}.`,
+          hi: `${item.sessionEn}: अध्यक्ष ${item.presidentHi} थे। मुख्य परिणाम: ${item.resolutionHi}।`
         },
-        tags: ['Modern India', 'Reformers', 'Brahmo Samaj', 'Arya Samaj']
+        tags: ['Freedom Movement', 'INC Sessions', 'Modern India', 'High Yield']
       };
     }
   },
@@ -491,115 +552,115 @@ export const TEMPLATES: GenerationTemplate[] = [
   // ==========================================
   {
     subjectId: 'indian_polity',
-    subtopic: 'Constitutional Amendments & Major Judgments',
+    subtopic: 'Fundamental Rights & Constitutional Remedies',
     importance: 'HIGH_YIELD',
-    importanceScore: 98,
-    conceptKey: 'Polity_Amendments',
+    importanceScore: 99,
+    conceptKey: 'Writs_Article32',
     generate: (seed) => {
-      const amendments = [
+      const writs = [
         {
-          amendmentEn: '73rd Constitutional Amendment Act, 1992',
-          amendmentHi: '73वां संविधान संशोधन अधिनियम, 1992',
-          featureEn: 'Added Part IX and 11th Schedule (29 functional items) granting constitutional status to Panchayati Raj Institutions.',
-          featureHi: 'संविधान में भाग IX और 11वीं अनुसूची (29 विषय) जोड़कर पंचायती राज संस्थाओं को संवैधानिक दर्जा दिया।'
+          writEn: 'Habeas Corpus (बंदी प्रत्यक्षीकरण)',
+          meaningEn: '"To have the body of"; safeguards individual liberty against unlawful detention by state or private individuals',
+          meaningHi: '"शरीर को प्रस्तुत किया जाए"; अवैध नजरबंदी के विरुद्ध व्यक्तिगत स्वतंत्रता की रक्षा'
         },
         {
-          amendmentEn: '86th Constitutional Amendment Act, 2002',
-          amendmentHi: '86वां संविधान संशोधन अधिनियम, 2002',
-          featureEn: 'Inserted Article 21A making free and compulsory elementary education a Fundamental Right for children aged 6 to 14 years.',
-          featureHi: 'अनुच्छेद 21A जोड़कर 6 से 14 वर्ष के बच्चों के लिए मुफ्त और अनिवार्य प्रारंभिक शिक्षा को मौलिक अधिकार बनाया।'
+          writEn: 'Mandamus (परमादेश)',
+          meaningEn: '"We Command"; issued to a public official/body directing them to perform a mandatory statutory public duty',
+          meaningHi: '"हम आदेश देते हैं"; किसी सार्वजनिक प्राधिकारी को उसके वैधानिक कर्तव्य पालन हेतु जारी'
         },
         {
-          amendmentEn: '101st Constitutional Amendment Act, 2016',
-          amendmentHi: '101वां संविधान संशोधन अधिनियम, 2016',
-          featureEn: 'Introduced the Goods and Services Tax (GST) regime in India and created the GST Council under Article 279A.',
-          featureHi: 'भारत में वस्तु एवं सेवा कर (GST) व्यवस्था लागू की तथा अनुच्छेद 279A के तहत जीएसटी परिषद का गठन किया।'
+          writEn: 'Quo-Warranto (अधिकार-पृच्छा)',
+          meaningEn: '"By what authority"; inquires into the legality of a person\'s claim to a public office to prevent usurpation',
+          meaningHi: '"किस अधिकार से"; किसी व्यक्ति द्वारा गैर-कानूनी तरीके से सार्वजनिक पद धारण करने की जांच'
         },
         {
-          amendmentEn: '106th Constitutional Amendment Act, 2023 (Nari Shakti Vandan Adhiniyam)',
-          amendmentHi: '106वां संविधान संशोधन अधिनियम, 2023 (नारी शक्ति वंदन अधिनियम)',
-          featureEn: 'Provides 33% reservation for women in Lok Sabha, Delhi Legislative Assembly, and State Legislative Assemblies for 15 years.',
-          featureHi: 'लोकसभा, दिल्ली विधानसभा एवं राज्य विधानसभाओं में महिलाओं के लिए 33% आरक्षण का प्रावधान करता है।'
+          writEn: 'Certiorari (उत्प्रेषण)',
+          meaningEn: '"To be certified / informed"; quashes the order of a lower court/tribunal issued in excess of jurisdiction or violating natural justice',
+          meaningHi: '"पूर्णतः सूचित किया जाए"; अधीनस्थ न्यायालय/अधिकरण के अधिकार क्षेत्र से बाहर दिए गए आदेश को निरस्त करना'
         }
       ];
 
-      const item = amendments[seed % amendments.length];
-      const others = amendments.filter(a => a.amendmentEn !== item.amendmentEn);
+      const item = writs[seed % writs.length];
+      const others = writs.filter(w => w.writEn !== item.writEn);
 
       return {
         question: {
-          en: `Which Constitutional Amendment Act ${item.featureEn}?`,
-          hi: `किस संविधान संशोधन अधिनियम द्वारा ${item.featureHi}?`
+          en: `Under Article 32 (Supreme Court) and Article 226 (High Courts), which prerogative writ literally translates to "${item.meaningEn}"?`,
+          hi: `अनुच्छेद 32 (उच्चतम न्यायालय) एवं अनुच्छेद 226 (उच्च न्यायालय) के अंतर्गत किस रिट (प्रलेख) का शाब्दिक अर्थ "${item.meaningHi}" होता है?`
         },
         options: {
-          en: [item.amendmentEn, others[0].amendmentEn, others[1].amendmentEn, others[2].amendmentEn],
-          hi: [item.amendmentHi, others[0].amendmentHi, others[1].amendmentHi, others[2].amendmentHi]
+          en: [item.writEn, others[0].writEn, others[1].writEn, others[2].writEn],
+          hi: [item.writEn, others[0].writEn, others[1].writEn, others[2].writEn]
         },
         correctOption: 0,
         explanation: {
-          en: `${item.amendmentEn}: ${item.featureEn}`,
-          hi: `${item.amendmentHi}: ${item.featureHi}`
+          en: `Writ of ${item.writEn}: Meaning & Scope: ${item.meaningEn}. Dr. B.R. Ambedkar termed Article 32 the "Heart and Soul of the Constitution".`,
+          hi: `${item.writEn}: इसका अर्थ एवं कार्यक्षेत्र - ${item.meaningHi}। डॉ. बी.आर. अंबेडकर ने अनु. 32 को "संविधान का हृदय व आत्मा" कहा था।`
         },
-        tags: ['Polity', 'Amendments', 'Panchayat', 'Reservation', 'High Yield']
+        tags: ['Fundamental Rights', 'Article 32', 'Writs', 'Indian Polity']
       };
     }
   },
 
   // ==========================================
-  // 7. GEOGRAPHY: INDIA & WORLD
+  // 7. INDIAN & WORLD GEOGRAPHY
   // ==========================================
   {
     subjectId: 'indian_world_geo',
-    subtopic: 'India: Drainage System (Ganga, Brahmaputra, Peninsular rivers)',
+    subtopic: 'Himalayan Passes & Physical Features of India',
     importance: 'HIGH_YIELD',
-    importanceScore: 93,
-    conceptKey: 'Indian_River_Tributaries',
+    importanceScore: 95,
+    conceptKey: 'Mountain_Passes_India',
     generate: (seed) => {
-      const riverTributaries = [
+      const passes = [
         {
-          riverEn: 'Godavari (Dakshin Ganga / Vridha Ganga)',
-          riverHi: 'गोदावरी (दक्षिण गंगा / वृद्ध गंगा)',
-          originEn: 'Trimbakeshwar near Nashik, Maharashtra',
-          originHi: 'त्र्यंबकेश्वर (नासिक, महाराष्ट्र)',
-          tributariesEn: 'Pranhita, Penganga, Wainganga, Indravati, Manjira',
-          tributariesHi: 'प्राणहिता, पेनगंगा, वैनगंगा, इंद्रावती, मंजिरा'
+          passEn: 'Zoji La Pass (जोजी ला दर्रा)',
+          locationEn: 'Greater Himalayas in Ladakh',
+          locationHi: 'लद्दाख (बृहत् हिमालय)',
+          connectsEn: 'Srinagar with Kargil and Leh; Zoji La tunnel provides all-weather connectivity',
+          connectsHi: 'श्रीनगर को कारगिल व लेह से जोड़ता है'
         },
         {
-          riverEn: 'Krishna River',
-          riverHi: 'कृष्णा नदी',
-          originEn: 'Mahabaleshwar in Western Ghats, Maharashtra',
-          originHi: 'महाबलेश्वर (पश्चिमी घाट, महाराष्ट्र)',
-          tributariesEn: 'Tungabhadra, Koyna, Bhima, Ghataprabha, Malaprabha',
-          tributariesHi: 'तुंगभद्रा, कोयना, भीमा, घटप्रभा, मालप्रभा'
+          passEn: 'Shipki La Pass (शिपकी ला दर्रा)',
+          locationEn: 'Himachal Pradesh (Kinnaur district)',
+          locationHi: 'हिमाचल प्रदेश (किन्नौर जिला)',
+          connectsEn: 'Entry point of Satluj River into India from Tibet; ancient Indo-Tibetan trade route',
+          connectsHi: 'सतलुज नदी का तिब्बत से भारत में प्रवेश बिंदु; भारत-तिब्बत व्यापार मार्ग'
         },
         {
-          riverEn: 'Cauvery (Kaveri) River',
-          riverHi: 'कावेरी नदी',
-          originEn: 'Talakaveri in Brahmagiri hills, Kodagu, Karnataka',
-          originHi: 'तालकावेरी (ब्रह्मगिरि पहाड़ियाँ, कर्नाटक)',
-          tributariesEn: 'Hemavati, Shimsha, Arkavathi, Kabini, Bhavani, Amaravati',
-          tributariesHi: 'हेमावती, शिमशा, अर्कावती, काबिनी, भवानी, अमरावती'
+          passEn: 'Nathu La Pass (नाथू ला दर्रा)',
+          locationEn: 'East Sikkim district',
+          locationHi: 'सिक्किम (डोंगक्या श्रेणी)',
+          connectsEn: 'India with Tibet (Chumbi Valley); vital branch of the historic Silk Route',
+          connectsHi: 'सिक्किम को तिब्बत (चुंबी घाटी) से जोड़ता है; सिल्क रूट का हिस्सा'
+        },
+        {
+          passEn: 'Bum La / Bomdi La Pass (बोमडी ला)',
+          locationEn: 'Arunachal Pradesh',
+          locationHi: 'अरुणाचल प्रदेश',
+          connectsEn: 'Arunachal Pradesh with Lhasa (Tibet); strategic military pass',
+          connectsHi: 'अरुणाचल प्रदेश को ल्हासा (तिब्बत) से जोड़ता है'
         }
       ];
 
-      const item = riverTributaries[seed % riverTributaries.length];
-      const others = riverTributaries.filter(r => r.riverEn !== item.riverEn);
+      const item = passes[seed % passes.length];
+      const others = passes.filter(p => p.passEn !== item.passEn);
 
       return {
         question: {
-          en: `Which major Peninsular river originates from ${item.originEn} and has key tributaries including ${item.tributariesEn}?`,
-          hi: `कौन सी प्रमुख प्रायद्वीपीय नदी ${item.originHi} से निकलती है तथा जिसकी प्रमुख सहायक नदियों में ${item.tributariesHi} शामिल हैं?`
+          en: `Which strategic Himalayan mountain pass located in ${item.locationEn} is famous for "${item.connectsEn}"?`,
+          hi: `${item.locationHi} में स्थित कौन सा महत्वपूर्ण हिमालयी दर्रा "${item.connectsHi}" हेतु प्रसिद्ध है?`
         },
         options: {
-          en: [item.riverEn, others[0].riverEn, others[1].riverEn, 'Narmada River'],
-          hi: [item.riverHi, others[0].riverHi, others[1].riverHi, 'नर्मदा नदी']
+          en: [item.passEn, others[0].passEn, others[1].passEn, others[2].passEn],
+          hi: [item.passEn, others[0].passEn, others[1].passEn, others[2].passEn]
         },
         correctOption: 0,
         explanation: {
-          en: `${item.riverEn}: Origin is ${item.originEn}. Tributaries: ${item.tributariesEn}.`,
-          hi: `${item.riverHi}: उद्गम ${item.originHi} है। सहायक नदियां: ${item.tributariesHi}।`
+          en: `${item.passEn}: Located in ${item.locationEn}. Strategic connectivity: ${item.connectsEn}.`,
+          hi: `${item.passEn}: यह ${item.locationHi} में स्थित है तथा ${item.connectsHi}।`
         },
-        tags: ['Geography', 'Rivers', 'Godavari', 'Krishna', 'Cauvery']
+        tags: ['Himalayan Passes', 'Indian Geography', 'Physical Geography']
       };
     }
   },
@@ -609,85 +670,86 @@ export const TEMPLATES: GenerationTemplate[] = [
   // ==========================================
   {
     subjectId: 'indian_economy',
-    subtopic: 'National Income & GDP Concepts',
+    subtopic: 'Monetary Policy & Banking in India',
     importance: 'HIGH_YIELD',
-    importanceScore: 92,
-    conceptKey: 'Macro_Economy_Concepts',
+    importanceScore: 96,
+    conceptKey: 'RBI_Monetary_Instruments',
     generate: (seed) => {
-      const concepts = [
+      const instruments = [
         {
-          termEn: 'Gross Domestic Product (GDP)',
-          termHi: 'सकल घरेलू उत्पाद (GDP)',
-          defEn: 'Total monetary value of all final goods and services produced within the domestic territory of a country in a given year.',
-          defHi: 'एक वित्तीय वर्ष में किसी देश की घरेलू भौगोलिक सीमा के भीतर उत्पादित समस्त अंतिम वस्तुओं और सेवाओं का कुल मौद्रिक मूल्य।'
+          toolEn: 'Repo Rate (रेपो दर)',
+          definitionEn: 'The policy interest rate at which the Reserve Bank of India lends short-term funds to commercial banks against government securities',
+          definitionHi: 'वह नीतिगत ब्याज दर जिस पर भारतीय रिज़र्व बैंक वाणिज्यिक बैंकों को सरकारी प्रतिभूतियों के बदले अल्पकालिक ऋण प्रदान करता है'
         },
         {
-          termEn: 'Gross National Product (GNP)',
-          termHi: 'सकल राष्ट्रीय उत्पाद (GNP)',
-          defEn: 'GDP plus Net Factor Income from Abroad (NFIA) produced by citizens of a country irrespective of geographical location.',
-          defHi: 'जीडीपी में विदेशों से प्राप्त शुद्ध साधन आय (NFIA) जोड़ने पर प्राप्त मूल्य।'
+          toolEn: 'Cash Reserve Ratio - CRR (नकद आरक्षित अनुपात)',
+          definitionEn: 'The specified minimum percentage of a commercial bank\'s Net Demand and Time Liabilities (NDTL) that it must mandatorily hold as cash with the RBI',
+          definitionHi: 'वाणिज्यिक बैंक की कुल जमा (NDTL) का वह अनिवार्य न्यूनतम प्रतिशत जो उसे RBI के पास नकद रूप में रखना होता है'
         },
         {
-          termEn: 'Net National Product at Factor Cost (NNP at FC)',
-          termHi: 'साधन लागत पर शुद्ध राष्ट्रीय उत्पाद (NNP at FC)',
-          defEn: 'Regarded as the official definition of "National Income" (राष्ट्रीय आय), obtained after deducting depreciation from GNP and adjusting for net indirect taxes.',
-          defHi: 'सकल राष्ट्रीय उत्पाद में से मूल्यह्रास (Depreciation) घटाने और अप्रत्यक्ष कर व सब्सिडी समायोजित करने के बाद राष्ट्रीय आय (National Income) का माप।'
+          toolEn: 'Statutory Liquidity Ratio - SLR (वैधानिक तरलता अनुपात)',
+          definitionEn: 'The percentage of NDTL that commercial banks must maintain in liquid assets (gold, unencumbered approved government securities) with themselves',
+          definitionHi: 'बैंकों द्वारा अपनी कुल जमा का वह अंश जो उन्हें स्वर्ण या अनुमोदित सरकारी प्रतिभूतियों के रूप में स्वयं के पास रखना अनिवार्य है'
+        },
+        {
+          toolEn: 'Standing Deposit Facility - SDF (स्थायी जमा सुविधा)',
+          definitionEn: 'An uncollateralized liquidity absorption mechanism allowing RBI to absorb surplus funds from commercial banks without providing government securities',
+          definitionHi: 'RBI द्वारा बिना किसी सरकारी प्रतिभूति को बंधक रखे बैंकों से अतिरिक्त तरलता सोखने का गैर-संपार्श्विक साधन'
         }
       ];
 
-      const item = concepts[seed % concepts.length];
-      const others = concepts.filter(c => c.termEn !== item.termEn);
+      const item = instruments[seed % instruments.length];
+      const others = instruments.filter(i => i.toolEn !== item.toolEn);
 
       return {
         question: {
-          en: `Which economic metric is defined as "${item.defEn}"?`,
-          hi: `किस आर्थिक संकेतक को "${item.defHi}" के रूप में परिभाषित किया जाता है?`
+          en: `In the monetary policy framework of India, which instrument is defined as "${item.definitionEn}"?`,
+          hi: `भारत के मौद्रिक नीति ढांचे में किस उपकरण को "${item.definitionHi}" के रूप में परिभाषित किया गया है?`
         },
         options: {
-          en: [item.termEn, others[0].termEn, others[1].termEn, 'Personal Disposable Income'],
-          hi: [item.termHi, others[0].termHi, others[1].termHi, 'व्यक्तिगत प्रयोज्य आय']
+          en: [item.toolEn, others[0].toolEn, others[1].toolEn, others[2].toolEn],
+          hi: [item.toolEn, others[0].toolEn, others[1].toolEn, others[2].toolEn]
         },
         correctOption: 0,
         explanation: {
-          en: `${item.termEn}: ${item.defEn}`,
-          hi: `${item.termHi}: ${item.defHi}`
+          en: `${item.toolEn}: ${item.definitionEn}. Set by the 6-member Monetary Policy Committee (MPC) chaired by the RBI Governor.`,
+          hi: `${item.toolEn}: ${item.definitionHi}। इसका निर्धारण RBI गवर्नर की अध्यक्षता वाली 6-सदस्यीय मौद्रिक नीति समिति (MPC) करती है।`
         },
-        tags: ['National Income', 'GDP', 'GNP', 'Economics']
+        tags: ['RBI', 'Monetary Policy', 'Indian Economy', 'High Yield']
       };
     }
   },
 
   // ==========================================
-  // 9. GENERAL SCIENCE & TECHNOLOGY
+  // 9. SCIENCE & TECHNOLOGY
   // ==========================================
   {
     subjectId: 'science_tech',
-    subtopic: 'Space Technology & ISRO Missions (Chandrayaan, Gaganyaan, Aditya-L1)',
+    subtopic: 'Space Exploration & Defense Technology',
     importance: 'HIGH_YIELD',
     importanceScore: 98,
     conceptKey: 'ISRO_Launch_Vehicles',
     generate: (seed) => {
       const missions = [
         {
-          nameEn: 'Chandrayaan-3',
-          vehicleEn: 'LVM3-M4 (Fat Boy / Bahubali)',
-          vehicleHi: 'LVM3-M4 (बाहुबली रॉकेट)',
-          detailsEn: 'Landed near the lunar south pole (Shiv Shakti Point) on 23 August 2023 (celebrated as National Space Day).',
-          detailsHi: '23 अगस्त 2023 को चंद्रमा के दक्षिणी ध्रुव पर "शिव शक्ति बिंदु" पर सफल सॉफ्ट लैंडिंग की (राष्ट्रीय अंतरिक्ष दिवस)।'
+          nameEn: 'LVM3 (Launch Vehicle Mark-3 / Bahubali)',
+          roleEn: 'Three-stage heavy lift launch vehicle with two solid strap-on motors (S200), a liquid core stage (L110), and a high-thrust cryogenic upper stage (C25); successfully launched Chandrayaan-3 into Lunar Transfer Orbit',
+          roleHi: 'इसरो का सबसे शक्तिशाली प्रक्षेपण यान जिसने चंद्रयान-3 और वनवेब उपग्रहों को सफलतापूर्वक कक्षा में स्थापित किया'
+        },
+        {
+          nameEn: 'PSLV (Polar Satellite Launch Vehicle - Workhorse of ISRO)',
+          roleEn: 'Four-stage launch vehicle with alternating solid and liquid propulsion stages; created world record by launching 104 satellites in a single flight (PSLV-C37)',
+          roleHi: 'इसरो का कार्य-अश्व (Workhorse) जिसमें ठोस व द्रव प्रणोदक चरण होते हैं; एक ही उड़ान में 104 उपग्रह प्रक्षेपित करने का रिकॉर्ड'
+        },
+        {
+          nameEn: 'BrahMos Supersonic Cruise Missile',
+          roleEn: 'Joint venture between India (DRDO) and Russia (NPO Mashinostroyeniya); operates on "Fire and Forget" principle reaching speeds of Mach 2.8 to 3.0',
+          roleHi: 'भारत व रूस का संयुक्त उद्यम; मैक 2.8 से 3.0 की गति से दागो और भूल जाओ (Fire and Forget) सिद्धांत पर आधारित सुपरसोनिक क्रूज मिसाइल'
         },
         {
           nameEn: 'Aditya-L1 Solar Mission',
-          vehicleEn: 'PSLV-C57 (XL Configuration)',
-          vehicleHi: 'PSLV-C57',
-          detailsEn: 'Placed in a halo orbit around Sun-Earth Lagrange point 1 (L1), equipped with 7 indigenous payloads including VELC.',
-          detailsHi: 'सूर्य के अध्ययन हेतु 7 पेलोड (VELC आदि) के साथ लैग्रेंज बिंदु 1 के हेलो ऑर्बिट में स्थापित।'
-        },
-        {
-          nameEn: 'XPoSat (X-ray Polarimeter Satellite)',
-          vehicleEn: 'PSLV-C58',
-          vehicleHi: 'PSLV-C58',
-          detailsEn: 'India\'s first dedicated scientific satellite to study polarimetry of cosmic X-ray sources like black holes and neutron stars.',
-          detailsHi: 'ब्लैक होल और न्यूट्रॉन तारों से निकलने वाले एक्स-रे ध्रुवीकरण का अध्ययन करने वाला भारत का पहला समर्पित मिशन।'
+          roleEn: 'India\'s first dedicated space observatory to study the Sun, placed in a halo orbit around Sun-Earth Lagrange Point 1 (L1) ~1.5 million km from Earth',
+          roleHi: 'सूर्य का अध्ययन करने वाली भारत की प्रथम अंतरिक्ष वेधशाला, जिसे पृथ्वी से 15 लाख किमी दूर L1 हेलो कक्षा में स्थापित किया गया'
         }
       ];
 
@@ -696,19 +758,19 @@ export const TEMPLATES: GenerationTemplate[] = [
 
       return {
         question: {
-          en: `Which launch vehicle of ISRO was used to successfully launch the "${item.nameEn}" mission?`,
-          hi: `इसरो (ISRO) द्वारा "${item.nameEn}" मिशन को सफलतापूर्वक प्रक्षेपित करने के लिए किस प्रक्षेपण यान (Launch Vehicle) का उपयोग किया गया था?`
+          en: `Which space or defense technology of India corresponds to the following description: "${item.roleEn}"?`,
+          hi: `भारत की कौन सी अंतरिक्ष अथवा रक्षा तकनीक "${item.roleHi}" से संबंधित है?`
         },
         options: {
-          en: [item.vehicleEn, others[0].vehicleEn, 'GSLV-F10', 'SSLV-D2'],
-          hi: [item.vehicleHi, others[0].vehicleHi, 'GSLV-F10', 'SSLV-D2']
+          en: [item.nameEn, others[0].nameEn, others[1].nameEn, others[2].nameEn],
+          hi: [item.nameEn, others[0].nameEn, others[1].nameEn, others[2].nameEn]
         },
         correctOption: 0,
         explanation: {
-          en: `${item.nameEn} was launched by ${item.vehicleEn}. Mission Highlight: ${item.detailsEn}`,
-          hi: `${item.nameEn} को ${item.vehicleHi} द्वारा प्रक्षेपित किया गया था। प्रमुख तथ्य: ${item.detailsHi}`
+          en: `${item.nameEn}: ${item.roleEn}.`,
+          hi: `${item.nameEn}: ${item.roleHi}।`
         },
-        tags: ['ISRO', 'Space Tech', 'Chandrayaan', 'Aditya L1', 'Science & Tech']
+        tags: ['ISRO', 'DRDO', 'Science & Tech', 'High Yield']
       };
     }
   },
@@ -718,33 +780,42 @@ export const TEMPLATES: GenerationTemplate[] = [
   // ==========================================
   {
     subjectId: 'reasoning_mental',
-    subtopic: 'Percentages, Ratio & Proportion, Averages',
+    subtopic: 'Number Series & Analytical Reasoning',
     importance: 'HIGH_YIELD',
-    importanceScore: 89,
-    conceptKey: 'Math_Ratio_Averages',
+    importanceScore: 94,
+    conceptKey: 'Reasoning_Dynamic_Math',
     generate: (seed) => {
-      const multiplier = (seed % 7) + 3;
-      const rA = 3;
-      const rB = 5;
-      const baseA = rA * multiplier;
-      const baseB = rB * multiplier;
-      const sum = baseA + baseB;
+      // Dynamic pattern generator: n^2 + k or n^3 - 1
+      const offset = (seed % 7) + 2;
+      const multipliers = [2, 3, 4, 5];
+      const mult = multipliers[seed % multipliers.length];
+
+      // Series: a, a*m + offset, ...
+      const a1 = (seed % 5) + 3;
+      const a2 = a1 * 2 + offset;
+      const a3 = a2 * 2 + offset;
+      const a4 = a3 * 2 + offset;
+      const correctNext = a4 * 2 + offset;
+
+      const wrong1 = correctNext + offset;
+      const wrong2 = correctNext - 2 * offset;
+      const wrong3 = a4 * 2;
 
       return {
         question: {
-          en: `The ratio of two numbers is 3 : 5. If their sum is ${sum}, what is the value of the larger number?`,
-          hi: `दो संख्याओं का अनुपात 3 : 5 है। यदि उनका योग ${sum} है, तो बड़ी संख्या का मान क्या होगा?`
+          en: `Find the missing next number in the given series: ${a1}, ${a2}, ${a3}, ${a4}, ?`,
+          hi: `दी गई संख्या श्रृंखला में अगला लुप्त पद ज्ञात कीजिए: ${a1}, ${a2}, ${a3}, ${a4}, ?`
         },
         options: {
-          en: [`${baseB}`, `${baseA}`, `${baseA + 4}`, `${baseB + 6}`],
-          hi: [`${baseB}`, `${baseA}`, `${baseA + 4}`, `${baseB + 6}`]
+          en: [String(correctNext), String(wrong1), String(wrong2), String(wrong3)],
+          hi: [String(correctNext), String(wrong1), String(wrong2), String(wrong3)]
         },
         correctOption: 0,
         explanation: {
-          en: `Let numbers be 3x and 5x. 3x + 5x = 8x = ${sum} => x = ${multiplier}. Larger number is 5x = 5 * ${multiplier} = ${baseB}.`,
-          hi: `माना संख्याएँ 3x और 5x हैं। 3x + 5x = 8x = ${sum} => x = ${multiplier}। अतः बड़ी संख्या = 5x = 5 * ${multiplier} = ${baseB} होगी।`
+          en: `Pattern logic: Each consecutive term is obtained by (Previous Term × 2) + ${offset}. Thus: ${a4} × 2 + ${offset} = ${correctNext}.`,
+          hi: `पैटर्न का नियम: प्रत्येक अगला पद (पिछला पद × 2) + ${offset} है। अतः: ${a4} × 2 + ${offset} = ${correctNext}।`
         },
-        tags: ['Reasoning', 'Ratios', 'Aptitude']
+        tags: ['Number Series', 'Logical Reasoning', 'Math']
       };
     }
   },
@@ -754,56 +825,29 @@ export const TEMPLATES: GenerationTemplate[] = [
   // ==========================================
   {
     subjectId: 'current_affairs',
-    subtopic: 'Rajasthan Current Affairs & Schemes',
+    subtopic: 'Rajasthan & National Current Affairs',
     importance: 'HIGH_YIELD',
-    importanceScore: 97,
-    conceptKey: 'Current_Affairs_Generator',
+    importanceScore: 99,
+    conceptKey: 'Dynamic_Current_Affairs_Generator',
     generate: (seed) => {
-      const caItems = [
-        {
-          schemeEn: 'Shri Annapurna Rasoi Yojana',
-          schemeHi: 'श्री अन्नपूर्णा रसोई योजना',
-          factEn: 'Enhanced government subsidy to ₹22 per plate with 600 grams of nutritious food while maintaining ₹8 beneficiary charge.',
-          factHi: 'प्रति थाली 600 ग्राम पौष्टिक भोजन, राज्य सरकार का अनुदान ₹22 व लाभार्थी शुल्क ₹8 निर्धारित।'
-        },
-        {
-          schemeEn: 'Mukhyamantri Ayushman Arogya (MAA) Yojana',
-          schemeHi: 'मुख्यमंत्री आयुष्मान आरोग्य (माँ) योजना',
-          factEn: 'Comprehensive cashless in-patient hospital healthcare with free medicines and diagnostic coverage across Rajasthan.',
-          factHi: 'कैशलेस इन-डोर उपचार, जांचें व दवाइयां उपलब्ध कराने वाली प्रमुख स्वास्थ्य योजना।'
-        },
-        {
-          schemeEn: 'Modified PKC-ERCP River Interlinking Project',
-          schemeHi: 'संशोधित PKC-ERCP नदी जोड़ो परियोजना',
-          factEn: 'Historic agreement between Rajasthan, Madhya Pradesh and Central Government for drinking & irrigation water to 13 eastern districts.',
-          factHi: 'राजस्थान, मध्य प्रदेश और केंद्र सरकार के मध्य 13 पूर्वी जिलों में जलापूर्ति का त्रिपक्षीय समझौता।'
-        }
-      ];
-
-      const item = caItems[seed % caItems.length];
-      const others = caItems.filter(c => c.schemeEn !== item.schemeEn);
-
+      const q = getLiveCurrentAffairsQuestion(seed);
       return {
-        question: {
-          en: `Which welfare initiative of the Government of Rajasthan is characterized by "${item.factEn}"?`,
-          hi: `राजस्थान सरकार की किस जनकल्याणकारी योजना की प्रमुख विशेषता "${item.factHi}" है?`
-        },
-        options: {
-          en: [item.schemeEn, others[0].schemeEn, others[1].schemeEn, 'Rajasthan Yuva Sambal Yojana'],
-          hi: [item.schemeHi, others[0].schemeHi, others[1].schemeHi, 'राजस्थान युवा संबल योजना']
-        },
-        correctOption: 0,
-        explanation: {
-          en: `${item.schemeEn}: ${item.factEn}`,
-          hi: `${item.schemeHi}: ${item.factHi}`
-        },
-        tags: ['Current Affairs', 'Rajasthan Schemes', 'High Yield']
+        question: q.question,
+        options: q.options,
+        correctOption: q.correctOption,
+        explanation: q.explanation,
+        tags: q.tags
       };
     }
   }
 ];
 
 export function generateDynamicQuestion(subjectId?: SubjectId, seed: number = Date.now()): Question {
+  // If subject is current affairs, route to live current affairs engine
+  if (subjectId === 'current_affairs') {
+    return getLiveCurrentAffairsQuestion(seed);
+  }
+
   const eligibleTemplates = subjectId 
     ? TEMPLATES.filter(t => t.subjectId === subjectId)
     : TEMPLATES;
@@ -813,7 +857,7 @@ export function generateDynamicQuestion(subjectId?: SubjectId, seed: number = Da
     : TEMPLATES[seed % TEMPLATES.length];
 
   const generated = template.generate(seed);
-  const qId = `dyn_${template.subjectId}_${seed % 99999}_${Math.floor(Math.random() * 1000)}`;
+  const qId = `dyn_${template.subjectId}_${seed % 999999}_${Math.floor(Math.random() * 10000)}`;
 
   // Randomize correct option position (0, 1, 2, 3)
   const targetIndex = (seed + 1) % 4;

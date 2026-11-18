@@ -7,7 +7,7 @@ import { SUBJECT_METADATA } from '../data/pyqAnalysis';
 import { INITIAL_QUESTION_BANK } from '../data/questionBank';
 import { generateDynamicQuestion } from '../services/questionGenerator';
 import { recordAnswerInSRS, isQuestionEligibleForPractice } from '../services/srsEngine';
-import { getDailyCurrentAffairsQuiz } from '../services/currentAffairsService';
+import { getDailyCurrentAffairsQuiz, getLiveCurrentAffairsQuestion } from '../services/currentAffairsService';
 import { sounds } from '../utils/audio';
 import { 
   Sparkles, 
@@ -49,7 +49,10 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
 
   // Active question stream
   const [currentQuestion, setCurrentQuestion] = useState<Question>(() => {
-    return INITIAL_QUESTION_BANK.find(q => q.subjectId === initialSubject) || INITIAL_QUESTION_BANK[0];
+    if (initialSubject === 'current_affairs') {
+      return getLiveCurrentAffairsQuestion();
+    }
+    return INITIAL_QUESTION_BANK.find(q => q.subjectId === initialSubject) || generateDynamicQuestion(initialSubject);
   });
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [hasAnswered, setHasAnswered] = useState<boolean>(false);

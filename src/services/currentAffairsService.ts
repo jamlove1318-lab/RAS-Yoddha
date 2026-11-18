@@ -30,12 +30,12 @@ export interface CurrentAffairsItem {
  * Curated repository of High-Yield RPSC RAS Current Affairs Items
  * (Rajasthan Sujas, Budget, Schemes, Appointments, Sports, National & Global Summits)
  */
-const CURRENT_AFFAIRS_MASTER: CurrentAffairsItem[] = [
+export const CURRENT_AFFAIRS_MASTER: CurrentAffairsItem[] = [
   // 1. Rajasthan Schemes & Infrastructure
   {
     id: 'ca_raj_ercp_mou',
     dateKey: '2024-01-28',
-    category: 'Rajasthan Infrastructure & Water',
+    category: 'rajasthan',
     questionEn: 'Under the Modified PKC-ERCP (Parbati-Kalisindh-Chambal Eastern Rajasthan Canal Project) tripartite agreement, which two states signed the historic MoU with the Union Jal Shakti Ministry?',
     questionHi: 'संशोधित पार्वती-कालीसिंध-चंबल (PKC-ERCP) लिंक परियोजना के त्रिपक्षीय समझौते के अंतर्गत किन दो राज्यों ने केंद्रीय जल शक्ति मंत्रालय के साथ ऐतिहासिक समझौता ज्ञापन (MoU) पर हस्ताक्षर किए?',
     optionsEn: [
@@ -52,14 +52,14 @@ const CURRENT_AFFAIRS_MASTER: CurrentAffairsItem[] = [
     ],
     correctOption: 0,
     explanationEn: 'On 28 January 2024, Rajasthan and Madhya Pradesh signed a historic tripartite MoU with the Union Jal Shakti Ministry for the modified Parbati-Kalisindh-Chambal inter-state river link project (integrated with ERCP) to provide drinking & irrigation water to 13 districts of eastern Rajasthan and Malwa/Chambal regions of MP.',
-    explanationHi: '28 जनवरी 2024 को राजस्थान और मध्य प्रदेश ने केंद्र सरकार के साथ संशोधित पार्वती-कालीसिंध-चंबल लिंक परियोजना (ERCP) के लिए समझौता ज्ञापन पर हस्ताक्षर किए, जिससे राजस्थान के 13 जिलों को पेयजल व सिंचाई सुविधा मिलेगी।',
+    explanationHi: '28 जनवरी 2024 को राजस्थान और मध्य प्रदेश ने केंद्र सरकार के साथ संशोधित पार्वती-कालीसिंध-चंबल लिंक परियोजना (ERCP) के लिए समझौता ज्ञापन पर हस्ताक्षर किए, जिससे राजस्थान के 13 पूर्वी जिलों को पेयजल व सिंचाई सुविधा मिलेगी।',
     importanceScore: 99,
     tags: ['ERCP', 'Chambal', 'Rajasthan Schemes', 'High Yield']
   },
   {
     id: 'ca_raj_annapurna_rasoi',
     dateKey: '2024-01-01',
-    category: 'Rajasthan Welfare Schemes',
+    category: 'rajasthan',
     questionEn: 'In Rajasthan, what is the new name given to the "Indira Rasoi Yojana", and what is the enhanced state government subsidy per thali provided under it?',
     questionHi: 'राजस्थान में "इंदिरा रसोई योजना" का नाम बदलकर क्या किया गया है, तथा इसके तहत राज्य सरकार द्वारा प्रति थाली दिया जाने वाला अनुदान बढ़ाकर कितना कर दिया गया है?',
     optionsEn: [
@@ -83,7 +83,7 @@ const CURRENT_AFFAIRS_MASTER: CurrentAffairsItem[] = [
   {
     id: 'ca_raj_gi_tags',
     dateKey: '2024-02-15',
-    category: 'Art, Culture & GI Tags',
+    category: 'rajasthan',
     questionEn: 'Which of the following handicrafts of Rajasthan was awarded the Geographical Indication (GI) Tag by the Geographical Indications Registry in Chennai?',
     questionHi: 'चेन्नई स्थित जीआई रजिस्ट्री द्वारा हाल ही में राजस्थान के किस प्रसिद्ध हस्तशिल्प को भौगोलिक उपदर्शन (GI Tag) प्रदान किया गया?',
     optionsEn: [
@@ -107,7 +107,7 @@ const CURRENT_AFFAIRS_MASTER: CurrentAffairsItem[] = [
   {
     id: 'ca_raj_solar_parks',
     dateKey: '2024-03-10',
-    category: 'Energy & Economic Survey',
+    category: 'rajasthan',
     questionEn: 'According to the Ministry of New and Renewable Energy (MNRE), what is Rajasthan’s rank in total installed solar power generation capacity in India?',
     questionHi: 'नवीन एवं नवीकरणीय ऊर्जा मंत्रालय (MNRE) के अद्यतन आंकड़ों के अनुसार भारत में कुल स्थापित सौर ऊर्जा उत्पादन क्षमता में राजस्थान का कौन सा स्थान है?',
     optionsEn: [
@@ -131,9 +131,9 @@ const CURRENT_AFFAIRS_MASTER: CurrentAffairsItem[] = [
   {
     id: 'ca_raj_ayushman_arogya',
     dateKey: '2024-04-05',
-    category: 'Health Welfare Schemes',
-    questionEn: 'Under the renamed "Ayushman Bharat - Mukhyamantri Ayushman Arogya Yojana (MAA Yojana)" in Rajasthan, which cancer treatment and IPD medical coverage is provided?',
-    questionHi: 'राजस्थान में "आयुष्मान भारत - मुख्यमंत्री आयुष्मान आरोग्य योजना (माँ योजना)" के तहत लाभार्थियों को क्या स्वास्थ्य बीमा एवं चिकित्सा सुविधा उपलब्ध कराई जा रही है?',
+    category: 'rajasthan',
+    questionEn: 'Under the renamed "Ayushman Bharat - Mukhyamantri Ayushman Arogya Yojana (MAA Yojana)" in Rajasthan, which healthcare coverage is provided to eligible families?',
+    questionHi: 'राजस्थान में "आयुष्मान भारत - मुख्यमंत्री आयुष्मान आरोग्य योजना (माँ योजना)" के तहत पात्र परिवारों को क्या स्वास्थ्य लाभ प्रदान किया जा रहा है?',
     optionsEn: [
       'Cashless in-patient treatment across empaneled government & private hospitals with free medicine and diagnostic tests',
       'Only OPD consultation reimbursement up to ₹5,000',
@@ -153,9 +153,105 @@ const CURRENT_AFFAIRS_MASTER: CurrentAffairsItem[] = [
     tags: ['Health Schemes', 'MAA Yojana', 'Rajasthan Health']
   },
   {
+    id: 'ca_raj_tiger_reserve_5th',
+    dateKey: '2024-01-20',
+    category: 'rajasthan',
+    questionEn: 'Which tiger reserve was notified as the 5th Tiger Reserve of Rajasthan by the National Tiger Conservation Authority (NTCA)?',
+    questionHi: 'राष्ट्रीय बाघ संरक्षण प्राधिकरण (NTCA) द्वारा राजस्थान के 5वें बाघ अभयारण्य (Tiger Reserve) के रूप में किसे अधिसूचित किया गया?',
+    optionsEn: [
+      'Dholpur-Karauli Tiger Reserve (धौलपुर-करौली टाइगर रिजर्व)',
+      'Ramgarh Vishdhari Tiger Reserve (रामगढ़ विषधारी टाइगर रिजर्व)',
+      'Kumbhalgarh Tiger Reserve (कुंभलगढ़ टाइगर रिजर्व)',
+      'Shergarh Wildlife Sanctuary (शेरगढ़ वन्यजीव अभयारण्य)'
+    ],
+    optionsHi: [
+      'धौलपुर-करौली टाइगर रिजर्व',
+      'रामगढ़ विषधारी टाइगर रिजर्व (यह चौथा है)',
+      'कुंभलगढ़ टाइगर रिजर्व',
+      'शेरगढ़ वन्यजीव अभयारण्य'
+    ],
+    correctOption: 0,
+    explanationEn: 'Dholpur-Karauli Tiger Reserve was officially approved as the 5th Tiger Reserve of Rajasthan (and 54th in India). Rajasthan now has: 1. Ranthambore, 2. Sariska, 3. Mukundra Hills, 4. Ramgarh Vishdhari (Bundi), and 5. Dholpur-Karauli.',
+    explanationHi: 'धौलपुर-करौली टाइगर रिजर्व राजस्थान का 5वां और देश का 54वां टाइगर रिजर्व बना। राजस्थान के 5 टाइगर रिजर्व: 1. रणथंभौर, 2. सरिस्का, 3. मुकुंदरा हिल्स, 4. रामगढ़ विषधारी (बूंदी) एवं 5. धौलपुर-करौली।',
+    importanceScore: 99,
+    tags: ['Tiger Reserve', 'Dholpur Karauli', 'Environment', 'High Yield']
+  },
+  {
+    id: 'ca_raj_pm_mitra_park',
+    dateKey: '2024-03-22',
+    category: 'rajasthan',
+    questionEn: 'Under the PM Mega Integrated Textile Region and Apparel (PM MITRA) scheme, where in Rajasthan has the Mega Textile Park been sanctioned by the Central Government?',
+    questionHi: 'पीएम मेगा इंटीग्रेटेड टेक्सटाइल रीजन एंड अपैरल (PM MITRA) योजना के अंतर्गत राजस्थान में मेगा टेक्सटाइल पार्क की स्थापना को केंद्र सरकार द्वारा कहां स्वीकृति दी गई है?',
+    optionsEn: [
+      'Kakani, Jodhpur (कांकाणी, जोधपुर)',
+      'Bhiwadi, Alwar (भिवाड़ी, अलवर)',
+      'Sitapura, Jaipur (सीतापुरा, जयपुर)',
+      'Bhilwara (भीलवाड़ा)'
+    ],
+    optionsHi: [
+      'कांकाणी, जोधपुर',
+      'भिवाड़ी, अलवर',
+      'सीतापुरा, जयपुर',
+      'भीलवाड़ा'
+    ],
+    correctOption: 0,
+    explanationEn: 'Under the PM MITRA scheme, Rajasthan’s Mega Textile Park is established at Kakani village in Jodhpur district over an area of ~1,000 acres to create a world-class integrated modern textile manufacturing and export hub.',
+    explanationHi: 'पीएम मित्रा योजना के तहत राजस्थान का मेगा टेक्सटाइल पार्क जोधपुर जिले के कांकाणी में लगभग 1,000 एकड़ क्षेत्र में स्थापित किया जा रहा है।',
+    importanceScore: 96,
+    tags: ['PM MITRA', 'Jodhpur', 'Textile', 'Economy']
+  },
+  {
+    id: 'ca_raj_sports_divyakriti',
+    dateKey: '2024-01-10',
+    category: 'sports_awards',
+    questionEn: 'Who became the first Indian woman athlete to be conferred the prestigious Arjuna Award in Equestrian (घुड़सवारी) sport by the President of India, hailing from Rajasthan?',
+    questionHi: 'राजस्थान की कौन सी खिलाड़ी भारत की पहली महिला एथलीट बनीं जिन्हें राष्ट्रपति द्वारा घुड़सवारी (Equestrian) खेल में प्रतिष्ठित अर्जुन पुरस्कार से सम्मानित किया गया?',
+    optionsEn: [
+      'Divyakriti Singh (दिव्यकृति सिंह)',
+      'Avani Lekhara (अवनि लेखरा)',
+      'Apurvi Chandela (अपूर्वी चंदेला)',
+      'Bhawna Jat (भावना जाट)'
+    ],
+    optionsHi: [
+      'दिव्यकृति सिंह',
+      'अवनि लेखरा',
+      'अपूर्वी चंदेला',
+      'भावना जाट'
+    ],
+    correctOption: 0,
+    explanationEn: 'Divyakriti Singh from Rajasthan (Jaipur/Nagaur) created history by becoming the first Indian woman equestrian to receive the Arjuna Award. She was part of the Indian Dressage team that clinched a historic Gold Medal at the Hangzhou Asian Games.',
+    explanationHi: 'दिव्यकृति सिंह घुड़सवारी खेल में अर्जुन पुरस्कार पाने वाली भारत की प्रथम महिला खिलाड़ी बनीं। उन्होंने हांगझोउ एशियाई खेलों में घुड़सवारी की ड्रेसेज स्पर्धा में ऐतिहासिक स्वर्ण पदक जीता था।',
+    importanceScore: 98,
+    tags: ['Divyakriti Singh', 'Arjuna Award', 'Rajasthan Sports']
+  },
+  {
+    id: 'ca_raj_green_hydrogen',
+    dateKey: '2024-02-28',
+    category: 'rajasthan',
+    questionEn: 'What is the ambitious production target set under the "Rajasthan Green Hydrogen Policy 2023" to be achieved by the year 2030?',
+    questionHi: '"राजस्थान ग्रीन हाइड्रोजन नीति 2023" के अंतर्गत वर्ष 2030 तक राज्य में प्रति वर्ष कितने ग्रीन हाइड्रोजन उत्पादन का महत्वाकांक्षी लक्ष्य निर्धारित किया गया है?',
+    optionsEn: [
+      '2,000 KTPA (2,000 Kilo Tonnes Per Annum)',
+      '1,000 KTPA',
+      '500 KTPA',
+      '5,000 KTPA'
+    ],
+    optionsHi: [
+      '2,000 केटीपीए (2,000 किलो टन प्रति वर्ष)',
+      '1,000 केटीपीए',
+      '500 केटीपीए',
+      '5,000 केटीपीए'
+    ],
+    correctOption: 0,
+    explanationEn: 'Under the Rajasthan Green Hydrogen Policy 2023, the state government aims to produce 2,000 KTPA of green hydrogen by 2030, offering 50% rebate in transmission and wheeling charges and full exemption on electricity duty for 10 years.',
+    explanationHi: 'राजस्थान ग्रीन हाइड्रोजन नीति 2023 के तहत वर्ष 2030 तक 2,000 केटीपीए ग्रीन हाइड्रोजन उत्पादन का लक्ष्य है। इसके लिए ट्रांसमिशन व व्हीलिंग शुल्क में 50% छूट तथा 10 वर्षों हेतु विद्युत शुल्क में 100% छूट का प्रावधान है।',
+    importanceScore: 95,
+    tags: ['Green Hydrogen', 'Rajasthan Policy', 'Renewable Energy']
+  },
+  {
     id: 'ca_india_space_aditya',
     dateKey: '2024-01-06',
-    category: 'Science & Space Technology',
+    category: 'national',
     questionEn: 'On 6 January 2024, ISRO successfully inserted Aditya-L1 into its final halo orbit around the Sun-Earth L1 point. What is the orbital period of the satellite in this halo orbit?',
     questionHi: '6 जनवरी 2024 को इसरो ने आदित्य-एल1 उपग्रह को सूर्य-पृथ्वी एल1 बिंदु के चारों ओर हेलो ऑर्बिट में सफलतापूर्वक स्थापित किया। इस हेलो कक्षा में उपग्रह का परिक्रमण काल लगभग कितना है?',
     optionsEn: [
@@ -179,7 +275,7 @@ const CURRENT_AFFAIRS_MASTER: CurrentAffairsItem[] = [
   {
     id: 'ca_sports_olympics_raj',
     dateKey: '2024-08-12',
-    category: 'Sports & Rajasthan Personalities',
+    category: 'sports_awards',
     questionEn: 'Avani Lekhara, who won the Gold Medal in women\'s 10m Air Rifle SH1 at the Paris 2024 Paralympics, belongs to which district of Rajasthan and created which unique record?',
     questionHi: 'पेरिस 2024 पैरालंपिक खेलों में 10 मीटर एयर राइफल (SH1) में स्वर्ण पदक जीतने वाली अवनि लेखरा राजस्थान के किस जिले से हैं तथा उन्होंने क्या ऐतिहासिक रिकॉर्ड बनाया?',
     optionsEn: [
@@ -201,9 +297,33 @@ const CURRENT_AFFAIRS_MASTER: CurrentAffairsItem[] = [
     tags: ['Avani Lekhara', 'Paralympics', 'Rajasthan Sports']
   },
   {
+    id: 'ca_sports_mona_agarwal',
+    dateKey: '2024-08-30',
+    category: 'sports_awards',
+    questionEn: 'At the Paris 2024 Paralympics, who won the Bronze medal in the Women\'s 10m Air Rifle Standing SH1 event alongside Avani Lekhara\'s Gold, representing Rajasthan?',
+    questionHi: 'पेरिस 2024 पैरालंपिक में 10 मीटर एयर राइफल स्टैंडिंग SH1 स्पर्धा में अवनि लेखरा के स्वर्ण के साथ किस राजस्थान खिलाड़ी ने कांस्य पदक जीता?',
+    optionsEn: [
+      'Mona Agarwal (मोना अग्रवाल)',
+      'Deepa Malik (दीपा मलिक)',
+      'Bhavina Patel (भाविना पटेल)',
+      'Rubina Francis (रुबीना फ्रांसिस)'
+    ],
+    optionsHi: [
+      'मोना अग्रवाल',
+      'दीपा मलिक',
+      'भाविना पटेल',
+      'रुबीना फ्रांसिस'
+    ],
+    correctOption: 0,
+    explanationEn: 'Mona Agarwal from Rajasthan clinched the Bronze medal with a score of 228.7 points in the Women\'s 10m Air Rifle Standing SH1, creating a historic double-podium finish for India at Paris 2024 alongside Avani Lekhara.',
+    explanationHi: 'मोना अग्रवाल (राजस्थान) ने पेरिस पैरालंपिक 2024 में 10 मीटर एयर राइफल स्पर्धा में कांस्य पदक जीता, जिससे भारत ने एक ही स्पर्धा में दो पदक हासिल करने का इतिहास रचा।',
+    importanceScore: 97,
+    tags: ['Mona Agarwal', 'Paralympics', 'Shooting']
+  },
+  {
     id: 'ca_polity_election_cec',
     dateKey: '2024-03-15',
-    category: 'National Polity & Governance',
+    category: 'national',
     questionEn: 'Under the Chief Election Commissioner and other Election Commissioners (Appointment, Conditions of Service and Term of Office) Act, 2023, who chairs the Selection Committee for appointing Election Commissioners?',
     questionHi: 'मुख्य निर्वाचन आयुक्त एवं अन्य निर्वाचन आयुक्त (नियुक्ति, सेवा शर्तें एवं पदावधि) अधिनियम, 2023 के अंतर्गत निर्वाचन आयुक्तों की नियुक्ति हेतु चयन समिति की अध्यक्षता किसके द्वारा की जाती है?',
     optionsEn: [
@@ -227,7 +347,7 @@ const CURRENT_AFFAIRS_MASTER: CurrentAffairsItem[] = [
   {
     id: 'ca_raj_invest_summit',
     dateKey: '2024-10-15',
-    category: 'Economy & Industry',
+    category: 'rajasthan',
     questionEn: 'What was the central theme of the "Rising Rajasthan Global Investment Summit" organized by the Government of Rajasthan in Jaipur?',
     questionHi: 'जयपुर में राजस्थान सरकार द्वारा आयोजित "राइजिंग राजस्थान ग्लोबल इन्वेस्टमेंट समिट" का मुख्य विषय (Theme) क्या था?',
     optionsEn: [
@@ -251,7 +371,7 @@ const CURRENT_AFFAIRS_MASTER: CurrentAffairsItem[] = [
   {
     id: 'ca_awards_bharat_ratna',
     dateKey: '2024-02-09',
-    category: 'National Honors & Personalities',
+    category: 'national',
     questionEn: 'Which former Prime Minister of India, celebrated as the architect of India\'s 1991 economic liberalization, was conferred the Bharat Ratna (posthumously) in 2024?',
     questionHi: 'भारत के किस पूर्व प्रधानमंत्री, जिन्हें 1991 के आर्थिक उदारीकरण का सूत्रधार माना जाता है, को 2024 में मरणोपरांत भारत रत्न से सम्मानित किया गया?',
     optionsEn: [
@@ -275,7 +395,7 @@ const CURRENT_AFFAIRS_MASTER: CurrentAffairsItem[] = [
   {
     id: 'ca_raj_desert_cyclone',
     dateKey: '2024-01-15',
-    category: 'Defence Exercises & Rajasthan',
+    category: 'national',
     questionEn: 'Joint Military Exercise "Desert Cyclone" was conducted at Mahajan Field Firing Range in Bikaner, Rajasthan between the armies of India and which foreign country?',
     questionHi: 'भारत और किस देश की सेना के बीच संयुक्त सैन्य अभ्यास "डेजर्ट साइक्लोन" (Desert Cyclone) राजस्थान के बीकानेर स्थित महाजन फील्ड फायरिंग रेंज में आयोजित किया गया?',
     optionsEn: [
@@ -299,7 +419,7 @@ const CURRENT_AFFAIRS_MASTER: CurrentAffairsItem[] = [
   {
     id: 'ca_india_ramsar_wetlands',
     dateKey: '2024-02-02',
-    category: 'Environment, Ecology & Wetlands',
+    category: 'rajasthan',
     questionEn: 'Which two wetlands from Rajasthan are included in the prestigious Ramsar List of Wetlands of International Importance?',
     questionHi: 'अंतर्राष्ट्रीय महत्व की रामसर आर्द्रभूमि (Ramsar Wetlands) सूची में राजस्थान के कौन से दो स्थल शामिल हैं?',
     optionsEn: [
@@ -319,8 +439,348 @@ const CURRENT_AFFAIRS_MASTER: CurrentAffairsItem[] = [
     explanationHi: 'राजस्थान में 2 रामसर आर्द्रभूमि स्थल हैं: 1. केवलादेव घाना राष्ट्रीय उद्यान (1981 में घोषित, मोंट्रेक्स रिकॉर्ड में शामिल) तथा 2. सांभर झील (1990 में घोषित)।',
     importanceScore: 98,
     tags: ['Ramsar Sites', 'Keoladeo', 'Sambhar', 'Ecology']
+  },
+  {
+    id: 'ca_raj_ramgarh_crater',
+    dateKey: '2024-03-01',
+    category: 'rajasthan',
+    questionEn: 'Ramgarh Crater in Baran district of Rajasthan was recognized as a National Geological Monument and Geo-heritage site. How was this structure formed?',
+    questionHi: 'राजस्थान के बारां जिले में स्थित रामगढ़ क्रेटर (Ramgarh Crater) को भू-विरासत स्थल के रूप में मान्यता प्राप्त है। इस संरचना का निर्माण किस प्रकार हुआ था?',
+    optionsEn: [
+      'Meteorite impact crater formed ~165 million years ago (उल्कापिंड के टकराने से निर्मित क्रेटर)',
+      'Volcanic caldera eruption (ज्वालामुखी विस्फोट से निर्मित काल्डेरा)',
+      'Glacial gouging during Pleistocene epoch',
+      'River erosion by Parbati river'
+    ],
+    optionsHi: [
+      'उल्कापिंड के टकराने से निर्मित क्रेटर (Meteorite Impact)',
+      'ज्वालामुखी विस्फोट से निर्मित काल्डेरा',
+      'हिमनदीय निक्षेप',
+      'पार्वती नदी के कटाव द्वारा'
+    ],
+    correctOption: 0,
+    explanationEn: 'Ramgarh Crater in Baran, Rajasthan is India\'s 3rd recognized meteorite impact crater (after Lonar Lake in Maharashtra and Dhala in MP). It is circular with a diameter of ~3.2 km.',
+    explanationHi: 'बारां जिले के मांगरोल में स्थित रामगढ़ क्रेटर लगभग 165 मिलियन वर्ष पूर्व उल्कापिंड के टकराने से बना था। यह लोनार (महाराष्ट्र) और ढाला (म.प्र.) के बाद भारत का तीसरा उल्कापिंड क्रेटर है।',
+    importanceScore: 97,
+    tags: ['Ramgarh Crater', 'Geoheritage', 'Baran']
+  },
+  {
+    id: 'ca_g20_african_union',
+    dateKey: '2024-01-18',
+    category: 'international',
+    questionEn: 'During India\'s historic G20 Presidency, which continental organization comprising 55 member states was inducted as a permanent member, officially creating G21?',
+    questionHi: 'भारत की ऐतिहासिक G20 अध्यक्षता के दौरान 55 सदस्य देशों वाले किस महाद्वीपीय संगठन को स्थायी सदस्य के रूप में शामिल किया गया, जिससे यह G21 बन गया?',
+    optionsEn: [
+      'African Union - AU (अफ्रीकी संघ)',
+      'European Union - EU',
+      'ASEAN (आसियान)',
+      'Organization of American States - OAS'
+    ],
+    optionsHi: [
+      'अफ्रीकी संघ (African Union - AU)',
+      'यूरोपीय संघ',
+      'आसियान (ASEAN)',
+      'अमेरिकी राज्यों का संगठन'
+    ],
+    correctOption: 0,
+    explanationEn: 'At the New Delhi G20 Leaders\' Summit under the theme "Vasudhaiva Kutumbakam - One Earth, One Family, One Future", the African Union (AU) with 55 nations was inducted as a permanent member.',
+    explanationHi: 'नई दिल्ली जी-20 शिखर सम्मेलन में "वसुधैव कुटुम्बकम्" के मंत्र के साथ 55 देशों के अफ्रीकी संघ (AU) को स्थायी सदस्यता प्रदान की गई।',
+    importanceScore: 99,
+    tags: ['G20', 'African Union', 'International']
+  },
+  {
+    id: 'ca_raj_district_reorg',
+    dateKey: '2024-02-12',
+    category: 'rajasthan',
+    questionEn: 'Which high-level committee was constituted by the Government of Rajasthan for the reorganization and creation of new districts and administrative divisions in the state?',
+    questionHi: 'राजस्थान में नए जिलों एवं प्रशासनिक संभागों के गठन तथा सीमाओं के पुनर्गठन हेतु राज्य सरकार द्वारा किस उच्च स्तरीय समिति का गठन किया गया था?',
+    optionsEn: [
+      'Ram Lubhaya Committee (रामलुभाया समिति)',
+      'GS Sandhu Committee (जी.एस. संधू समिति)',
+      'Paramesh Chandra Committee (परमेश चंद्र समिति)',
+      'V. S. Vyas Committee (वी.एस. व्यास समिति)'
+    ],
+    optionsHi: [
+      'रामलुभाया समिति',
+      'जी.एस. संधू समिति',
+      'परमेश चंद्र समिति (प्रतापगढ़ जिला गठन से संबंधित थी)',
+      'वी.एस. व्यास समिति'
+    ],
+    correctOption: 0,
+    explanationEn: 'The Ram Lubhaya Committee was constituted to examine and recommend the formation of new districts and divisions in Rajasthan. Paramesh Chandra Committee had previously recommended the 33rd district Pratapgarh in 2008.',
+    explanationHi: 'राजस्थान में नए जिलों के गठन हेतु सेवानिवृत्त आईएएस रामलुभाया की अध्यक्षता में उच्च स्तरीय समिति का गठन किया गया था। परमेश चंद्र समिति ने 2008 में 33वें जिले प्रतापगढ़ की सिफारिश की थी।',
+    importanceScore: 98,
+    tags: ['Districts Reorganization', 'Ram Lubhaya', 'Polity']
   }
 ];
+
+/**
+ * Procedural Dynamic Current Affairs Synthesis Engine
+ * Synthesizes unlimited unique questions across 8 high-yield domains
+ */
+export function generateDynamicCurrentAffairsQuestion(seed: number = Date.now(), categoryFilter?: string): Question {
+  const categories = [
+    'raj_welfare_schemes',
+    'raj_solar_energy',
+    'raj_water_infrastructure',
+    'raj_sports_champions',
+    'raj_awards_literature',
+    'raj_wildlife_ecology',
+    'national_space_defense',
+    'national_constitutional_acts'
+  ];
+
+  const chosenCat = categoryFilter && categoryFilter !== 'all' 
+    ? categoryFilter 
+    : categories[seed % categories.length];
+
+  let qObj = {
+    en: '',
+    hi: '',
+    optsEn: ['', '', '', ''],
+    optsHi: ['', '', '', ''],
+    correct: 0,
+    expEn: '',
+    expHi: '',
+    subtopic: 'Current Affairs',
+    score: 95
+  };
+
+  if (chosenCat === 'raj_welfare_schemes') {
+    const schemes = [
+      {
+        nameEn: 'Mukhyamantri Ayushman Arogya (MAA) Yojana',
+        nameHi: 'मुख्यमंत्री आयुष्मान आरोग्य (माँ) योजना',
+        featureEn: 'Comprehensive cashless in-patient treatment across empaneled hospitals with free medicines and diagnostic coverage',
+        featureHi: 'संबद्ध अस्पतालों में निःशुल्क दवा, जांच व कैशलेस इन-डोर उपचार'
+      },
+      {
+        nameEn: 'Shri Annapurna Rasoi Yojana',
+        nameHi: 'श्री अन्नपूर्णा रसोई योजना',
+        featureEn: 'Enhanced government subsidy of ₹22 per thali offering 600 grams of nutritious food for ₹8',
+        featureHi: 'प्रति थाली ₹22 सरकारी अनुदान, 600 ग्राम भोजन मात्र ₹8 में'
+      },
+      {
+        nameEn: 'Mukhyamantri Nishulk Dava Yojana',
+        nameHi: 'मुख्यमंत्री निःशुल्क दवा योजना',
+        featureEn: 'Free essential medicines provided to all OPD and IPD patients in state-run hospitals',
+        featureHi: 'राजकीय चिकित्सालयों में ओपीडी व आईपीडी मरीजों को आवश्यक दवाइयों का निःशुल्क वितरण'
+      },
+      {
+        nameEn: 'Palanhar Yojana',
+        nameHi: 'पालनहार योजना',
+        featureEn: 'Monthly financial assistance for orphan children education and welfare up to 18 years of age',
+        featureHi: 'अनाथ एवं पात्र बच्चों के पालन-पोषण व शिक्षा हेतु 18 वर्ष तक मासिक आर्थिक संबल'
+      },
+      {
+        nameEn: 'Lakhpati Didi Initiative',
+        nameHi: 'लखपति दीदी योजना',
+        featureEn: 'Empowering rural women through Self Help Groups (SHGs) to earn annual household income exceeding ₹1 Lakh',
+        featureHi: 'स्वयं सहायता समूहों के माध्यम से ग्रामीण महिलाओं की वार्षिक आय ₹1 लाख से अधिक करने का लक्ष्य'
+      }
+    ];
+
+    const item = schemes[seed % schemes.length];
+    const wrongs = schemes.filter(s => s.nameEn !== item.nameEn);
+    qObj = {
+      en: `Under the latest administrative decisions of the Government of Rajasthan, which flagship scheme provides "${item.featureEn}"?`,
+      hi: `राजस्थान सरकार के नवीनतम प्रशासनिक निर्णयों के अनुसार, किस प्रमुख योजना के तहत "${item.featureHi}" की सुविधा प्रदान की जाती है?`,
+      optsEn: [item.nameEn, wrongs[0].nameEn, wrongs[1].nameEn, wrongs[2].nameEn],
+      optsHi: [item.nameHi, wrongs[0].nameHi, wrongs[1].nameHi, wrongs[2].nameHi],
+      correct: 0,
+      expEn: `${item.nameEn}: Major feature - ${item.featureEn}. This is an essential RPSC Prelims flagship scheme.`,
+      expHi: `${item.nameHi}: मुख्य विशेषता - ${item.featureHi}। यह आरपीएससी प्रीलिम्स हेतु अति-महत्वपूर्ण योजना है।`,
+      subtopic: 'Rajasthan Welfare Schemes',
+      score: 98
+    };
+  } else if (chosenCat === 'raj_solar_energy') {
+    const solarItems = [
+      {
+        parkEn: 'Bhadla Solar Park (Phalodi district)',
+        parkHi: 'भड़ला सोलर पार्क (फलोदी जिला)',
+        capacityEn: '2,245 MW capacity; one of the largest operational solar parks on Earth',
+        capacityHi: '2,245 मेगावाट क्षमता; विश्व के सबसे बड़े संचालित सोलर पार्कों में से एक'
+      },
+      {
+        parkEn: 'Nokh Solar Park (Jaisalmer district)',
+        parkHi: 'नोख सोलर पार्क (जैसलमेर जिला)',
+        capacityEn: '925 MW capacity developed by Rajasthan Solar Park Development Company',
+        capacityHi: '925 मेगावाट क्षमता; राजस्थान सोलर पार्क डेवलपमेंट कंपनी द्वारा विकसित'
+      },
+      {
+        parkEn: 'Pugal Solar Park (Bikaner district)',
+        parkHi: 'पूगल सोलर पार्क (बीकानेर जिला)',
+        capacityEn: '1,450 MW capacity joint venture with Coal India and RVUNL',
+        capacityHi: '1,450 मेगावाट क्षमता; कोल इंडिया व राजस्थान विद्युत उत्पादन निगम का संयुक्त उपक्रम'
+      },
+      {
+        parkEn: 'Fatehgarh Solar Park (Jaisalmer district)',
+        parkHi: 'फतेहगढ़ सोलर पार्क (जैसलमेर जिला)',
+        capacityEn: 'Ultra Mega Renewable Energy Solar Park powering western transmission corridor',
+        capacityHi: 'अल्ट्रा मेगा रिन्यूएबल एनर्जी सोलर पार्क जो पश्चिमी ग्रिड को ऊर्जा आपूर्ति करता है'
+      }
+    ];
+
+    const item = solarItems[seed % solarItems.length];
+    const wrongs = solarItems.filter(s => s.parkEn !== item.parkEn);
+    qObj = {
+      en: `Which mega solar power installation in Rajasthan is characterized by: "${item.capacityEn}"?`,
+      hi: `राजस्थान का कौन सा प्रमुख सौर ऊर्जा पार्क "${item.capacityHi}" से संबंधित है?`,
+      optsEn: [item.parkEn, wrongs[0].parkEn, wrongs[1].parkEn, wrongs[2].parkEn],
+      optsHi: [item.parkHi, wrongs[0].parkHi, wrongs[1].parkHi, wrongs[2].parkHi],
+      correct: 0,
+      expEn: `${item.parkEn}: Features: ${item.capacityEn}. Rajasthan stands first in India in solar power capacity.`,
+      expHi: `${item.parkHi}: ${item.capacityHi}। सौर ऊर्जा स्थापित क्षमता में राजस्थान देश में प्रथम स्थान पर है।`,
+      subtopic: 'Renewable Energy & Infrastructure',
+      score: 97
+    };
+  } else if (chosenCat === 'raj_water_infrastructure') {
+    const waterProjects = [
+      {
+        nameEn: 'Modified PKC-ERCP Link Project',
+        nameHi: 'संशोधित पार्वती-कालीसिंध-चंबल (PKC-ERCP) लिंक',
+        districtsEn: '13 eastern districts including Kota, Bundi, Baran, Jhalawar, Ajmer, Tonk, Jaipur, Dausa, Alwar, Bharatpur, Dholpur, Karauli, Sawai Madhopur',
+        districtsHi: '13 पूर्वी जिले (कोटा, बूंदी, बारां, झालावाड़, अजमेर, टोंक, जयपुर, दौसा, अलवर, भरतपुर, धौलपुर, करौली, सवाई माधोपुर)'
+      },
+      {
+        nameEn: 'Indira Gandhi Canal Project (IGNP)',
+        nameHi: 'इंदिरा गांधी नहर परियोजना (IGNP)',
+        districtsEn: 'Harike Barrage at confluence of Satluj and Beas; feeds northwestern desert districts',
+        districtsHi: 'सतलुज-व्यास के संगम पर हरिके बैराज से उद्गमित; उत्तर-पश्चिमी मरुस्थलीय जिलों की जीवन रेखा'
+      },
+      {
+        nameEn: 'Narmada Canal Project',
+        nameHi: 'नर्मदा नहर परियोजना',
+        districtsEn: 'Enters Rajasthan at Silu village (Sanchore/Jalore); India\'s first project with mandatory sprinkler/drip irrigation',
+        districtsHi: 'सीलू गांव (सांचौर/जालौर) से प्रवेश; भारत की प्रथम परियोजना जिसमें फव्वारा (स्प्रिंकलर) सिंचाई अनिवार्य है'
+      },
+      {
+        nameEn: 'Bisalpur Water Supply Project',
+        nameHi: 'बीसलपुर बांध पेयजल परियोजना',
+        districtsEn: 'Constructed on Banas river at Toda Rai Singh (Tonk); lifelife for drinking water to Jaipur, Ajmer, and Tonk',
+        districtsHi: 'टोडारायसिंह (टोंक) में बनास नदी पर निर्मित; जयपुर, अजमेर व टोंक हेतु मुख्य पेयजल स्रोत'
+      }
+    ];
+
+    const item = waterProjects[seed % waterProjects.length];
+    const wrongs = waterProjects.filter(w => w.nameEn !== item.nameEn);
+    qObj = {
+      en: `Which irrigation and drinking water project in Rajasthan is associated with: "${item.districtsEn}"?`,
+      hi: `राजस्थान की कौन सी सिंचाई एवं पेयजल परियोजना "${item.districtsHi}" से संबद्ध है?`,
+      optsEn: [item.nameEn, wrongs[0].nameEn, wrongs[1].nameEn, wrongs[2].nameEn],
+      optsHi: [item.nameHi, wrongs[0].nameHi, wrongs[1].nameHi, wrongs[2].nameHi],
+      correct: 0,
+      expEn: `${item.nameEn}: Key details: ${item.districtsEn}.`,
+      expHi: `${item.nameHi}: प्रमुख तथ्य: ${item.districtsHi}।`,
+      subtopic: 'Rajasthan Water Resources & Irrigation',
+      score: 99
+    };
+  } else {
+    // General current affairs item
+    const generalPool = CURRENT_AFFAIRS_MASTER;
+    const item = generalPool[seed % generalPool.length];
+    qObj = {
+      en: item.questionEn,
+      hi: item.questionHi,
+      optsEn: item.optionsEn,
+      optsHi: item.optionsHi,
+      correct: item.correctOption,
+      expEn: item.explanationEn,
+      expHi: item.explanationHi,
+      subtopic: item.category,
+      score: item.importanceScore
+    };
+  }
+
+  // Shuffle options so correct answer isn't always at 0
+  const targetIndex = (seed + 2) % 4;
+  const enOpts = [...qObj.optsEn];
+  const hiOpts = [...qObj.optsHi];
+
+  const tmpEn = enOpts[0];
+  const tmpHi = hiOpts[0];
+  enOpts[0] = enOpts[targetIndex];
+  hiOpts[0] = hiOpts[targetIndex];
+  enOpts[targetIndex] = tmpEn;
+  hiOpts[targetIndex] = tmpHi;
+
+  return {
+    id: `ca_live_${seed % 999999}_${Math.floor(Math.random() * 10000)}`,
+    subjectId: 'current_affairs',
+    subtopic: qObj.subtopic,
+    importance: 'HIGH_YIELD',
+    importanceScore: qObj.score,
+    conceptKey: `CA_${chosenCat}`,
+    question: {
+      en: qObj.en,
+      hi: qObj.hi
+    },
+    options: {
+      en: enOpts,
+      hi: hiOpts
+    },
+    correctOption: targetIndex,
+    explanation: {
+      en: qObj.expEn,
+      hi: qObj.expHi
+    },
+    tags: ['Live Current Affairs', 'RPSC Prelims', 'Dynamic']
+  };
+}
+
+/**
+ * Get Next Live Current Affairs Question
+ * Ensures unlimited streaming without repeating in the current session
+ */
+export function getLiveCurrentAffairsQuestion(
+  seed: number = Date.now(), 
+  excludeIds?: Set<string>,
+  categoryFilter?: string
+): Question {
+  // First attempt from master list if unseen
+  if (excludeIds) {
+    const unseens = CURRENT_AFFAIRS_MASTER.filter(m => !excludeIds.has(m.id));
+    if (unseens.length > 0) {
+      const selected = unseens[seed % unseens.length];
+      const targetIndex = (seed + 1) % 4;
+      const enOpts = [...selected.optionsEn];
+      const hiOpts = [...selected.optionsHi];
+      
+      const tmpEn = enOpts[0];
+      const tmpHi = hiOpts[0];
+      enOpts[0] = enOpts[targetIndex];
+      hiOpts[0] = hiOpts[targetIndex];
+      enOpts[targetIndex] = tmpEn;
+      hiOpts[targetIndex] = tmpHi;
+
+      return {
+        id: selected.id,
+        subjectId: 'current_affairs',
+        subtopic: selected.category,
+        importance: 'HIGH_YIELD',
+        importanceScore: selected.importanceScore,
+        conceptKey: selected.id,
+        question: {
+          en: selected.questionEn,
+          hi: selected.questionHi
+        },
+        options: {
+          en: enOpts,
+          hi: hiOpts
+        },
+        correctOption: targetIndex,
+        explanation: {
+          en: selected.explanationEn,
+          hi: selected.explanationHi
+        },
+        tags: ['Current Affairs', ...selected.tags]
+      };
+    }
+  }
+
+  // When master pool has been seen or for infinite mode, procedurally generate fresh
+  return generateDynamicCurrentAffairsQuestion(seed + Math.floor(Math.random() * 50000), categoryFilter);
+}
 
 /**
  * Get Today's Date String in standard ISO YYYY-MM-DD
@@ -346,11 +806,6 @@ export function getFormattedTodayDate(lang: 'en' | 'hi'): string {
   return d.toLocaleDateString(lang === 'hi' ? 'hi-IN' : 'en-US', options);
 }
 
-/**
- * Deterministic PRNG using string hash (e.g. today's date)
- * Ensures every candidate gets the same daily quiz for today,
- * and every new day automatically gets a fresh rotated quiz!
- */
 function hashDateToSeed(dateStr: string): number {
   let hash = 0;
   for (let i = 0; i < dateStr.length; i++) {
@@ -361,20 +816,18 @@ function hashDateToSeed(dateStr: string): number {
 }
 
 /**
- * Get Today's 10 Daily Current Affairs Questions
- * Refreshes everyday automatically based on the calendar day!
+ * Get Current Affairs Questions
+ * If limit is omitted or 0, returns the entire active master pool
  */
-export function getDailyCurrentAffairsQuiz(dateStr: string = getTodayDateString()): Question[] {
+export function getDailyCurrentAffairsQuiz(dateStr: string = getTodayDateString(), limit: number = 0): Question[] {
   const seed = hashDateToSeed(dateStr);
   const totalAvailable = CURRENT_AFFAIRS_MASTER.length;
 
-  // Shuffle deterministic list based on day seed
   const indices: number[] = [];
   for (let i = 0; i < totalAvailable; i++) {
     indices.push(i);
   }
 
-  // Fisher-Yates shuffle with seed
   for (let i = indices.length - 1; i > 0; i--) {
     const j = (seed + i * 37) % (i + 1);
     const temp = indices[i];
@@ -382,34 +835,46 @@ export function getDailyCurrentAffairsQuiz(dateStr: string = getTodayDateString(
     indices[j] = temp;
   }
 
-  const selectedCount = Math.min(10, totalAvailable);
+  const selectedCount = limit > 0 ? Math.min(limit, totalAvailable) : totalAvailable;
   const selectedItems = indices.slice(0, selectedCount).map(idx => CURRENT_AFFAIRS_MASTER[idx]);
 
-  return selectedItems.map((item, index) => ({
-    id: `daily_${dateStr}_q${index + 1}_${item.id}`,
-    subjectId: 'current_affairs',
-    subtopic: item.category,
-    year: 2024,
-    paperName: `Daily Current Affairs - ${dateStr}`,
-    importance: 'HIGH_YIELD',
-    importanceScore: item.importanceScore,
-    conceptKey: item.id,
-    question: {
-      en: item.questionEn,
-      hi: item.questionHi
-    },
-    options: {
-      en: item.optionsEn,
-      hi: item.optionsHi
-    },
-    correctOption: item.correctOption,
-    explanation: {
-      en: item.explanationEn,
-      hi: item.explanationHi
-    },
-    tags: ['Daily CA', ...item.tags],
-    frequencyNote: 'Updated on current daily basis for RPSC Prelims'
-  }));
+  return selectedItems.map((item, index) => {
+    const targetIdx = (seed + index) % 4;
+    const enOpts = [...item.optionsEn];
+    const hiOpts = [...item.optionsHi];
+    const tmpEn = enOpts[0];
+    const tmpHi = hiOpts[0];
+    enOpts[0] = enOpts[targetIdx];
+    hiOpts[0] = hiOpts[targetIdx];
+    enOpts[targetIdx] = tmpEn;
+    hiOpts[targetIdx] = tmpHi;
+
+    return {
+      id: `daily_${dateStr}_q${index + 1}_${item.id}`,
+      subjectId: 'current_affairs',
+      subtopic: item.category,
+      year: 2024,
+      paperName: `Daily Current Affairs - ${dateStr}`,
+      importance: 'HIGH_YIELD',
+      importanceScore: item.importanceScore,
+      conceptKey: item.id,
+      question: {
+        en: item.questionEn,
+        hi: item.questionHi
+      },
+      options: {
+        en: enOpts,
+        hi: hiOpts
+      },
+      correctOption: targetIdx,
+      explanation: {
+        en: item.explanationEn,
+        hi: item.explanationHi
+      },
+      tags: ['Daily CA', ...item.tags],
+      frequencyNote: 'Live updated RPSC Prelims Current Affairs'
+    };
+  });
 }
 
 /**

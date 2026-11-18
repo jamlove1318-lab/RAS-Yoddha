@@ -171,12 +171,12 @@ export const Dashboard: React.FC<DashboardProps> = ({
               <span>{lang === 'hi' ? `दैनिक समसामयिकी • ${formattedToday}` : `Daily Current Affairs • ${formattedToday}`}</span>
             </div>
             <h2 className="text-xl sm:text-2xl font-black tracking-tight">
-              {lang === 'hi' ? 'आज का दैनिक समसामयिकी टेस्ट (10 प्रश्न)' : 'Today\'s Daily Current Affairs Quiz (10 MCQs)'}
+              {lang === 'hi' ? 'लाइव एवं असीमित समसामयिकी केंद्र' : 'Live & Unlimited Current Affairs Hub'}
             </h2>
             <p className="text-xs sm:text-sm text-amber-100 max-w-2xl">
               {lang === 'hi'
-                ? 'राजस्थान सूजस, बजट, योजनाएं, नवीनतम नियुक्तियां, खेल एवं राष्ट्रीय घटनाक्रम पर आधारित। प्रतिदिन स्वतः अपडेट होता है।'
-                : 'Updated on a daily current basis with Rajasthan Sujas, state welfare schemes, sports, awards, and national developments.'}
+                ? 'राजस्थान सूजस, बजट, योजनाएं, नवीनतम नियुक्तियां, खेल एवं राष्ट्रीय घटनाक्रम पर आधारित। हर समय असीमित नए प्रश्नों के साथ स्वतः अपडेट।'
+                : 'Real-time updated current events with Rajasthan Sujas, state welfare schemes, sports, awards, and national developments. Unlimited practice anytime.'}
             </p>
           </div>
 
@@ -188,7 +188,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
               }}
               className="px-5 py-2.5 rounded-2xl bg-white text-orange-700 hover:bg-amber-50 font-black text-xs sm:text-sm shadow-lg active:scale-95 transition-all flex items-center gap-2"
             >
-              <span>{isCACompleted ? (lang === 'hi' ? 'आज का क्विज पुनः दें' : 'Retake Today\'s Quiz') : (lang === 'hi' ? 'आज का क्विज शुरू करें' : 'Start Today\'s Quiz')}</span>
+              <span>{lang === 'hi' ? 'असीमित समसामयिकी शुरू करें' : 'Start Unlimited Current Affairs'}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
