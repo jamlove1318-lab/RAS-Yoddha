@@ -1,4 +1,5 @@
 import { Question, SubjectId, ImportanceLevel } from '../types';
+import { isQuestionEligibleForPractice } from './srsEngine';
 
 interface GenerationTemplate {
   subjectId: SubjectId;
@@ -15,13 +16,15 @@ interface GenerationTemplate {
   };
 }
 
-const TEMPLATES: GenerationTemplate[] = [
-  // 1. Rajasthan Forts & Key Facts
+export const TEMPLATES: GenerationTemplate[] = [
+  // ==========================================
+  // 1. RAJASTHAN HISTORY, ART & CULTURE
+  // ==========================================
   {
     subjectId: 'raj_history_art',
     subtopic: 'Forts, Palaces & Architecture (दुर्ग एवं स्थापत्य)',
     importance: 'HIGH_YIELD',
-    importanceScore: 95,
+    importanceScore: 96,
     conceptKey: 'Fort_Features_Generator',
     generate: (seed) => {
       const forts = [
@@ -32,38 +35,48 @@ const TEMPLATES: GenerationTemplate[] = [
           typeHi: 'जल दुर्ग (औदक दुर्ग)',
           riversEn: 'Ahu and Kalisindh rivers',
           riversHi: 'आहू और कालीसिंध नदियों के संगम पर',
-          factEn: 'It is built without any foundation on a natural rock and was ruled by King Achaldas Khichi.',
+          factEn: 'Built without foundations on a natural rock, famous for the heroic resistance of King Achaldas Khichi.',
           factHi: 'यह बिना किसी नींव के सीधे प्राकृतिक चट्टान पर खड़ा है तथा अचलदास खींची की वीरता के लिए प्रसिद्ध है।'
         },
         {
           nameEn: 'Kumbhalgarh Fort (Rajsamand)',
           nameHi: 'कुंभलगढ़ दुर्ग (राजसमंद)',
-          typeEn: 'Hill Fort (Giri Durg) with Katargarh citadel',
+          typeEn: 'Hill Fort (Giri Durg) with Katargarh citadel (Eye of Mewar)',
           typeHi: 'गिरि दुर्ग एवं अंतःदुर्ग कटारगढ़ (मेवाड़ की आंख)',
           riversEn: 'Aravalli range near Kelwara',
           riversHi: 'अरावली की जरगा पहाड़ी श्रृंखला पर',
-          factEn: 'Constructed by Maharana Kumbha through architect Mandan, having a 36 km long massive wall ("Great Wall of India").',
+          factEn: 'Constructed by Maharana Kumbha through chief architect Mandan; features a 36 km long massive wall ("Great Wall of India").',
           factHi: 'महाराणा कुंभा द्वारा प्रमुख वास्तुकार मंडन की देखरेख में निर्मित, जिसकी 36 किमी लंबी दीवार भारत की महान दीवार कहलाती है।'
         },
         {
           nameEn: 'Mehrangarh Fort (Jodhpur)',
           nameHi: 'मेहरानगढ़ दुर्ग (जोधपुर)',
-          typeEn: 'Peacock-shaped Hill Fort (Mayur-dhvaj-garh)',
+          typeEn: 'Peacock-shaped Hill Fort (Mayur-dhvaj-garh on Chidiyatunk hill)',
           typeHi: 'मयूरध्वजगढ़ / चिड़ियाटूँक पहाड़ी पर निर्मित गिरि दुर्ग',
-          riversEn: 'Chidiyatunk hill',
-          riversHi: 'चिड़ियाटूँक पहाड़ी',
+          riversEn: 'Chidiyatunk hill overlooking Marwar',
+          riversHi: 'चिड़ियाटूँक पहाड़ी पर स्थित',
           factEn: 'Founded by Rao Jodha in 1459 AD; Rudyard Kipling described it as "A work of giants and fairies".',
-          factHi: 'राव जोधा द्वारा 1459 ई. में नींव रखी गई। रुडयार्ड किपलिंग ने इसे "परियों व देवताओं द्वारा निर्मित" बताया था।'
+          factHi: 'राव जोधा द्वारा 1459 ई. में नींव रखी गई। रुडयार्ड किपलिंग ने इसे "परियों व फरिश्तों द्वारा निर्मित" बताया था।'
         },
         {
           nameEn: 'Taragarh Fort (Bundi)',
           nameHi: 'तारागढ़ दुर्ग (बूंदी)',
           typeEn: 'Star-shaped Fort with Garbh-Gunjam Cannon',
           typeHi: 'तारे के आकार का दुर्ग (गर्भ गुंजन तोप युक्त)',
-          riversEn: 'Nagpahar / Bundi hills',
+          riversEn: 'Bundi Aravalli hills',
           riversHi: 'बूंदी की अरावली पहाड़ियों पर',
-          factEn: 'Built by Rao Bar Singh in the 14th century, famous for its grand stepwells and Chitrashala paintings.',
+          factEn: 'Built by Rao Bar Singh in the 14th century, world-famous for its stepwells and Chitrashala mural paintings.',
           factHi: '14वीं शताब्दी में राव बरसिंह द्वारा निर्मित, जो अपनी चित्रशाला और विशाल बावड़ियों के लिए विश्वविख्यात है।'
+        },
+        {
+          nameEn: 'Junagarh Fort (Bikaner)',
+          nameHi: 'जूनागढ़ दुर्ग (बीकानेर)',
+          typeEn: 'Dhanva/Ground Fort (Zameen ka Zevar)',
+          typeHi: 'धान्व दुर्ग (जमीन का जेवर)',
+          riversEn: 'Bikaner desert plains',
+          riversHi: 'बीकानेर के मैदानी क्षेत्र में',
+          factEn: 'Constructed by Maharaja Rai Singh between 1589 and 1594 AD with high artistic ramparts and Anup Mahal.',
+          factHi: 'महाराजा रायसिंह द्वारा 1589-1594 ई. में निर्मित, जिसे "जमीन का जेवर" कहा जाता है।'
         }
       ];
 
@@ -72,7 +85,7 @@ const TEMPLATES: GenerationTemplate[] = [
 
       return {
         question: {
-          en: `Which of the following forts of Rajasthan is situated at the confluence of ${chosen.riversEn} and classified as a ${chosen.typeEn}?`,
+          en: `Which of the following forts of Rajasthan is situated at/on ${chosen.riversEn} and classified as a ${chosen.typeEn}?`,
           hi: `राजस्थान का कौन सा दुर्ग ${chosen.riversHi} स्थित है तथा इसे ${chosen.typeHi} की श्रेणी में रखा जाता है?`
         },
         options: {
@@ -81,15 +94,13 @@ const TEMPLATES: GenerationTemplate[] = [
         },
         correctOption: 0,
         explanation: {
-          en: `${chosen.nameEn}: ${chosen.factEn} Rivers/Location: ${chosen.riversEn}.`,
+          en: `${chosen.nameEn}: ${chosen.factEn} Location/Rivers: ${chosen.riversEn}.`,
           hi: `${chosen.nameHi}: ${chosen.factHi} यह ${chosen.riversHi} स्थित है।`
         },
         tags: ['Forts', 'Architecture', 'High Yield', 'RPSC Favorite']
       };
     }
   },
-
-  // 2. Rajasthan Integration (एकीकरण)
   {
     subjectId: 'raj_history_art',
     subtopic: 'Integration of Rajasthan (राजस्थान का एकीकरण)',
@@ -104,7 +115,7 @@ const TEMPLATES: GenerationTemplate[] = [
           dateHi: '18 मार्च 1948',
           pmEn: 'Shobha Ram Kumawat',
           pmHi: 'शोभाराम कुमावत (अलवर)',
-          rajpramukhEn: 'Udaybhan Singh (Dholpur)',
+          rajpramukhEn: 'Maharaja Udaybhan Singh (Dholpur)',
           rajpramukhHi: 'महाराजा उदयभान सिंह (धौलपुर)',
           statesEn: 'Alwar, Bharatpur, Dholpur, Karauli and Neemrana'
         },
@@ -163,8 +174,6 @@ const TEMPLATES: GenerationTemplate[] = [
       };
     }
   },
-
-  // 3. Rajasthan Prajamandal and Peasant Movements
   {
     subjectId: 'raj_history_art',
     subtopic: 'Freedom Movement & Prajamandal Movements',
@@ -176,31 +185,31 @@ const TEMPLATES: GenerationTemplate[] = [
         {
           nameEn: 'Bijolia Peasant Movement',
           nameHi: 'बिजोलिया किसान आंदोलन',
-          durationEn: '1897 to 1941 (44 years - Longest non-violent movement)',
+          durationEn: '1897 to 1941 (44 years - Longest non-violent movement in India)',
           durationHi: '1897 से 1941 (44 वर्ष - भारत का सबसे लंबा अहिंसक आंदोलन)',
           leadersEn: 'Sadhu Sitaram Das, Vijay Singh Pathik (Bhup Singh), Manikya Lal Verma',
           leadersHi: 'साधु सीताराम दास, विजय सिंह पथिक, माणिक्य लाल वर्मा',
-          taxesEn: '84 types of taxes (Lagh-Bagh) including Chanwari and Talwar Bandhai tax',
+          taxesEn: '84 types of taxes (Lagh-Bagh) including Chanwari tax (₹5 on daughter marriage) and Talwar Bandhai tax',
           taxesHi: '84 प्रकार की लाग-बाग (चौंरी कर व तलवार बंधाई कर)'
         },
         {
           nameEn: 'Begun Peasant Movement',
           nameHi: 'बेगूं किसान आंदोलन',
-          durationEn: '1921 to 1923',
-          durationHi: '1921 से 1923',
-          leadersEn: 'Ramnarayan Chaudhary, Rupa Ji and Kripa Ji Dhakar (martyrs at Govindpura)',
-          leadersHi: 'रामनारायण चौधरी, रूपा जी व कृपा जी धाकड़ (गोविंदपुरा गोलीकांड में शहीद)',
-          taxesEn: 'Trench Commission Inquiry & Bolshevik agreement',
+          durationEn: '1921 to 1923 in Chittorgarh region',
+          durationHi: '1921 से 1923 (चित्तौड़गढ़ क्षेत्र)',
+          leadersEn: 'Ramnarayan Chaudhary; Rupa Ji and Kripa Ji Dhakar (martyred at Govindpura firing)',
+          leadersHi: 'रामनारायण चौधरी; रूपा जी व कृपा जी धाकड़ (गोविंदपुरा गोलीकांड में शहीद)',
+          taxesEn: 'Trench Commission Inquiry & subsequent agreement labeled "Bolshevik decision"',
           taxesHi: 'ट्रेंच आयोग की जांच तथा बोलशेविक फैसला'
         },
         {
-          nameEn: 'Neemuchana Peasant Movement, Alwar',
+          nameEn: 'Neemuchana Peasant Movement (Alwar)',
           nameHi: 'नीमूचाणा हत्याकांड (अलवर)',
           durationEn: '14 May 1925',
           durationHi: '14 मई 1925',
-          leadersEn: 'Maharaja Jai Singh wild boar tax & Land settlement protests',
+          leadersEn: 'Led by Madho Singh & Govind Singh against wild boar crop damage & enhanced land revenue',
           leadersHi: 'सूअर समस्या एवं नई लगान दरों के विरोध में किसानों का आंदोलन',
-          taxesEn: 'Condemned by Mahatma Gandhi as "Dyerism Double Distilled" (दोहरी डायरशाही)',
+          taxesEn: 'Condemned by Mahatma Gandhi in "Young India" as "Dyerism Double Distilled" (दोहरी डायरशाही)',
           taxesHi: 'गांधीजी ने इसे "दोहरी डायरशाही" (जलियांवाला बाग से भी वीभत्स) कहा'
         }
       ];
@@ -222,12 +231,14 @@ const TEMPLATES: GenerationTemplate[] = [
           en: `${item.nameEn}: Duration: ${item.durationEn}. Key details: ${item.taxesEn}.`,
           hi: `${item.nameHi}: समयावधि ${item.durationHi}। प्रमुख विशेषताएं: ${item.taxesHi}।`
         },
-        tags: ['Peasant Movement', 'Bijolia', 'Neemuchana', 'Pathik', 'High Yield']
+        tags: ['Peasant Movement', 'Bijolia', 'Neemuchana', 'High Yield']
       };
     }
   },
 
-  // 4. Rajasthan Geography - Rivers & Lakes
+  // ==========================================
+  // 2. GEOGRAPHY OF RAJASTHAN
+  // ==========================================
   {
     subjectId: 'raj_geography',
     subtopic: 'Drainage Systems & Lakes (अपवाह तंत्र एवं झीलें)',
@@ -253,8 +264,8 @@ const TEMPLATES: GenerationTemplate[] = [
           originHi: 'खमनौर की पहाड़ियां (राजसमंद)',
           damsEn: 'Bisalpur Dam (Tonk) and Isarda Dam (Sawai Madhopur)',
           damsHi: 'बीसलपुर बांध (टोंक) तथा ईसरदा बांध (सवाई माधोपुर)',
-          drainageEn: 'Longest river completely flowing within Rajasthan',
-          drainageHi: 'पूर्णतः राजस्थान में बहने वाली सबसे लंबी नदी'
+          drainageEn: 'Longest river completely flowing within Rajasthan (480 km)',
+          drainageHi: 'पूर्णतः राजस्थान में बहने वाली सबसे लंबी नदी (480 किमी)'
         },
         {
           nameEn: 'Mahi River (कांठल की गंगा / आदिवासियों की गंगा)',
@@ -264,7 +275,7 @@ const TEMPLATES: GenerationTemplate[] = [
           damsEn: 'Mahi Bajaj Sagar Dam (Banswara) and Kadana Dam (Gujarat)',
           damsHi: 'माही बजाज सागर (बांसवाड़ा) तथा कडाणा बांध (गुजरात)',
           drainageEn: 'Cuts Tropic of Cancer twice; drains into Gulf of Khambhat (Arabian Sea)',
-          drainageHi: 'कर्क रेखा को दो बार पार करने वाली नदी'
+          drainageHi: 'कर्क रेखा को दो बार पार करने वाली नदी (खंभात की खाड़ी)'
         },
         {
           nameEn: 'Som River (सोम नदी)',
@@ -273,7 +284,7 @@ const TEMPLATES: GenerationTemplate[] = [
           originHi: 'बीछामेड़ा पहाड़ियां (उदयपुर)',
           damsEn: 'Som-Kagdar (Udaipur) and Som-Kamla-Amba (Dungarpur)',
           damsHi: 'सोम-कागदर (उदयपुर) एवं सोम-कमला-अम्बा (डूंगरपुर)',
-          drainageEn: 'Meets Mahi and Jakham at Beneshwar Dham Triveni Sangam',
+          drainageEn: 'Forms Triveni Sangam with Mahi and Jakham at Beneshwar Dham',
           drainageHi: 'बेणेश्वर धाम पर माही व जाखम के साथ त्रिवेणी संगम बनाती है'
         }
       ];
@@ -292,7 +303,7 @@ const TEMPLATES: GenerationTemplate[] = [
         },
         correctOption: 0,
         explanation: {
-          en: `${r.nameEn}: Origin is ${r.originEn}. Dams: ${r.damsEn}. Note: ${r.drainageEn}.`,
+          en: `${r.nameEn}: Origin: ${r.originEn}. Dams: ${r.damsEn}. Note: ${r.drainageEn}.`,
           hi: `${r.nameHi}: उद्गम ${r.originHi} से होता है। बांध: ${r.damsHi}। विशेष: ${r.drainageHi}।`
         },
         tags: ['Drainage', 'Rivers', 'Banas', 'Chambal', 'Mahi', 'High Yield']
@@ -300,61 +311,184 @@ const TEMPLATES: GenerationTemplate[] = [
     }
   },
 
-  // 5. Science & Tech - Space & Physics/Biology
+  // ==========================================
+  // 3. RAJASTHAN POLITY & ADMINISTRATION
+  // ==========================================
   {
-    subjectId: 'science_tech',
-    subtopic: 'Space Technology & ISRO Missions (Chandrayaan, Gaganyaan, Aditya-L1)',
+    subjectId: 'raj_polity_admin',
+    subtopic: 'Governor & Chief Minister powers & tenures',
     importance: 'HIGH_YIELD',
-    importanceScore: 97,
-    conceptKey: 'ISRO_Launch_Vehicles',
+    importanceScore: 94,
+    conceptKey: 'Rajasthan_Governor_Articles',
     generate: (seed) => {
-      const missions = [
+      const articles = [
         {
-          nameEn: 'Chandrayaan-3',
-          vehicleEn: 'LVM3-M4 (Fat Boy / Bahubali)',
-          vehicleHi: 'LVM3-M4 (बाहुबली रॉकेट)',
-          detailsEn: 'Landed near the lunar south pole (Shiv Shakti Point) on 23 August 2023 (National Space Day).',
-          detailsHi: '23 अगस्त 2023 को चंद्रमा के दक्षिणी ध्रुव पर "शिव शक्ति बिंदु" पर सफल सॉफ्ट लैंडिंग की (राष्ट्रीय अंतरिक्ष दिवस)।'
+          article: 'Article 153',
+          featureEn: 'There shall be a Governor for each State (and 7th Amendment allows same person for two or more states)',
+          featureHi: 'प्रत्येक राज्य के लिए एक राज्यपाल होगा (7वें संशोधन द्वारा एक ही व्यक्ति दो या अधिक राज्यों का राज्यपाल हो सकता है)'
         },
         {
-          nameEn: 'Aditya-L1 Solar Mission',
-          vehicleEn: 'PSLV-C57 (XL Configuration)',
-          vehicleHi: 'PSLV-C57',
-          detailsEn: 'Placed in a halo orbit around Sun-Earth Lagrange point 1 (L1), equipped with 7 indigenous payloads including VELC.',
-          detailsHi: 'सूर्य के अध्ययन हेतु 7 पेलोड (VELC आदि) के साथ लैग्रेंज बिंदु 1 के हेलो ऑर्बिट में स्थापित।'
+          article: 'Article 156',
+          featureEn: 'Governor holds office during the pleasure of the President (normal term of 5 years)',
+          featureHi: 'राज्यपाल राष्ट्रपति के प्रसादपर्यंत पद धारण करता है (सामान्यतः 5 वर्ष का कार्यकाल)'
         },
         {
-          nameEn: 'XPoSat (X-ray Polarimeter Satellite)',
-          vehicleEn: 'PSLV-C58',
-          vehicleHi: 'PSLV-C58',
-          detailsEn: 'India\'s first dedicated scientific satellite to study polarimetry of cosmic X-ray sources like black holes and neutron stars.',
-          detailsHi: 'ब्लैक होल और न्यूट्रॉन तारों से निकलने वाले एक्स-रे ध्रुवीकरण का अध्ययन करने वाला भारत का पहला समर्पित मिशन।'
+          article: 'Article 161',
+          featureEn: 'Pardoning powers of the Governor for offenses against state laws (cannot pardon death sentence)',
+          featureHi: 'राज्य विधि के विरुद्ध अपराधों पर राज्यपाल की क्षमादान की शक्ति (मृत्युदंड को क्षमा नहीं कर सकता)'
+        },
+        {
+          article: 'Article 213',
+          featureEn: 'Power of the Governor to promulgate Ordinances during recess of the State Legislature',
+          featureHi: 'विधानमंडल के विश्रांतिकाल में राज्यपाल द्वारा अध्यादेश प्रख्यापित करने की शक्ति'
         }
       ];
 
-      const item = missions[seed % missions.length];
-      const others = missions.filter(m => m.nameEn !== item.nameEn);
+      const chosen = articles[seed % articles.length];
+      const others = articles.filter(a => a.article !== chosen.article);
 
       return {
         question: {
-          en: `Which launch vehicle of ISRO was used to successfully launch the "${item.nameEn}" mission?`,
-          hi: `इसरो (ISRO) द्वारा "${item.nameEn}" मिशन को सफलतापूर्वक प्रक्षेपित करने के लिए किस प्रक्षेपण यान (Launch Vehicle) का उपयोग किया गया था?`
+          en: `Under which Article of the Constitution of India ${chosen.featureEn}?`,
+          hi: `भारतीय संविधान के किस अनुच्छेद के तहत ${chosen.featureHi}?`
         },
         options: {
-          en: [item.vehicleEn, others[0].vehicleEn, 'GSLV-F10', 'SSLV-D2'],
-          hi: [item.vehicleHi, others[0].vehicleHi, 'GSLV-F10', 'SSLV-D2']
+          en: [chosen.article, others[0].article, others[1].article, others[2].article],
+          hi: [chosen.article, others[0].article, others[1].article, others[2].article]
         },
         correctOption: 0,
         explanation: {
-          en: `${item.nameEn} was launched by ${item.vehicleEn}. Mission Highlight: ${item.detailsEn}`,
-          hi: `${item.nameEn} को ${item.vehicleHi} द्वारा प्रक्षेपित किया गया था। प्रमुख तथ्य: ${item.detailsHi}`
+          en: `${chosen.article}: ${chosen.featureEn}.`,
+          hi: `${chosen.article}: ${chosen.featureHi}।`
         },
-        tags: ['ISRO', 'Space Tech', 'Chandrayaan', 'Aditya L1', 'Science & Tech']
+        tags: ['Polity', 'Governor', 'Constitution', 'High Yield']
       };
     }
   },
 
-  // 6. Indian Polity - Constitutional Articles
+  // ==========================================
+  // 4. RAJASTHAN ECONOMY & ECONOMIC SURVEY
+  // ==========================================
+  {
+    subjectId: 'raj_economy',
+    subtopic: 'Macro Indicators of Rajasthan (GSDP, Per Capita Income)',
+    importance: 'HIGH_YIELD',
+    importanceScore: 97,
+    conceptKey: 'Economic_Survey_Indicators',
+    generate: (seed) => {
+      const indicators = [
+        {
+          topicEn: 'Per Capita Income of Rajasthan at current prices',
+          topicHi: 'प्रचलित मूल्यों पर राजस्थान की प्रति व्यक्ति आय',
+          factEn: 'As per the recent Rajasthan Economic Survey, Per Capita Income at current prices stands at approximately ₹1,56,149, reflecting strong service & industrial growth.',
+          factHi: 'राजस्थान आर्थिक समीक्षा के अनुसार प्रचलित मूल्यों पर प्रति व्यक्ति आय लगभग ₹1,56,149 आंकी गई है।',
+          correctEn: 'Around ₹1.56 Lakh (₹1,56,149)',
+          correctHi: 'लगभग ₹1.56 लाख (₹1,56,149)',
+          wrongsEn: ['Around ₹98,000', 'Around ₹2.40 Lakh', 'Around ₹3.10 Lakh'],
+          wrongsHi: ['लगभग ₹98,000', 'लगभग ₹2.40 लाख', 'लगभग ₹3.10 लाख']
+        },
+        {
+          topicEn: 'Sectoral contribution to GSVA at constant (2011-12) prices',
+          topicHi: 'स्थिर (2011-12) मूल्यों पर GSVA में क्षेत्रीय योगदान का सही घटता क्रम',
+          factEn: 'Services sector contributes the highest (~43.74%), followed by Agriculture (~28.50%) and Industry (~27.76%).',
+          factHi: 'सेवा क्षेत्र सर्वाधिक (~43.74%), उसके बाद कृषि क्षेत्र (~28.50%) तथा उद्योग क्षेत्र (~27.76%) का स्थान है।',
+          correctEn: 'Services > Agriculture > Industry',
+          correctHi: 'सेवा क्षेत्र > कृषि क्षेत्र > उद्योग क्षेत्र',
+          wrongsEn: ['Industry > Services > Agriculture', 'Agriculture > Industry > Services', 'Agriculture > Services > Industry'],
+          wrongsHi: ['उद्योग > सेवा > कृषि', 'कृषि > उद्योग > सेवा', 'कृषि > सेवा > उद्योग']
+        }
+      ];
+
+      const item = indicators[seed % indicators.length];
+      return {
+        question: {
+          en: `According to the latest Rajasthan Economic Survey, which of the following is correct regarding ${item.topicEn}?`,
+          hi: `नवीनतम राजस्थान आर्थिक समीक्षा के अनुसार ${item.topicHi} के संदर्भ में कौन सा कथन सही है?`
+        },
+        options: {
+          en: [item.correctEn, ...item.wrongsEn],
+          hi: [item.correctHi, ...item.wrongsHi]
+        },
+        correctOption: 0,
+        explanation: {
+          en: `${item.topicEn}: ${item.factEn}`,
+          hi: `${item.topicHi}: ${item.factHi}`
+        },
+        tags: ['Economic Survey', 'GSDP', 'Macro Indicators']
+      };
+    }
+  },
+
+  // ==========================================
+  // 5. INDIAN HISTORY
+  // ==========================================
+  {
+    subjectId: 'indian_history',
+    subtopic: 'Modern India: 1857 Revolt, Socio-religious reforms',
+    importance: 'HIGH_YIELD',
+    importanceScore: 94,
+    conceptKey: 'Socio_Religious_Reformers',
+    generate: (seed) => {
+      const reformers = [
+        {
+          nameEn: 'Brahmo Samaj (1828, Calcutta)',
+          nameHi: 'ब्रह्म समाज (1828, कलकत्ता)',
+          founderEn: 'Raja Ram Mohan Roy',
+          founderHi: 'राजा राम मोहन राय',
+          factEn: 'Opposed Sati Pratha (led to 1829 Sati Abolition Act under William Bentinck), idol worship and advocated monotheism.',
+          factHi: 'सती प्रथा के उन्मूलन (1829 का सती निषेध कानून) तथा एकेश्वरवाद के प्रचार में अग्रणी भूमिका निभाई।'
+        },
+        {
+          nameEn: 'Arya Samaj (1875, Bombay)',
+          nameHi: 'आर्य समाज (1875, बंबई)',
+          founderEn: 'Swami Dayanand Saraswati',
+          founderHi: 'स्वामी दयानंद सरस्वती',
+          factEn: 'Gave the call "Go Back to the Vedas" (वेदों की ओर लौटो); authored Satyarth Prakash in Udaipur, Rajasthan.',
+          factHi: '"वेदों की ओर लौटो" का नारा दिया तथा अपने प्रसिद्ध ग्रंथ "सत्यार्थ प्रकाश" की रचना उदयपुर (राजस्थान) में की।'
+        },
+        {
+          nameEn: 'Prarthana Samaj (1867, Bombay)',
+          nameHi: 'प्रार्थना समाज (1867, बंबई)',
+          founderEn: 'Dr. Atmaram Pandurang (with Justice M. G. Ranade)',
+          founderHi: 'डॉ. आत्माराम पांडुरंग (एम. जी. रानाडे के सहयोग से)',
+          factEn: 'Emphasized inter-caste dining, widow remarriage, upliftment of women and depressed classes.',
+          factHi: 'जाति प्रथा उन्मूलन, विधवा पुनर्विवाह एवं स्त्री शिक्षा पर विशेष बल दिया।'
+        },
+        {
+          nameEn: 'Satyashodhak Samaj (1873, Maharashtra)',
+          nameHi: 'सत्यशोधक समाज (1873, महाराष्ट्र)',
+          founderEn: 'Jyotirao Phule',
+          founderHi: 'ज्योतिराव फुले',
+          factEn: 'Penned "Gulamgiri" and fought against caste oppression, Brahminical supremacy and for girl education.',
+          factHi: '"गुलामगिरी" पुस्तक की रचना की तथा दलितों व महिलाओं की शिक्षा एवं अधिकारों हेतु संघर्ष किया।'
+        }
+      ];
+
+      const chosen = reformers[seed % reformers.length];
+      const others = reformers.filter(r => r.nameEn !== chosen.nameEn);
+
+      return {
+        question: {
+          en: `Who was the founder of "${chosen.nameEn}" which ${chosen.factEn}?`,
+          hi: `"${chosen.nameHi}" के संस्थापक कौन थे, जिन्होंने ${chosen.factHi}?`
+        },
+        options: {
+          en: [chosen.founderEn, others[0].founderEn, others[1].founderEn, others[2].founderEn],
+          hi: [chosen.founderHi, others[0].founderHi, others[1].founderHi, others[2].founderHi]
+        },
+        correctOption: 0,
+        explanation: {
+          en: `${chosen.nameEn} was founded by ${chosen.founderEn}. Key impact: ${chosen.factEn}`,
+          hi: `${chosen.nameHi} की स्थापना ${chosen.founderHi} द्वारा की गई थी।`
+        },
+        tags: ['Modern India', 'Reformers', 'Brahmo Samaj', 'Arya Samaj']
+      };
+    }
+  },
+
+  // ==========================================
+  // 6. INDIAN POLITY & CONSTITUTION
+  // ==========================================
   {
     subjectId: 'indian_polity',
     subtopic: 'Constitutional Amendments & Major Judgments',
@@ -411,7 +545,177 @@ const TEMPLATES: GenerationTemplate[] = [
     }
   },
 
-  // 7. Reasoning & Mental Ability
+  // ==========================================
+  // 7. GEOGRAPHY: INDIA & WORLD
+  // ==========================================
+  {
+    subjectId: 'indian_world_geo',
+    subtopic: 'India: Drainage System (Ganga, Brahmaputra, Peninsular rivers)',
+    importance: 'HIGH_YIELD',
+    importanceScore: 93,
+    conceptKey: 'Indian_River_Tributaries',
+    generate: (seed) => {
+      const riverTributaries = [
+        {
+          riverEn: 'Godavari (Dakshin Ganga / Vridha Ganga)',
+          riverHi: 'गोदावरी (दक्षिण गंगा / वृद्ध गंगा)',
+          originEn: 'Trimbakeshwar near Nashik, Maharashtra',
+          originHi: 'त्र्यंबकेश्वर (नासिक, महाराष्ट्र)',
+          tributariesEn: 'Pranhita, Penganga, Wainganga, Indravati, Manjira',
+          tributariesHi: 'प्राणहिता, पेनगंगा, वैनगंगा, इंद्रावती, मंजिरा'
+        },
+        {
+          riverEn: 'Krishna River',
+          riverHi: 'कृष्णा नदी',
+          originEn: 'Mahabaleshwar in Western Ghats, Maharashtra',
+          originHi: 'महाबलेश्वर (पश्चिमी घाट, महाराष्ट्र)',
+          tributariesEn: 'Tungabhadra, Koyna, Bhima, Ghataprabha, Malaprabha',
+          tributariesHi: 'तुंगभद्रा, कोयना, भीमा, घटप्रभा, मालप्रभा'
+        },
+        {
+          riverEn: 'Cauvery (Kaveri) River',
+          riverHi: 'कावेरी नदी',
+          originEn: 'Talakaveri in Brahmagiri hills, Kodagu, Karnataka',
+          originHi: 'तालकावेरी (ब्रह्मगिरि पहाड़ियाँ, कर्नाटक)',
+          tributariesEn: 'Hemavati, Shimsha, Arkavathi, Kabini, Bhavani, Amaravati',
+          tributariesHi: 'हेमावती, शिमशा, अर्कावती, काबिनी, भवानी, अमरावती'
+        }
+      ];
+
+      const item = riverTributaries[seed % riverTributaries.length];
+      const others = riverTributaries.filter(r => r.riverEn !== item.riverEn);
+
+      return {
+        question: {
+          en: `Which major Peninsular river originates from ${item.originEn} and has key tributaries including ${item.tributariesEn}?`,
+          hi: `कौन सी प्रमुख प्रायद्वीपीय नदी ${item.originHi} से निकलती है तथा जिसकी प्रमुख सहायक नदियों में ${item.tributariesHi} शामिल हैं?`
+        },
+        options: {
+          en: [item.riverEn, others[0].riverEn, others[1].riverEn, 'Narmada River'],
+          hi: [item.riverHi, others[0].riverHi, others[1].riverHi, 'नर्मदा नदी']
+        },
+        correctOption: 0,
+        explanation: {
+          en: `${item.riverEn}: Origin is ${item.originEn}. Tributaries: ${item.tributariesEn}.`,
+          hi: `${item.riverHi}: उद्गम ${item.originHi} है। सहायक नदियां: ${item.tributariesHi}।`
+        },
+        tags: ['Geography', 'Rivers', 'Godavari', 'Krishna', 'Cauvery']
+      };
+    }
+  },
+
+  // ==========================================
+  // 8. INDIAN ECONOMY
+  // ==========================================
+  {
+    subjectId: 'indian_economy',
+    subtopic: 'National Income & GDP Concepts',
+    importance: 'HIGH_YIELD',
+    importanceScore: 92,
+    conceptKey: 'Macro_Economy_Concepts',
+    generate: (seed) => {
+      const concepts = [
+        {
+          termEn: 'Gross Domestic Product (GDP)',
+          termHi: 'सकल घरेलू उत्पाद (GDP)',
+          defEn: 'Total monetary value of all final goods and services produced within the domestic territory of a country in a given year.',
+          defHi: 'एक वित्तीय वर्ष में किसी देश की घरेलू भौगोलिक सीमा के भीतर उत्पादित समस्त अंतिम वस्तुओं और सेवाओं का कुल मौद्रिक मूल्य।'
+        },
+        {
+          termEn: 'Gross National Product (GNP)',
+          termHi: 'सकल राष्ट्रीय उत्पाद (GNP)',
+          defEn: 'GDP plus Net Factor Income from Abroad (NFIA) produced by citizens of a country irrespective of geographical location.',
+          defHi: 'जीडीपी में विदेशों से प्राप्त शुद्ध साधन आय (NFIA) जोड़ने पर प्राप्त मूल्य।'
+        },
+        {
+          termEn: 'Net National Product at Factor Cost (NNP at FC)',
+          termHi: 'साधन लागत पर शुद्ध राष्ट्रीय उत्पाद (NNP at FC)',
+          defEn: 'Regarded as the official definition of "National Income" (राष्ट्रीय आय), obtained after deducting depreciation from GNP and adjusting for net indirect taxes.',
+          defHi: 'सकल राष्ट्रीय उत्पाद में से मूल्यह्रास (Depreciation) घटाने और अप्रत्यक्ष कर व सब्सिडी समायोजित करने के बाद राष्ट्रीय आय (National Income) का माप।'
+        }
+      ];
+
+      const item = concepts[seed % concepts.length];
+      const others = concepts.filter(c => c.termEn !== item.termEn);
+
+      return {
+        question: {
+          en: `Which economic metric is defined as "${item.defEn}"?`,
+          hi: `किस आर्थिक संकेतक को "${item.defHi}" के रूप में परिभाषित किया जाता है?`
+        },
+        options: {
+          en: [item.termEn, others[0].termEn, others[1].termEn, 'Personal Disposable Income'],
+          hi: [item.termHi, others[0].termHi, others[1].termHi, 'व्यक्तिगत प्रयोज्य आय']
+        },
+        correctOption: 0,
+        explanation: {
+          en: `${item.termEn}: ${item.defEn}`,
+          hi: `${item.termHi}: ${item.defHi}`
+        },
+        tags: ['National Income', 'GDP', 'GNP', 'Economics']
+      };
+    }
+  },
+
+  // ==========================================
+  // 9. GENERAL SCIENCE & TECHNOLOGY
+  // ==========================================
+  {
+    subjectId: 'science_tech',
+    subtopic: 'Space Technology & ISRO Missions (Chandrayaan, Gaganyaan, Aditya-L1)',
+    importance: 'HIGH_YIELD',
+    importanceScore: 98,
+    conceptKey: 'ISRO_Launch_Vehicles',
+    generate: (seed) => {
+      const missions = [
+        {
+          nameEn: 'Chandrayaan-3',
+          vehicleEn: 'LVM3-M4 (Fat Boy / Bahubali)',
+          vehicleHi: 'LVM3-M4 (बाहुबली रॉकेट)',
+          detailsEn: 'Landed near the lunar south pole (Shiv Shakti Point) on 23 August 2023 (celebrated as National Space Day).',
+          detailsHi: '23 अगस्त 2023 को चंद्रमा के दक्षिणी ध्रुव पर "शिव शक्ति बिंदु" पर सफल सॉफ्ट लैंडिंग की (राष्ट्रीय अंतरिक्ष दिवस)।'
+        },
+        {
+          nameEn: 'Aditya-L1 Solar Mission',
+          vehicleEn: 'PSLV-C57 (XL Configuration)',
+          vehicleHi: 'PSLV-C57',
+          detailsEn: 'Placed in a halo orbit around Sun-Earth Lagrange point 1 (L1), equipped with 7 indigenous payloads including VELC.',
+          detailsHi: 'सूर्य के अध्ययन हेतु 7 पेलोड (VELC आदि) के साथ लैग्रेंज बिंदु 1 के हेलो ऑर्बिट में स्थापित।'
+        },
+        {
+          nameEn: 'XPoSat (X-ray Polarimeter Satellite)',
+          vehicleEn: 'PSLV-C58',
+          vehicleHi: 'PSLV-C58',
+          detailsEn: 'India\'s first dedicated scientific satellite to study polarimetry of cosmic X-ray sources like black holes and neutron stars.',
+          detailsHi: 'ब्लैक होल और न्यूट्रॉन तारों से निकलने वाले एक्स-रे ध्रुवीकरण का अध्ययन करने वाला भारत का पहला समर्पित मिशन।'
+        }
+      ];
+
+      const item = missions[seed % missions.length];
+      const others = missions.filter(m => m.nameEn !== item.nameEn);
+
+      return {
+        question: {
+          en: `Which launch vehicle of ISRO was used to successfully launch the "${item.nameEn}" mission?`,
+          hi: `इसरो (ISRO) द्वारा "${item.nameEn}" मिशन को सफलतापूर्वक प्रक्षेपित करने के लिए किस प्रक्षेपण यान (Launch Vehicle) का उपयोग किया गया था?`
+        },
+        options: {
+          en: [item.vehicleEn, others[0].vehicleEn, 'GSLV-F10', 'SSLV-D2'],
+          hi: [item.vehicleHi, others[0].vehicleHi, 'GSLV-F10', 'SSLV-D2']
+        },
+        correctOption: 0,
+        explanation: {
+          en: `${item.nameEn} was launched by ${item.vehicleEn}. Mission Highlight: ${item.detailsEn}`,
+          hi: `${item.nameEn} को ${item.vehicleHi} द्वारा प्रक्षेपित किया गया था। प्रमुख तथ्य: ${item.detailsHi}`
+        },
+        tags: ['ISRO', 'Space Tech', 'Chandrayaan', 'Aditya L1', 'Science & Tech']
+      };
+    }
+  },
+
+  // ==========================================
+  // 10. REASONING & MENTAL ABILITY
+  // ==========================================
   {
     subjectId: 'reasoning_mental',
     subtopic: 'Percentages, Ratio & Proportion, Averages',
@@ -419,27 +723,81 @@ const TEMPLATES: GenerationTemplate[] = [
     importanceScore: 89,
     conceptKey: 'Math_Ratio_Averages',
     generate: (seed) => {
-      const multiplier = (seed % 5) + 2;
-      const baseA = 3 * multiplier;
-      const baseB = 4 * multiplier;
+      const multiplier = (seed % 7) + 3;
+      const rA = 3;
+      const rB = 5;
+      const baseA = rA * multiplier;
+      const baseB = rB * multiplier;
       const sum = baseA + baseB;
-      const ratioAns = '3 : 4';
 
       return {
         question: {
-          en: `Two numbers are in the ratio of 3 : 4. If their sum is ${sum}, what is the larger number?`,
-          hi: `दो संख्याएँ 3 : 4 के अनुपात में हैं। यदि उनका योग ${sum} है, तो बड़ी संख्या क्या होगी?`
+          en: `The ratio of two numbers is 3 : 5. If their sum is ${sum}, what is the value of the larger number?`,
+          hi: `दो संख्याओं का अनुपात 3 : 5 है। यदि उनका योग ${sum} है, तो बड़ी संख्या का मान क्या होगा?`
         },
         options: {
-          en: [`${baseB}`, `${baseA}`, `${baseA + 2}`, `${baseB + 4}`],
-          hi: [`${baseB}`, `${baseA}`, `${baseA + 2}`, `${baseB + 4}`]
+          en: [`${baseB}`, `${baseA}`, `${baseA + 4}`, `${baseB + 6}`],
+          hi: [`${baseB}`, `${baseA}`, `${baseA + 4}`, `${baseB + 6}`]
         },
         correctOption: 0,
         explanation: {
-          en: `Let the numbers be 3x and 4x. 3x + 4x = 7x = ${sum} => x = ${multiplier}. The larger number is 4x = 4 * ${multiplier} = ${baseB}.`,
-          hi: `माना संख्याएँ 3x और 4x हैं। 3x + 4x = 7x = ${sum} => x = ${multiplier}। अतः बड़ी संख्या = 4x = 4 * ${multiplier} = ${baseB} होगी।`
+          en: `Let numbers be 3x and 5x. 3x + 5x = 8x = ${sum} => x = ${multiplier}. Larger number is 5x = 5 * ${multiplier} = ${baseB}.`,
+          hi: `माना संख्याएँ 3x और 5x हैं। 3x + 5x = 8x = ${sum} => x = ${multiplier}। अतः बड़ी संख्या = 5x = 5 * ${multiplier} = ${baseB} होगी।`
         },
         tags: ['Reasoning', 'Ratios', 'Aptitude']
+      };
+    }
+  },
+
+  // ==========================================
+  // 11. CURRENT AFFAIRS
+  // ==========================================
+  {
+    subjectId: 'current_affairs',
+    subtopic: 'Rajasthan Current Affairs & Schemes',
+    importance: 'HIGH_YIELD',
+    importanceScore: 97,
+    conceptKey: 'Current_Affairs_Generator',
+    generate: (seed) => {
+      const caItems = [
+        {
+          schemeEn: 'Shri Annapurna Rasoi Yojana',
+          schemeHi: 'श्री अन्नपूर्णा रसोई योजना',
+          factEn: 'Enhanced government subsidy to ₹22 per plate with 600 grams of nutritious food while maintaining ₹8 beneficiary charge.',
+          factHi: 'प्रति थाली 600 ग्राम पौष्टिक भोजन, राज्य सरकार का अनुदान ₹22 व लाभार्थी शुल्क ₹8 निर्धारित।'
+        },
+        {
+          schemeEn: 'Mukhyamantri Ayushman Arogya (MAA) Yojana',
+          schemeHi: 'मुख्यमंत्री आयुष्मान आरोग्य (माँ) योजना',
+          factEn: 'Comprehensive cashless in-patient hospital healthcare with free medicines and diagnostic coverage across Rajasthan.',
+          factHi: 'कैशलेस इन-डोर उपचार, जांचें व दवाइयां उपलब्ध कराने वाली प्रमुख स्वास्थ्य योजना।'
+        },
+        {
+          schemeEn: 'Modified PKC-ERCP River Interlinking Project',
+          schemeHi: 'संशोधित PKC-ERCP नदी जोड़ो परियोजना',
+          factEn: 'Historic agreement between Rajasthan, Madhya Pradesh and Central Government for drinking & irrigation water to 13 eastern districts.',
+          factHi: 'राजस्थान, मध्य प्रदेश और केंद्र सरकार के मध्य 13 पूर्वी जिलों में जलापूर्ति का त्रिपक्षीय समझौता।'
+        }
+      ];
+
+      const item = caItems[seed % caItems.length];
+      const others = caItems.filter(c => c.schemeEn !== item.schemeEn);
+
+      return {
+        question: {
+          en: `Which welfare initiative of the Government of Rajasthan is characterized by "${item.factEn}"?`,
+          hi: `राजस्थान सरकार की किस जनकल्याणकारी योजना की प्रमुख विशेषता "${item.factHi}" है?`
+        },
+        options: {
+          en: [item.schemeEn, others[0].schemeEn, others[1].schemeEn, 'Rajasthan Yuva Sambal Yojana'],
+          hi: [item.schemeHi, others[0].schemeHi, others[1].schemeHi, 'राजस्थान युवा संबल योजना']
+        },
+        correctOption: 0,
+        explanation: {
+          en: `${item.schemeEn}: ${item.factEn}`,
+          hi: `${item.schemeHi}: ${item.factHi}`
+        },
+        tags: ['Current Affairs', 'Rajasthan Schemes', 'High Yield']
       };
     }
   }
@@ -455,7 +813,7 @@ export function generateDynamicQuestion(subjectId?: SubjectId, seed: number = Da
     : TEMPLATES[seed % TEMPLATES.length];
 
   const generated = template.generate(seed);
-  const qId = `dyn_${template.subjectId}_${seed}_${Math.floor(Math.random() * 1000)}`;
+  const qId = `dyn_${template.subjectId}_${seed % 99999}_${Math.floor(Math.random() * 1000)}`;
 
   // Randomize correct option position (0, 1, 2, 3)
   const targetIndex = (seed + 1) % 4;
@@ -491,7 +849,7 @@ export function generateDynamicQuestion(subjectId?: SubjectId, seed: number = Da
 export function generateQuestionSet(count: number, subjectId?: SubjectId): Question[] {
   const list: Question[] = [];
   for (let i = 0; i < count; i++) {
-    list.push(generateDynamicQuestion(subjectId, Date.now() + i * 37));
+    list.push(generateDynamicQuestion(subjectId, Date.now() + i * 47));
   }
   return list;
 }

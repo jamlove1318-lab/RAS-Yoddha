@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   SubjectId, 
   Question 
@@ -6,7 +6,8 @@ import {
 import { SUBJECT_METADATA } from '../data/pyqAnalysis';
 import { INITIAL_QUESTION_BANK } from '../data/questionBank';
 import { generateDynamicQuestion } from '../services/questionGenerator';
-import { recordAnswerInSRS } from '../services/srsEngine';
+import { recordAnswerInSRS, isQuestionEligibleForPractice } from '../services/srsEngine';
+import { getDailyCurrentAffairsQuiz } from '../services/currentAffairsService';
 import { sounds } from '../utils/audio';
 import { 
   Sparkles, 
@@ -20,7 +21,9 @@ import {
   BookOpen,
   Award,
   Zap,
-  Flame
+  Flame,
+  ShieldCheck,
+  Check
 } from 'lucide-react';
 
 interface PracticeModeProps {
@@ -41,6 +44,9 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
   const [onlyHighYield, setOnlyHighYield] = useState<boolean>(true);
   const [instantFeedback, setInstantFeedback] = useState<boolean>(true);
 
+  // Session seen questions to guarantee zero repeats within a practice session
+  const [seenInSession, setSeenInSession] = useState<Set<string>>(new Set());
+
   // Active question stream
   const [currentQuestion, setCurrentQuestion] = useState<Question>(() => {
     return INITIAL_QUESTION_BANK.find(q => q.subjectId === initialSubject) || INITIAL_QUESTION_BANK[0];
@@ -59,28 +65,66 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
     fetchNextQuestion(id, 'all', onlyHighYield);
   };
 
-  const fetchNextQuestion = (subj: SubjectId = selectedSubject, subtopic: string = selectedSubtopic, highYieldOnly: boolean = onlyHighYield) => {
+  /**
+   * Question Fetcher with Zero-Repetition Engine
+   * 1. Never repeats non-high yield questions once answered correctly.
+   * 2. Never repeats questions already shown in this practice session.
+   * 3. Only repeats high-yield questions when their spaced review interval is due.
+   * 4. Dynamically generates fresh questions when curated static bank is exhausted.
+   */
+  const fetchNextQuestion = (
+    subj: SubjectId = selectedSubject, 
+    subtopic: string = selectedSubtopic, 
+    highYieldOnly: boolean = onlyHighYield
+  ) => {
     setSelectedOption(null);
     setHasAnswered(false);
 
-    // Filter existing bank first
-    let candidates = INITIAL_QUESTION_BANK.filter(q => q.subjectId === subj);
-    if (subtopic !== 'all') {
-      candidates = candidates.filter(q => q.subtopic === subtopic);
-    }
-    if (highYieldOnly) {
-      candidates = candidates.filter(q => q.importance === 'HIGH_YIELD');
+    // Build base candidates pool
+    let pool: Question[] = [];
+    if (subj === 'current_affairs') {
+      pool = [...getDailyCurrentAffairsQuiz(), ...INITIAL_QUESTION_BANK.filter(q => q.subjectId === subj)];
+    } else {
+      pool = INITIAL_QUESTION_BANK.filter(q => q.subjectId === subj);
     }
 
-    // If available in bank and random chance, pick from bank, otherwise generate dynamically for "unlimited"
-    const pickFromBank = candidates.length > 0 && Math.random() > 0.4;
-    if (pickFromBank) {
-      const randomIdx = Math.floor(Math.random() * candidates.length);
-      setCurrentQuestion(candidates[randomIdx]);
+    if (subtopic !== 'all') {
+      pool = pool.filter(q => q.subtopic === subtopic);
+    }
+    if (highYieldOnly) {
+      pool = pool.filter(q => q.importance === 'HIGH_YIELD' || q.importanceScore >= 90);
+    }
+
+    // Filter out:
+    // 1) questions seen in this active session
+    // 2) questions that were solved correctly and are not scheduled for review
+    const validCandidates = pool.filter(q => {
+      if (seenInSession.has(q.id)) return false;
+      return isQuestionEligibleForPractice(q.id, q.importanceScore);
+    });
+
+    if (validCandidates.length > 0) {
+      // Pick random unseen candidate from bank
+      const randomIdx = Math.floor(Math.random() * validCandidates.length);
+      const chosen = validCandidates[randomIdx];
+      setCurrentQuestion(chosen);
+      setSeenInSession(prev => new Set([...prev, chosen.id]));
     } else {
-      // Dynamic generation
-      const generated = generateDynamicQuestion(subj, Date.now() + Math.floor(Math.random() * 10000));
-      setCurrentQuestion(generated);
+      // All static bank questions exhausted or already mastered!
+      // Generate fresh, dynamic question using procedural generator
+      let generated: Question | null = null;
+      let attempts = 0;
+      while (!generated && attempts < 10) {
+        attempts++;
+        const candidate = generateDynamicQuestion(subj, Date.now() + Math.floor(Math.random() * 500000));
+        if (!seenInSession.has(candidate.id)) {
+          generated = candidate;
+        }
+      }
+
+      const finalQ = generated || generateDynamicQuestion(subj, Date.now() + Math.floor(Math.random() * 999999));
+      setCurrentQuestion(finalQ);
+      setSeenInSession(prev => new Set([...prev, finalQ.id]));
     }
   };
 
@@ -107,7 +151,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
     }
   };
 
-  const isCorrect = selectedOption === currentQuestion.correctOption;
+  const isHighYield = currentQuestion.importance === 'HIGH_YIELD' || currentQuestion.importanceScore >= 90;
 
   return (
     <div className="max-w-5xl mx-auto space-y-6 animate-fadeIn pb-12">
@@ -209,22 +253,26 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
 
       {/* Active Question Box */}
       <div className="bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
-        {/* Question Header */}
+        {/* Question Header & Importance Badge */}
         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800 pb-4">
           <div className="flex items-center gap-2">
             <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300">
               {currentQuestion.subtopic}
             </span>
-            {currentQuestion.importance === 'HIGH_YIELD' && (
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-100 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900">
-                {currentQuestion.importanceScore}% Yield
+            {isHighYield ? (
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-100 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900">
+                ★ {lang === 'hi' ? 'अति महत्वपूर्ण (स्पैस्ड रिवीजन पर दोहराएगा)' : 'High-Yield (Repeats via SRS)'}
+              </span>
+            ) : (
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                {lang === 'hi' ? 'सामान्य तथ्य (एक बार सही होने पर नहीं दोहराएगा)' : 'Standard Fact (Won\'t Repeat)'}
               </span>
             )}
           </div>
 
-          {currentQuestion.frequencyNote && (
+          {currentQuestion.paperName && (
             <span className="text-[11px] text-amber-600 dark:text-amber-400 font-medium">
-              ★ {currentQuestion.frequencyNote}
+              ★ {currentQuestion.paperName}
             </span>
           )}
         </div>
@@ -303,7 +351,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
             className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold text-xs sm:text-sm shadow-md shadow-orange-500/20 transition-all flex items-center gap-2"
           >
             <Sparkles className="w-4 h-4 text-yellow-200" />
-            <span>{lang === 'hi' ? 'अगला असीमित प्रश्न' : 'Next Unlimited Question'}</span>
+            <span>{lang === 'hi' ? 'अगला नया प्रश्न' : 'Next Unlimited Question'}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>

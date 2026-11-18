@@ -1,7 +1,9 @@
 import { Question } from '../types';
 
 export const INITIAL_QUESTION_BANK: Question[] = [
-  // 1. Rajasthan History, Art & Culture
+  // ==========================================
+  // 1. RAJASTHAN HISTORY, ART & CULTURE
+  // ==========================================
   {
     id: 'ras_pyq_2023_01',
     subjectId: 'raj_history_art',
@@ -14,7 +16,7 @@ export const INITIAL_QUESTION_BANK: Question[] = [
     frequencyNote: 'Asked in RAS 2013, 2018, 2021, and 2023.',
     tags: ['Lokdevta', 'Pabuji', 'Camel protector', 'High Yield'],
     question: {
-      en: 'Who is revered as the main folk deity (Lokdevta) protecting camels and credited with bringing camels ( ऊंट ) to Marwar for the first time?',
+      en: 'Who is revered as the main folk deity (Lokdevta) protecting camels and credited with bringing camels (ऊंट) to Marwar for the first time?',
       hi: 'मारवाड़ में सर्वप्रथम ऊंट (सांड) लाने का श्रेय किस लोकदेवता को दिया जाता है तथा उन्हें ऊंटों के रक्षक देवता के रूप में पूजा जाता है?'
     },
     options: {
@@ -83,12 +85,62 @@ export const INITIAL_QUESTION_BANK: Question[] = [
     },
     correctOption: 0,
     explanation: {
-      en: 'Sirohi Prajamandal was founded by Gokulbhai Bhatt (known as "Rajasthan ka Gandhi") in 1939 in Bombay. Mewar was founded by Manikya Lal Verma (1938), Bikaner by Magharam Vaidya in Calcutta (1936), and Banswara by Bhupendranath Trivedi (1943).',
+      en: 'Sirohi Prajamandal was founded by Gokulbhai Bhatt (known as "Rajasthan ka Gandhi") in 1939. Mewar was founded by Manikya Lal Verma (1938), Bikaner by Magharam Vaidya in Calcutta (1936), and Banswara by Bhupendranath Trivedi (1943).',
       hi: 'सिरोही प्रजामंडल की स्थापना 1939 में गोकुलभाई भट्ट ("राजस्थान के गांधी") द्वारा की गई। मेवाड़ प्रजामंडल के संस्थापक माणिक्यलाल वर्मा थे, बीकानेर के मघाराम वैद्य (कलकत्ता में 1936) तथा बांसवाड़ा के भूपेंद्रनाथ त्रिवेदी थे।'
     }
   },
+  {
+    id: 'ras_pyq_hist_temple_art',
+    subjectId: 'raj_history_art',
+    subtopic: 'Forts, Palaces & Architecture (दुर्ग एवं स्थापत्य)',
+    year: 2021,
+    paperName: 'RPSC RAS Prelims 2021',
+    importance: 'HIGH_YIELD',
+    importanceScore: 95,
+    conceptKey: 'Maha_Maru_Style',
+    tags: ['Architecture', 'Maha-Maru', 'Gurjara-Pratihara', 'Osian'],
+    question: {
+      en: 'The architectural style of ancient temples in Rajasthan belonging to the 8th to 12th century (such as Osian, Kiradu, and Harshanath) is known as which style?',
+      hi: '8वीं से 12वीं शताब्दी के मध्य राजस्थान में निर्मित प्राचीन मंदिरों की स्थापत्य शैली (जैसे ओसियां, किराडू, हर्षनाथ) को किस नाम से जाना जाता है?'
+    },
+    options: {
+      en: ['Maha-Maru / Gurjara-Pratihara style', 'Dravidian style', 'Vesara style', 'Chola style'],
+      hi: ['महा-मारू (गुर्जर-प्रतिहार) शैली', 'द्रविड़ शैली', 'वेसर शैली', 'चोल शैली']
+    },
+    correctOption: 0,
+    explanation: {
+      en: 'The temple architecture developed during the Gurjara-Pratihara period in Rajasthan is known as the Maha-Maru style. Examples include the Sun Temple & Sachiya Mata at Osian (Jodhpur), Someshwar temple at Kiradu (Barmer), and Harshnath temple (Sikar).',
+      hi: 'गुर्जर-प्रतिहार काल में राजस्थान में विकसित मंदिर स्थापत्य शैली को "महा-मारू शैली" कहा जाता है। ओसियां के मंदिर, किराडू का सोमेश्वर मंदिर व सीकर का हर्षनाथ मंदिर इसके उत्कृष्ट उदाहरण हैं।'
+    }
+  },
+  {
+    id: 'ras_pyq_hist_1857',
+    subjectId: 'raj_history_art',
+    subtopic: 'Major Historical Dynasties & Rulers',
+    year: 2018,
+    paperName: 'RPSC RAS Prelims 2018',
+    importance: 'HIGH_YIELD',
+    importanceScore: 96,
+    conceptKey: 'Revolt_1857_Rajasthan',
+    tags: ['1857 Revolt', 'Naseerabad', 'Auwa', 'Kushal Singh'],
+    question: {
+      en: 'At which military cantonment did the 1857 Revolt start for the first time in Rajasthan on 28 May 1857?',
+      hi: 'राजस्थान में 1857 की क्रांति का सूत्रपात सर्वप्रथम 28 मई 1857 को किस सैनिक छावनी से हुआ था?'
+    },
+    options: {
+      en: ['Naseerabad Cantonment (नसीराबाद)', 'Neemuch Cantonment (नीमच)', 'Erinpura Cantonment (एरिनपुरा)', 'Kota (कोटा)'],
+      hi: ['नसीराबाद छावनी', 'नीमच छावनी', 'एरिनपुरा छावनी', 'कोटा']
+    },
+    correctOption: 0,
+    explanation: {
+      en: 'The 1857 revolt in Rajasthan began at Naseerabad on 28 May 1857 by the 15th Bengal Native Infantry. Neemuch revolted on 3 June, and Erinpura on 21 August 1857 ("Chalo Dilli, Maro Firangi").',
+      hi: 'राजस्थान में क्रांति की शुरुआत 28 मई 1857 को नसीराबाद छावनी में 15वीं बंगाल नेटिव इन्फैंट्री के सैनिकों द्वारा की गई। नीमच में 3 जून तथा एरिनपुरा में 21 अगस्त 1857 को विद्रोह हुआ।'
+    }
+  },
 
-  // 2. Rajasthan Geography
+  // ==========================================
+  // 2. GEOGRAPHY OF RAJASTHAN
+  // ==========================================
   {
     id: 'ras_pyq_2023_04',
     subjectId: 'raj_geography',
@@ -135,12 +187,62 @@ export const INITIAL_QUESTION_BANK: Question[] = [
     },
     correctOption: 0,
     explanation: {
-      en: 'River Luni originates from Nag Pahar (Ajmer). Its water remains sweet up to Balotra (now a separate district, formerly Barmer). Beyond Balotra, due to salt-rich soil and evaporation in the arid region, the water turns saline.',
+      en: 'River Luni originates from Nag Pahar (Ajmer). Its water remains sweet up to Balotra. Beyond Balotra, due to salt-rich soil and evaporation in the arid region, the water turns saline.',
       hi: 'लूणी नदी अजमेर के नाग पहाड़ से निकलती है। बालोतरा तक इसका पानी मीठा रहता है, परंतु बालोतरा के बाद मरुस्थलीय मिट्टी में लवणीय कणों की अधिकता के कारण इसका पानी खारा (नमकीन) हो जाता है। इसलिए इसे "आधी मीठी - आधी खारी" नदी भी कहते हैं।'
     }
   },
+  {
+    id: 'ras_pyq_geo_minerals',
+    subjectId: 'raj_geography',
+    subtopic: 'Mines & Minerals (खनिज संसाधन)',
+    year: 2021,
+    paperName: 'RPSC RAS Prelims 2021',
+    importance: 'HIGH_YIELD',
+    importanceScore: 97,
+    conceptKey: 'Rajasthan_Minerals_Monopoly',
+    tags: ['Minerals', 'Wollastonite', 'Lead-Zinc', 'Gypsum'],
+    question: {
+      en: 'In production of which of the following minerals does Rajasthan hold a virtually 100% (sole monopoly) share in India?',
+      hi: 'निम्नलिखित में से किस खनिज के उत्पादन में राजस्थान का भारत में लगभग शत-प्रतिशत (एकमात्र एकाधिकार) है?'
+    },
+    options: {
+      en: ['Wollastonite and Jasper', 'Iron Ore and Bauxite', 'Mica and Coal', 'Gold and Copper'],
+      hi: ['वोलास्टोनाइट एवं जैस्पर', 'लौह अयस्क एवं बॉक्साइट', 'अभ्रक एवं कोयला', 'सोना एवं तांबा']
+    },
+    correctOption: 0,
+    explanation: {
+      en: 'Rajasthan holds virtually 100% sole monopoly in production of Wollastonite and Jasper in India, and is also the leading producer of Lead-Zinc, Calcite, Gypsum, and Rock Phosphate.',
+      hi: 'राजस्थान का वोलास्टोनाइट एवं जैस्पर के उत्पादन में देश में लगभग 100% एकाधिकार है। इसके अलावा सीसा-जस्ता, जिप्सम, कैल्साइट तथा रॉक फॉस्फेट में भी राजस्थान अग्रणी है।'
+    }
+  },
+  {
+    id: 'ras_pyq_geo_climate_koppen',
+    subjectId: 'raj_geography',
+    subtopic: 'Climate & Weather Patterns (जलवायु)',
+    year: 2018,
+    paperName: 'RPSC RAS Prelims 2018',
+    importance: 'HIGH_YIELD',
+    importanceScore: 98,
+    conceptKey: 'Koppen_Climate_Classification',
+    tags: ['Koppen', 'BWhw', 'BShw', 'Cwg', 'Aw'],
+    question: {
+      en: 'According to Koppen\'s climate classification, which symbol represents the tropical arid desert climate zone of Rajasthan (Jaisalmer, Bikaner, western Barmer)?',
+      hi: 'कोपेन के जलवायु वर्गीकरण के अनुसार राजस्थान के उष्ण मरुस्थलीय शुष्क जलवायु प्रदेश (जैसलमेर, बीकानेर, पश्चिमी बाड़मेर) को किस कोड द्वारा दर्शाया गया है?'
+    },
+    options: {
+      en: ['BWhw', 'BShw', 'Cwg', 'Aw'],
+      hi: ['BWhw', 'BShw', 'Cwg', 'Aw']
+    },
+    correctOption: 0,
+    explanation: {
+      en: 'Koppen classified Rajasthan into 4 zones: BWhw (Arid Desert - Jaisalmer, Bikaner), BShw (Semi-arid Steppe - Shekhawati, Nagaur, Jodhpur), Cwg (Sub-humid / Monsoon eastern plains), and Aw (Tropical humid - Banswara, Dungarpur, Hadoti).',
+      hi: 'कोपेन ने राजस्थान की जलवायु को 4 भागों में बांटा: BWhw (शुष्क मरुस्थलीय), BShw (अर्द्ध-शुष्क स्टेपी), Cwg (पूर्वी मैदानी उप-आर्द्र), तथा Aw (अति-आर्द्र दक्षिणी राजस्थान- बांसवाड़ा, झालावाड़)।'
+    }
+  },
 
-  // 3. Rajasthan Polity & Administration
+  // ==========================================
+  // 3. RAJASTHAN POLITY & ADMINISTRATION
+  // ==========================================
   {
     id: 'ras_pyq_2023_06',
     subjectId: 'raj_polity_admin',
@@ -150,11 +252,10 @@ export const INITIAL_QUESTION_BANK: Question[] = [
     importance: 'HIGH_YIELD',
     importanceScore: 94,
     conceptKey: 'SHRC_Composition',
-    frequencyNote: 'Rajasthan SHRC composition and chairpersons is a guaranteed topic.',
     tags: ['SHRC', 'Polity', 'Human Rights'],
     question: {
-      en: 'Under the Protection of Human Rights (Amendment) Act 2019, what is the composition of the State Human Rights Commission (SHRC)?',
-      hi: 'मानव अधिकार संरक्षण (संशोधन) अधिनियम, 2019 के अंतर्गत राज्य मानवाधिकार आयोग (SHRC) की संरचना क्या है?'
+      en: 'Under the Protection of Human Rights (Amendment) Act 2019, what is the statutory composition of the State Human Rights Commission (SHRC)?',
+      hi: 'मानव अधिकार संरक्षण (संशोधन) अधिनियम, 2019 के अंतर्गत राज्य मानवाधिकार आयोग (SHRC) की वैधानिक संरचना क्या है?'
     },
     options: {
       en: [
@@ -172,12 +273,48 @@ export const INITIAL_QUESTION_BANK: Question[] = [
     },
     correctOption: 0,
     explanation: {
-      en: 'As per the 2006 and 2019 amendments to the Human Rights Act, a State Human Rights Commission consists of a Chairperson (who has been a Chief Justice or a Judge of a High Court) and two members (one judicial member and one with knowledge of human rights). Total = 1 + 2 = 3.',
+      en: 'As per the Human Rights Amendment Act, the State Human Rights Commission consists of 1 Chairperson (former High Court Chief Justice or Judge) and 2 Members (one judicial member, one expert in human rights). Total = 3 persons.',
       hi: 'मानवाधिकार संरक्षण अधिनियम के तहत राज्य मानवाधिकार आयोग में 1 अध्यक्ष (उच्च न्यायालय का पूर्व मुख्य न्यायाधीश या न्यायाधीश) तथा 2 सदस्य होते हैं (कुल 3 व्यक्ति)।'
     }
   },
+  {
+    id: 'ras_pyq_polity_rpsc_rules',
+    subjectId: 'raj_polity_admin',
+    subtopic: 'RPSC, State Election Commission & Lokayukta',
+    year: 2021,
+    paperName: 'RPSC RAS Prelims 2021',
+    importance: 'HIGH_YIELD',
+    importanceScore: 98,
+    conceptKey: 'RPSC_Constitutional_Provisions',
+    tags: ['RPSC', 'Article 316', 'Chairman', 'Governor'],
+    question: {
+      en: 'Under Article 316 of the Constitution, who appoints the Chairman and members of the Rajasthan Public Service Commission (RPSC), and who alone can remove them from office?',
+      hi: 'संविधान के अनुच्छेद 316 के तहत राजस्थान लोक सेवा आयोग (RPSC) के अध्यक्ष व सदस्यों की नियुक्ति किसके द्वारा की जाती है तथा उन्हें पद से हटाने का अधिकार किसे प्राप्त है?'
+    },
+    options: {
+      en: [
+        'Appointed by Governor; Removed by President of India on grounds of misbehavior after Supreme Court inquiry',
+        'Appointed by Governor; Removed by Governor',
+        'Appointed by Chief Minister; Removed by Governor',
+        'Appointed by President; Removed by Supreme Court'
+      ],
+      hi: [
+        'नियुक्ति राज्यपाल द्वारा; पद से हटाना सर्वोच्च न्यायालय की जांच रिपोर्ट पर केवल भारत के राष्ट्रपति द्वारा',
+        'नियुक्ति राज्यपाल द्वारा; पद से हटाना भी राज्यपाल द्वारा',
+        'नियुक्ति मुख्यमंत्री द्वारा; पद से हटाना राज्यपाल द्वारा',
+        'नियुक्ति राष्ट्रपति द्वारा; हटाना संसद द्वारा'
+      ]
+    },
+    correctOption: 0,
+    explanation: {
+      en: 'Article 316: Chairman and members of a State PSC are appointed by the State Governor. However, under Article 317, they can ONLY be removed by the President of India following an inquiry by the Supreme Court.',
+      hi: 'अनुच्छेद 316 के तहत राज्य लोक सेवा आयोग के अध्यक्ष व सदस्यों की नियुक्ति राज्यपाल करते हैं, परंतु अनुच्छेद 317 के तहत उन्हें पद से हटाने का अधिकार केवल भारत के राष्ट्रपति को (सर्वोच्च न्यायालय की जांच के बाद) प्राप्त है।'
+    }
+  },
 
-  // 4. Rajasthan Economy & Economic Survey
+  // ==========================================
+  // 4. RAJASTHAN ECONOMY & ECONOMIC SURVEY
+  // ==========================================
   {
     id: 'ras_pyq_2023_07',
     subjectId: 'raj_economy',
@@ -187,7 +324,6 @@ export const INITIAL_QUESTION_BANK: Question[] = [
     importance: 'HIGH_YIELD',
     importanceScore: 99,
     conceptKey: 'Economic_Survey_GSDP',
-    frequencyNote: 'Economic survey sectoral shares (Agri, Industry, Service) appears in every RAS exam.',
     tags: ['Economic Survey', 'GSDP', 'Sectoral Share'],
     question: {
       en: 'As per the Rajasthan Economic Survey, which sector contributes the highest share to the Gross State Value Added (GSVA) at constant (2011-12) prices?',
@@ -204,7 +340,9 @@ export const INITIAL_QUESTION_BANK: Question[] = [
     }
   },
 
-  // 5. Indian History
+  // ==========================================
+  // 5. INDIAN HISTORY
+  // ==========================================
   {
     id: 'ras_pyq_2021_08',
     subjectId: 'indian_history',
@@ -214,7 +352,6 @@ export const INITIAL_QUESTION_BANK: Question[] = [
     importance: 'HIGH_YIELD',
     importanceScore: 91,
     conceptKey: 'Buddhist_Councils',
-    frequencyNote: 'Buddhist councils, kings & places asked in 2013, 2016, 2021.',
     tags: ['Ancient India', 'Buddhism', 'Ashoka', 'Kanishka'],
     question: {
       en: 'The Fourth Buddhist Council was held during the reign of which king and at which location?',
@@ -240,8 +377,34 @@ export const INITIAL_QUESTION_BANK: Question[] = [
       hi: 'चतुर्थ बौद्ध संगीति कुषाण राजा कनिष्क के शासनकाल में कश्मीर के कुंडलवन में हुई थी। इसके अध्यक्ष वसुमित्र व उपाध्यक्ष अश्वघोष थे। इसी संगीति में बौद्ध धर्म हीनयान और महायान में विभाजित हुआ।'
     }
   },
+  {
+    id: 'ras_pyq_hist_inc_sessions',
+    subjectId: 'indian_history',
+    subtopic: 'Freedom Struggle & Gandhian Era (1915-1947)',
+    year: 2021,
+    paperName: 'RPSC RAS Prelims 2021',
+    importance: 'HIGH_YIELD',
+    importanceScore: 93,
+    conceptKey: 'INC_Historic_Sessions',
+    tags: ['INC', 'Lahore Session', 'Purna Swaraj', 'Nehru'],
+    question: {
+      en: 'In which historic session of the Indian National Congress (INC) was the resolution of "Purna Swaraj" (Complete Independence) passed under the presidency of Jawaharlal Nehru?',
+      hi: 'भारतीय राष्ट्रीय कांग्रेस के किस ऐतिहासिक अधिवेशन में जवाहरलाल नेहरू की अध्यक्षता में "पूर्ण स्वराज्य" का प्रस्ताव पारित किया गया था?'
+    },
+    options: {
+      en: ['Lahore Session, 1929 (लाहौर अधिवेशन)', 'Karachi Session, 1931 (कराची अधिवेशन)', 'Belgaum Session, 1924 (बेलगाम अधिवेशन)', 'Calcutta Session, 1928 (कलकत्ता अधिवेशन)'],
+      hi: ['लाहौर अधिवेशन, 1929', 'कराची अधिवेशन, 1931', 'बेलगाम अधिवेशन, 1924', 'कलकत्ता अधिवेशन, 1928']
+    },
+    correctOption: 0,
+    explanation: {
+      en: 'At the Lahore session in December 1929, the INC declared "Purna Swaraj" (Complete Independence) as its ultimate goal. It was decided to celebrate 26 January 1930 as the first Independence Day.',
+      hi: 'दिसंबर 1929 के ऐतिहासिक लाहौर अधिवेशन में जवाहरलाल नेहरू की अध्यक्षता में पूर्ण स्वराज का प्रस्ताव पारित किया गया तथा 26 जनवरी 1930 को प्रथम स्वतंत्रता दिवस के रूप में मनाने की घोषणा की गई।'
+    }
+  },
 
-  // 6. Indian Polity
+  // ==========================================
+  // 6. INDIAN POLITY & CONSTITUTION
+  // ==========================================
   {
     id: 'ras_pyq_2023_09',
     subjectId: 'indian_polity',
@@ -251,7 +414,6 @@ export const INITIAL_QUESTION_BANK: Question[] = [
     importance: 'HIGH_YIELD',
     importanceScore: 98,
     conceptKey: 'DPSP_Articles',
-    frequencyNote: 'Articles 39A, 40, 44, 48A, 50 are tested repeatedly in RPSC.',
     tags: ['Polity', 'DPSP', 'Article 44', 'UCC'],
     question: {
       en: 'Under Part IV (Directive Principles of State Policy) of the Constitution of India, which Article directs the State to secure a Uniform Civil Code (UCC) for the citizens?',
@@ -267,8 +429,34 @@ export const INITIAL_QUESTION_BANK: Question[] = [
       hi: 'अनुच्छेद 44 राज्य को पूरे भारत में नागरिकों के लिए एक समान नागरिक संहिता (Uniform Civil Code) लागू करने का निर्देश देता है। अनुच्छेद 40 ग्राम पंचायतों के गठन तथा अनुच्छेद 50 कार्यपालिका से न्यायपालिका के पृथक्करण से संबंधित है।'
     }
   },
+  {
+    id: 'ras_pyq_polity_writs',
+    subjectId: 'indian_polity',
+    subtopic: 'Preamble, Fundamental Rights & DPSP',
+    year: 2021,
+    paperName: 'RPSC RAS Prelims 2021',
+    importance: 'HIGH_YIELD',
+    importanceScore: 97,
+    conceptKey: 'Constitutional_Writs',
+    tags: ['Writs', 'Article 32', 'Quo-Warranto', 'Mandamus'],
+    question: {
+      en: 'Which writ is issued by the Supreme Court or High Court to prevent an illegal usurpation of a public office by an unqualified person?',
+      hi: 'किसी अयोग्य व्यक्ति द्वारा किसी सार्वजनिक पद को अवैध रूप से धारण करने से रोकने हेतु सर्वोच्च न्यायालय या उच्च न्यायालय द्वारा कौन सी रिट जारी की जाती है?'
+    },
+    options: {
+      en: ['Quo-Warranto (अधिकार पृच्छा)', 'Mandamus (परमादेश)', 'Habeas Corpus (बंदी प्रत्यक्षीकरण)', 'Certiorari (उत्प्रेषण)'],
+      hi: ['अधिकार पृच्छा (Quo-Warranto)', 'परमादेश (Mandamus)', 'बंदी प्रत्यक्षीकरण (Habeas Corpus)', 'उत्प्रेषण (Certiorari)']
+    },
+    correctOption: 0,
+    explanation: {
+      en: 'Quo-Warranto (literally "By what authority?") is issued to enquire into the legality of the claim of a person to a public office. Mandamus commands performance of a public duty; Habeas Corpus produces a detained person.',
+      hi: 'अधिकार पृच्छा (Quo-Warranto) का शाब्दिक अर्थ है "आपका क्या प्राधिकार है?"। यह रिट किसी व्यक्ति द्वारा सार्वजनिक पद के अवैध उपभोग की जांच करने हेतु जारी की जाती है।'
+    }
+  },
 
-  // 7. Geography: India & World
+  // ==========================================
+  // 7. GEOGRAPHY: INDIA & WORLD
+  // ==========================================
   {
     id: 'ras_pyq_2021_10',
     subjectId: 'indian_world_geo',
@@ -278,7 +466,6 @@ export const INITIAL_QUESTION_BANK: Question[] = [
     importance: 'HIGH_YIELD',
     importanceScore: 92,
     conceptKey: 'World_Straits',
-    frequencyNote: 'World straits and choke points are favorite RPSC physical geography questions.',
     tags: ['World Geography', 'Strait of Gibraltar', 'Mediterranean'],
     question: {
       en: 'Which strait connects the Atlantic Ocean with the Mediterranean Sea and separates Europe (Spain) from Africa (Morocco)?',
@@ -290,12 +477,42 @@ export const INITIAL_QUESTION_BANK: Question[] = [
     },
     correctOption: 0,
     explanation: {
-      en: 'The Strait of Gibraltar connects the Atlantic Ocean to the Mediterranean Sea and separates the Iberian Peninsula (Spain, Europe) from Morocco (Africa). It is known as the "Key to the Mediterranean".',
+      en: 'The Strait of Gibraltar connects the Atlantic Ocean to the Mediterranean Sea and separates Spain from Morocco. It is known as the "Key to the Mediterranean".',
       hi: 'जिब्राल्टर जलसंधि अटलांटिक महासागर को भूमध्य सागर से जोड़ती है और यूरोप (स्पेन) को अफ्रीका (मोरक्को) से पृथक करती है। इसे भूमध्य सागर की कुंजी (Key to Mediterranean) भी कहा जाता है।'
     }
   },
 
-  // 8. General Science & Technology
+  // ==========================================
+  // 8. INDIAN ECONOMY
+  // ==========================================
+  {
+    id: 'ras_pyq_econ_monetary_policy',
+    subjectId: 'indian_economy',
+    subtopic: 'Monetary Policy, RBI & Inflation Management',
+    year: 2023,
+    paperName: 'RPSC RAS Prelims 2023',
+    importance: 'HIGH_YIELD',
+    importanceScore: 95,
+    conceptKey: 'RBI_Monetary_Policy_Committee',
+    tags: ['RBI', 'MPC', 'Inflation Target', 'Repo Rate'],
+    question: {
+      en: 'Under the Reserve Bank of India Act 1934, what is the flexible inflation target mandate given to the Monetary Policy Committee (MPC)?',
+      hi: 'भारतीय रिज़र्व बैंक अधिनियम 1934 के अंतर्गत मौद्रिक नीति समिति (MPC) को उपभोक्ता मूल्य सूचकांक (CPI) आधारित मुद्रास्फीति का क्या लक्ष्य सौंपा गया है?'
+    },
+    options: {
+      en: ['4% with a tolerance band of +/- 2% (2% to 6%)', '5% with a tolerance band of +/- 1%', '3% with a tolerance band of +/- 2%', '6% fixed target'],
+      hi: ['4% के साथ +/- 2% का सहनशीलता दायरा (2% से 6%)', '5% (+/- 1%)', '3% (+/- 2%)', '6% नियत लक्ष्य']
+    },
+    correctOption: 0,
+    explanation: {
+      en: 'The Central Government, in consultation with the RBI, sets the inflation target at 4% with an upper tolerance limit of 6% and a lower tolerance limit of 2% (4% +/- 2%) based on Headline CPI.',
+      hi: 'आरबीआई अधिनियम के तहत केंद्र सरकार द्वारा मुद्रास्फीति का लक्ष्य 4% निर्धारित किया गया है, जिसकी न्यूनतम सीमा 2% तथा अधिकतम सीमा 6% (4% +/- 2%) रखी गई है।'
+    }
+  },
+
+  // ==========================================
+  // 9. GENERAL SCIENCE & TECHNOLOGY
+  // ==========================================
   {
     id: 'ras_pyq_2023_11',
     subjectId: 'science_tech',
@@ -305,10 +522,9 @@ export const INITIAL_QUESTION_BANK: Question[] = [
     importance: 'HIGH_YIELD',
     importanceScore: 100,
     conceptKey: 'Aditya_L1_Mission',
-    frequencyNote: 'Directly asked in RAS Prelims 2023.',
     tags: ['ISRO', 'Aditya L1', 'Lagrange Point', 'Space'],
     question: {
-      en: 'In India’s first solar observatory mission "Aditya-L1", what does "L1" stand for and at what approximate distance is it located from Earth?',
+      en: 'In India’s solar observatory mission "Aditya-L1", what does "L1" stand for and at what approximate distance is it located from Earth?',
       hi: 'भारत के प्रथम सौर वेधशाला मिशन "आदित्य-एल1" (Aditya-L1) में "L1" का क्या अर्थ है और यह पृथ्वी से लगभग कितनी दूरी पर स्थित है?'
     },
     options: {
@@ -327,12 +543,38 @@ export const INITIAL_QUESTION_BANK: Question[] = [
     },
     correctOption: 0,
     explanation: {
-      en: 'Aditya-L1 was launched by PSLV-C57 to the Sun-Earth Lagrangian Point 1 (L1), located approximately 1.5 million km from Earth. At L1, the gravitational forces between Sun and Earth provide a continuous unobstructed view of the Sun without eclipses.',
-      hi: 'आदित्य-L1 को PSLV-C57 द्वारा पृथ्वी से लगभग 15 लाख किलोमीटर दूर सूर्य-पृथ्वी लैग्रेंज बिंदु 1 (L1) के हेलो ऑर्बिट में स्थापित किया गया है। L1 बिंदु पर बिना किसी ग्रहण के सूर्य का 24 घंटे निरंतर अध्ययन किया जा सकता है।'
+      en: 'Aditya-L1 was launched by PSLV-C57 to the Sun-Earth Lagrangian Point 1 (L1), located approximately 1.5 million km from Earth, allowing uninterrupted 24x7 solar viewing without eclipses.',
+      hi: 'आदित्य-L1 को PSLV-C57 द्वारा पृथ्वी से लगभग 15 लाख किलोमीटर दूर सूर्य-पृथ्वी लैग्रेंज बिंदु 1 (L1) के हेलो ऑर्बिट में स्थापित किया गया है, जहां से बिना किसी ग्रहण के सूर्य का 24 घंटे निरंतर अध्ययन किया जा सकता है।'
+    }
+  },
+  {
+    id: 'ras_pyq_sci_mrna_vaccine',
+    subjectId: 'science_tech',
+    subtopic: 'Biotechnology, Genetic Engineering & Vaccines',
+    year: 2023,
+    paperName: 'RPSC RAS Prelims 2023',
+    importance: 'HIGH_YIELD',
+    importanceScore: 98,
+    conceptKey: 'mRNA_Vaccine_Technology',
+    tags: ['Biotechnology', 'mRNA', 'Nobel Prize', 'Vaccines'],
+    question: {
+      en: 'Katalin Kariko and Drew Weissman were awarded the 2023 Nobel Prize in Physiology or Medicine for discoveries concerning nucleoside base modifications that enabled the development of which vaccine technology?',
+      hi: 'कैटालिन कारिको और ड्रू वीसमैन को न्यूक्लियोसाइड बेस संशोधनों से संबंधित खोजों के लिए 2023 का चिकित्सा नोबेल पुरस्कार दिया गया, जिससे किस टीका (वैक्सीन) तकनीक का विकास संभव हुआ?'
+    },
+    options: {
+      en: ['Effective mRNA vaccines against COVID-19', 'Inactivated virus vaccines', 'Viral vector based vaccines', 'Live attenuated bacterial vaccines'],
+      hi: ['कोविड-19 के विरुद्ध प्रभावी mRNA टीके', 'निष्क्रिय विषाणु टीके', 'वायरल वेक्टर टीके', 'जीवित क्षीण टीके']
+    },
+    correctOption: 0,
+    explanation: {
+      en: 'Kariko and Weissman discovered that base-modified mRNA suppressed inflammatory responses and drastically increased protein production, paving the way for FDA-approved mRNA COVID-19 vaccines (Pfizer/BioNTech and Moderna).',
+      hi: 'कारिको और वीसमैन की खोज ने न्यूक्लियोसाइड बेस मॉडिफिकेशन द्वारा मानव शरीर की प्रतिरक्षा प्रणाली से बिना किसी सूजन के mRNA वैक्सीन (फाइजर, मॉडर्ना) बनाने का मार्ग प्रशस्त किया।'
     }
   },
 
-  // 9. Reasoning & Mental Ability
+  // ==========================================
+  // 10. REASONING & MENTAL ABILITY
+  // ==========================================
   {
     id: 'ras_pyq_2023_12',
     subjectId: 'reasoning_mental',
@@ -342,7 +584,6 @@ export const INITIAL_QUESTION_BANK: Question[] = [
     importance: 'HIGH_YIELD',
     importanceScore: 90,
     conceptKey: 'Logical_Syllogism',
-    frequencyNote: 'Syllogism and statements have 3-4 questions in every RAS exam.',
     tags: ['Reasoning', 'Syllogism', 'Logic'],
     question: {
       en: 'Statements: 1. All IAS officers are graduates. 2. Some graduates are poets. \nConclusions: I. Some poets are IAS officers. II. All graduates are IAS officers.',
@@ -355,11 +596,13 @@ export const INITIAL_QUESTION_BANK: Question[] = [
     correctOption: 0,
     explanation: {
       en: 'Conclusion I ("Some poets are IAS officers") is possible but not definite. Conclusion II ("All graduates are IAS officers") is false since IAS is a subset of graduates, not vice versa. Hence, neither follows.',
-      hi: 'कथन के अनुसार सभी IAS स्नातक हैं और कुछ स्नातक कवि हैं। इससे यह अनिवार्य नहीं निकलता कि कोई कवि IAS है (केवल संभावना है, निश्चित नहीं)। दूसरा निष्कर्ष भी गलत है क्योंकि केवल कुछ स्नातक ही IAS हैं। अतः न तो निष्कर्ष I और न ही निष्कर्ष II अनुसरण करता है।'
+      hi: 'कथन के अनुसार सभी IAS स्नातक हैं और कुछ स्नातक कवि हैं। इससे यह अनिवार्य नहीं निकलता कि कोई कवि IAS है। दूसरा निष्कर्ष भी गलत है क्योंकि स्नातक बड़ा समुच्चय है। अतः न तो निष्कर्ष I और न ही II निकलता है।'
     }
   },
 
-  // 10. Current Affairs
+  // ==========================================
+  // 11. CURRENT AFFAIRS
+  // ==========================================
   {
     id: 'ras_pyq_2023_13',
     subjectId: 'current_affairs',
@@ -369,7 +612,6 @@ export const INITIAL_QUESTION_BANK: Question[] = [
     importance: 'HIGH_YIELD',
     importanceScore: 97,
     conceptKey: 'ERCP_Project',
-    frequencyNote: 'ERCP (Eastern Rajasthan Canal Project) is the biggest water infrastructure topic in Rajasthan.',
     tags: ['ERCP', 'Chambal', 'Districts', 'Current Affairs'],
     question: {
       en: 'The Eastern Rajasthan Canal Project (ERCP) has been designed to address drinking and irrigation water needs of how many eastern and south-eastern districts of Rajasthan?',
