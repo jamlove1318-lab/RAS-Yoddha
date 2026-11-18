@@ -4,7 +4,8 @@ import {
   Layers, 
   BookOpen, 
   Brain, 
-  Gamepad2 
+  Gamepad2,
+  RotateCcw 
 } from 'lucide-react';
 import { ActiveTab } from './Navbar';
 import { sounds } from '../utils/audio';
@@ -20,37 +21,37 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
   setActiveTab,
   lang
 }) => {
-  const tabs = [
+  const tabs: { id: ActiveTab; labelEn: string; labelHi: string; icon: any; badge?: string }[] = [
     {
-      id: 'dashboard' as ActiveTab,
+      id: 'dashboard',
       labelEn: 'Trends',
       labelHi: 'विश्लेषण',
       icon: Compass
     },
     {
-      id: 'mock' as ActiveTab,
+      id: 'mock',
       labelEn: 'Mock',
       labelHi: 'मॉक टेस्ट',
       icon: Layers
     },
     {
-      id: 'practice' as ActiveTab,
+      id: 'practice',
       labelEn: 'Practice',
       labelHi: 'अभ्यास',
       icon: BookOpen
     },
     {
-      id: 'vault' as ActiveTab,
-      labelEn: 'Vault',
+      id: 'revision',
+      labelEn: 'Revision',
       labelHi: 'रिवीजन',
-      icon: Brain
+      icon: RotateCcw,
+      badge: 'NEW'
     },
     {
-      id: 'game' as ActiveTab,
+      id: 'game',
       labelEn: 'Arena 🎮',
       labelHi: 'गेम 🎮',
-      icon: Gamepad2,
-      badge: 'NEW'
+      icon: Gamepad2
     }
   ];
 

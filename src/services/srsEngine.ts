@@ -1,26 +1,24 @@
 import { Question, SRSItem, SubjectId } from '../types';
 
-const SRS_STORAGE_KEY = 'ras_srs_data_v2';
-const MISTAKES_STORAGE_KEY = 'ras_mistakes_v2';
-const SOLVED_HISTORY_KEY = 'ras_solved_history_v2';
+const SRS_STORAGE_KEY = 'ras_srs_data_v3';
+const MISTAKES_STORAGE_KEY = 'ras_mistakes_v3';
+const SOLVED_HISTORY_KEY = 'ras_solved_history_v3';
+const RECENT_SIGNATURES_KEY = 'ras_recent_signatures_v3';
+const GLOBAL_COUNTER_KEY = 'ras_global_counter_v3';
 
 // Leitner intervals in milliseconds
-// Box 1: 4 hours (Review today)
-// Box 2: 1 day (Review tomorrow)
-// Box 3: 3 days
-// Box 4: 7 days
-// Box 5: 14 days (Mastered!)
 const INTERVALS_MS = [
   0,
-  4 * 60 * 60 * 1000,
-  24 * 60 * 60 * 1000,
-  3 * 24 * 60 * 60 * 1000,
-  7 * 24 * 60 * 60 * 1000,
-  14 * 24 * 60 * 60 * 1000
+  12 * 60 * 60 * 1000,      // Box 1: 12 hours
+  24 * 60 * 60 * 1000,      // Box 2: 1 day
+  3 * 24 * 60 * 60 * 1000,  // Box 3: 3 days
+  7 * 24 * 60 * 60 * 1000,  // Box 4: 7 days
+  14 * 24 * 60 * 60 * 1000  // Box 5: 14 days
 ];
 
 export interface SolvedRecord {
   questionId: string;
+  conceptKey: string;
   subjectId: SubjectId;
   attempts: number;
   correctCount: number;
@@ -28,6 +26,55 @@ export interface SolvedRecord {
   lastWasCorrect: boolean;
   isHighYield: boolean;
   importanceScore: number;
+  minSolvedCounterDue: number; // Question can only repeat after this global counter
+}
+
+export function getGlobalSolvedCounter(): number {
+  try {
+    const raw = localStorage.getItem(GLOBAL_COUNTER_KEY);
+    return raw ? parseInt(raw, 10) : 0;
+  } catch {
+    return 0;
+  }
+}
+
+export function incrementGlobalSolvedCounter(): number {
+  try {
+    const next = getGlobalSolvedCounter() + 1;
+    localStorage.setItem(GLOBAL_COUNTER_KEY, next.toString());
+    return next;
+  } catch {
+    return 1;
+  }
+}
+
+/**
+ * Ring buffer of the last 40 answered question signatures/conceptKeys
+ */
+export function getRecentSignatures(): string[] {
+  try {
+    const raw = localStorage.getItem(RECENT_SIGNATURES_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+export function pushRecentSignature(signature: string): void {
+  try {
+    const current = getRecentSignatures();
+    const updated = [signature, ...current.filter(s => s !== signature)].slice(0, 40);
+    localStorage.setItem(RECENT_SIGNATURES_KEY, JSON.stringify(updated));
+  } catch (e) {
+    console.error('Failed to push recent signature', e);
+  }
+}
+
+export function isSignatureRecentlySeen(signature: string, maxLookback: number = 30): boolean {
+  const recent = getRecentSignatures();
+  const index = recent.indexOf(signature);
+  if (index === -1) return false;
+  return index < maxLookback;
 }
 
 export function getSolvedHistory(): Record<string, SolvedRecord> {
@@ -66,28 +113,38 @@ export function saveSRSItems(items: Record<string, SRSItem>): void {
 
 /**
  * Record user response for spaced repetition and mastery tracking.
- * REPETITION RULE:
- * 1. If question is NOT High-Yield (importanceScore < 90) and user got it right,
- *    it is marked as solved/mastered and NEVER repeats in regular practice.
- * 2. If question IS High-Yield (importanceScore >= 90), it enters the Leitner Spaced Repetition queue.
- *    It repeats ONLY when its scheduled review interval is due.
- * 3. If user got it wrong, it repeats and is added to the Mistakes Notebook.
+ * STRICT REPETITION RULES:
+ * 1. Standard Questions (<90 importance):
+ *    - Once solved correctly, marked permanently mastered and NEVER repeated.
+ * 2. High-Importance Questions (>=90 importance):
+ *    - MUST NOT revise immediately!
+ *    - Can only revise after at least 20 to 40 MORE questions have been answered.
+ * 3. Recent 40 Buffer:
+ *    - The question's signature is added to a 40-item FIFO buffer.
+ *    - While inside the buffer (last 20-40 questions), it is strictly blocked.
  */
 export function recordAnswerInSRS(question: Question, isCorrect: boolean): void {
   const isHighYield = question.importance === 'HIGH_YIELD' || question.importanceScore >= 90;
   const now = Date.now();
+  const currentGlobalCounter = incrementGlobalSolvedCounter();
+
+  // Signature based on conceptKey or question ID
+  const signature = question.conceptKey || question.id;
+  pushRecentSignature(signature);
 
   // 1. Update Solved History
   const history = getSolvedHistory();
-  const existingRecord = history[question.id] || {
+  const existingRecord: SolvedRecord = history[question.id] || {
     questionId: question.id,
+    conceptKey: signature,
     subjectId: question.subjectId,
     attempts: 0,
     correctCount: 0,
     lastAttemptAt: 0,
     lastWasCorrect: false,
     isHighYield,
-    importanceScore: question.importanceScore
+    importanceScore: question.importanceScore,
+    minSolvedCounterDue: 0
   };
 
   existingRecord.attempts += 1;
@@ -96,12 +153,16 @@ export function recordAnswerInSRS(question: Question, isCorrect: boolean): void 
   if (isCorrect) {
     existingRecord.correctCount += 1;
   }
+
+  // Set minimum question delay: must solve 20 to 40 MORE questions before this can appear again!
+  const delay = Math.floor(Math.random() * 21) + 20; // 20 to 40 questions gap
+  existingRecord.minSolvedCounterDue = currentGlobalCounter + delay;
+
   history[question.id] = existingRecord;
   saveSolvedHistory(history);
 
-  // 2. If NOT High-Yield and answered correctly: lock out from repeat
+  // 2. Standard questions answered correctly are locked out permanently
   if (!isHighYield && isCorrect) {
-    // Remove from mistakes if it was there
     clearMistake(question.id);
     return;
   }
@@ -128,17 +189,17 @@ export function recordAnswerInSRS(question: Question, isCorrect: boolean): void 
     existingSRS.box = Math.min(5, existingSRS.box + 1);
   } else {
     existingSRS.consecutiveCorrect = 0;
-    existingSRS.box = 1; // Demote back to Box 1 for immediate review
+    existingSRS.box = 1;
   }
 
-  // Calculate next review timestamp based on Leitner box
+  // Interval based on Leitner box
   const interval = INTERVALS_MS[existingSRS.box] || INTERVALS_MS[1];
   existingSRS.nextReviewDate = now + interval;
 
   srsItems[question.id] = existingSRS;
   saveSRSItems(srsItems);
 
-  // 4. Record or clear mistake
+  // 4. Mistake Notebook
   if (!isCorrect) {
     recordMistake(question.id);
   } else {
@@ -147,11 +208,24 @@ export function recordAnswerInSRS(question: Question, isCorrect: boolean): void 
 }
 
 /**
- * Check whether a question should be shown in practice.
- * Non-important questions that were answered correctly will return FALSE (they do not repeat).
- * High-yield questions will return TRUE if not solved yet, or if solved and due for spaced review.
+ * Check whether a question is eligible to appear in practice.
+ * Enforces:
+ * - Minimum 20-40 questions gap before high-importance questions repeat
+ * - Never repeats standard questions answered correctly
+ * - Blocks questions in the recent 30-40 answered buffer
  */
-export function isQuestionEligibleForPractice(questionId: string, importanceScore: number): boolean {
+export function isQuestionEligibleForPractice(
+  questionId: string, 
+  importanceScore: number, 
+  conceptKey?: string
+): boolean {
+  const signature = conceptKey || questionId;
+
+  // 1. If question was seen in the last 20 to 40 questions, DO NOT SHOW!
+  if (isSignatureRecentlySeen(signature, 30)) {
+    return false;
+  }
+
   const history = getSolvedHistory();
   const record = history[questionId];
 
@@ -160,47 +234,39 @@ export function isQuestionEligibleForPractice(questionId: string, importanceScor
     return true;
   }
 
-  // If candidate got it wrong last time, it is eligible (needs revision)
+  // If candidate got it wrong last time, it can appear ONLY if not in recent 20
   if (!record.lastWasCorrect) {
-    return true;
+    return !isSignatureRecentlySeen(signature, 20);
   }
 
   const isHighYield = record.isHighYield || importanceScore >= 90;
 
-  // If NOT high yield and answered correctly, LOCK OUT! (Do not repeat)
+  // If standard question answered correctly -> NEVER repeat!
   if (!isHighYield) {
     return false;
   }
 
-  // If High-Yield, only repeat if due in Spaced Repetition (or mastered in Box 5)
+  // For High-Importance:
+  // Must satisfy BOTH:
+  // 1) Global question counter gap (at least 20-40 questions solved since last attempt)
+  const currentCounter = getGlobalSolvedCounter();
+  if (currentCounter < record.minSolvedCounterDue) {
+    return false; // Still waiting for 20-40 questions to pass
+  }
+
+  // 2) Leitner SRS time interval
   const srsItems = getSRSItems();
   const srs = srsItems[questionId];
   if (!srs) {
+    return true;
+  }
+
+  // Mastered high yield question (Box 5 with 3+ consecutive correct) - keep out of daily drill
+  if (srs.consecutiveCorrect >= 3 && srs.box >= 5) {
     return false;
   }
 
-  // Once candidate gets 3+ consecutive correct on a high yield question, do not clutter daily drill
-  if (srs.consecutiveCorrect >= 3 && srs.box >= 4) {
-    return false;
-  }
-
-  // Repeat if scheduled time has arrived
   return srs.nextReviewDate <= Date.now();
-}
-
-export function getQuestionsDueForReview(allQuestions: Question[]): Question[] {
-  const items = getSRSItems();
-  const now = Date.now();
-
-  const dueIds = new Set<string>();
-  for (const [id, item] of Object.entries(items)) {
-    // High-yield questions due for review or questions missed previously
-    if (item.nextReviewDate <= now && item.consecutiveCorrect < 3) {
-      dueIds.add(id);
-    }
-  }
-
-  return allQuestions.filter(q => dueIds.has(q.id));
 }
 
 export function recordMistake(questionId: string): void {
@@ -237,9 +303,6 @@ export function clearMistake(questionId: string): void {
   }
 }
 
-/**
- * Live User Analytics computed from real storage data
- */
 export interface UserLiveStats {
   totalSolved: number;
   correctCount: number;
@@ -274,20 +337,17 @@ export function getUserLiveStats(): UserLiveStats {
     subjectPerformance[rec.subjectId].correct += rec.correctCount;
   });
 
-  // Calculate subject accuracies
   Object.keys(subjectPerformance).forEach((subj) => {
     const s = subjectPerformance[subj];
     s.accuracy = s.solved > 0 ? Math.round((s.correct / s.solved) * 100) : 0;
   });
 
-  // Count high yield mastered
   Object.values(srsItems).forEach((item) => {
     if (item.consecutiveCorrect >= 3 || item.box >= 4) {
       highYieldMastered += 1;
     }
   });
 
-  // Count due SRS
   let srsDueCount = 0;
   Object.values(srsItems).forEach((item) => {
     if (item.nextReviewDate <= now && item.consecutiveCorrect < 3) {

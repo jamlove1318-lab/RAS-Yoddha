@@ -100,10 +100,10 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
 
     // Filter out:
     // 1) questions seen in this active session
-    // 2) questions that were solved correctly and are not scheduled for review
+    // 2) questions that do not meet the 20-40 question gap rule
     const validCandidates = pool.filter(q => {
       if (seenInSession.has(q.id)) return false;
-      return isQuestionEligibleForPractice(q.id, q.importanceScore);
+      return isQuestionEligibleForPractice(q.id, q.importanceScore, q.conceptKey);
     });
 
     if (validCandidates.length > 0) {
@@ -113,14 +113,13 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
       setCurrentQuestion(chosen);
       setSeenInSession(prev => new Set([...prev, chosen.id]));
     } else {
-      // All static bank questions exhausted or already mastered!
-      // Generate fresh, dynamic question using procedural generator
+      // Generate fresh dynamic question enforcing the 20-40 question spacing rule
       let generated: Question | null = null;
       let attempts = 0;
-      while (!generated && attempts < 10) {
+      while (!generated && attempts < 25) {
         attempts++;
-        const candidate = generateDynamicQuestion(subj, Date.now() + Math.floor(Math.random() * 500000));
-        if (!seenInSession.has(candidate.id)) {
+        const candidate = generateDynamicQuestion(subj, Date.now() + Math.floor(Math.random() * 500000) + attempts * 37);
+        if (!seenInSession.has(candidate.id) && isQuestionEligibleForPractice(candidate.id, candidate.importanceScore, candidate.conceptKey)) {
           generated = candidate;
         }
       }

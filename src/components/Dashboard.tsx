@@ -125,7 +125,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
           </div>
 
           <div 
-            onClick={() => { sounds.playClick(); setActiveTab('vault'); }}
+            onClick={() => { sounds.playClick(); setActiveTab('revision'); }}
             className="p-3.5 rounded-2xl bg-purple-50/70 dark:bg-purple-950/20 border border-purple-200/60 dark:border-purple-900/40 cursor-pointer hover:border-purple-400 transition-colors"
           >
             <div className="flex items-center justify-between">
@@ -143,7 +143,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
           </div>
 
           <div 
-            onClick={() => { sounds.playClick(); setActiveTab('vault'); }}
+            onClick={() => { sounds.playClick(); setActiveTab('revision'); }}
             className="p-3.5 rounded-2xl bg-rose-50/70 dark:bg-rose-950/20 border border-rose-200/60 dark:border-rose-900/40 cursor-pointer hover:border-rose-400 transition-colors"
           >
             <div className="flex items-center justify-between">

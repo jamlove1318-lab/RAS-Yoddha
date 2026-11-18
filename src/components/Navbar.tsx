@@ -10,11 +10,12 @@ import {
   Compass, 
   Brain, 
   Gamepad2, 
-  Layers 
+  Layers,
+  RotateCcw
 } from 'lucide-react';
 import { sounds } from '../utils/audio';
 
-export type ActiveTab = 'dashboard' | 'mock' | 'practice' | 'vault' | 'game';
+export type ActiveTab = 'dashboard' | 'mock' | 'practice' | 'revision' | 'vault' | 'game';
 
 interface NavbarProps {
   activeTab: ActiveTab;
@@ -65,17 +66,17 @@ export const Navbar: React.FC<NavbarProps> = ({
       icon: BookOpen
     },
     {
-      id: 'vault' as ActiveTab,
-      labelEn: 'High-Yield SRS',
-      labelHi: 'रिवीजन वॉल्ट',
-      icon: Brain
+      id: 'revision' as ActiveTab,
+      labelEn: 'Revision Hub',
+      labelHi: 'रिवीजन हब 🔄',
+      icon: RotateCcw,
+      badge: 'HIGH-YIELD'
     },
     {
       id: 'game' as ActiveTab,
       labelEn: 'Game Arena 🎮',
       labelHi: 'खेल-खेल में सीखें 🎮',
-      icon: Gamepad2,
-      badge: 'NEW'
+      icon: Gamepad2
     }
   ];
 

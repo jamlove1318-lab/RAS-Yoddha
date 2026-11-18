@@ -5,7 +5,7 @@ import { InstallAppBanner } from './components/InstallAppBanner';
 import { Dashboard } from './components/Dashboard';
 import { ExamSimulator } from './components/ExamSimulator';
 import { PracticeMode } from './components/PracticeMode';
-import { HighYieldVault } from './components/HighYieldVault';
+import { RevisionHub } from './components/RevisionHub';
 import { GameArena } from './components/GameArena';
 import { SubjectId } from './types';
 
@@ -110,8 +110,8 @@ export const App: React.FC = () => {
           />
         )}
 
-        {activeTab === 'vault' && (
-          <HighYieldVault
+        {(activeTab === 'revision' || activeTab === 'vault') && (
+          <RevisionHub
             lang={lang}
             onAddXP={handleAddXP}
           />
