@@ -24,12 +24,15 @@
     <div id="root"></div>
     <script type="module" src="./src/main.tsx"></script>
 
-    <!-- Register Service Worker for Offline Mobile Running -->
+    <!-- Register Service Worker for Offline Mobile Running & Auto Updates -->
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
           navigator.serviceWorker.register('./sw.js')
-            .then((reg) => console.log('RAS Yoddha Service Worker registered:', reg.scope))
+            .then((reg) => {
+              // Automatically check for new versions on GitHub Pages
+              reg.update();
+            })
             .catch((err) => console.warn('Service Worker registration skipped:', err));
         });
       }

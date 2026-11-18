@@ -1,11 +1,10 @@
-// Service Worker for Offline PWA Support
-const CACHE_NAME = 'ras-yoddha-v1';
+// Service Worker for Offline PWA Support & Seamless Live Updates
+const CACHE_NAME = 'ras-yoddha-v2';
 const STATIC_ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.webmanifest',
-  '/icon.svg',
-  '/vite.svg'
+  './',
+  './index.html',
+  './manifest.webmanifest',
+  './icon.svg'
 ];
 
 self.addEventListener('install', (event) => {
@@ -32,23 +31,40 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
+// Network-first for navigation (so updates are seen immediately), stale-while-revalidate for static assets
 self.addEventListener('fetch', (event) => {
-  // Stale-while-revalidate for local assets
   if (event.request.method !== 'GET') return;
 
+  // Handle page navigation
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const copy = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+          }
+          return networkResponse;
+        })
+        .catch(() => caches.match(event.request) || caches.match('./index.html'))
+    );
+    return;
+  }
+
+  // Stale-while-revalidate for scripts, styles, fonts, and assets
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
-      const fetchPromise = fetch(event.request).then((networkResponse) => {
-        if (networkResponse && networkResponse.status === 200) {
-          const responseToCache = networkResponse.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache);
-          });
-        }
-        return networkResponse;
-      }).catch(() => {
-        return cachedResponse;
-      });
+      const fetchPromise = fetch(event.request)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const responseToCache = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, responseToCache);
+            });
+          }
+          return networkResponse;
+        })
+        .catch(() => cachedResponse);
 
       return cachedResponse || fetchPromise;
     })
